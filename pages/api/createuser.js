@@ -1,7 +1,7 @@
 import User from "../../backend/models/User";
 import connectDb from "../../backend/connect";
 import bcrypt from "bcryptjs";
-export default async function createUser(req, res) {
+export default async function createuser(req, res) {
   if (req.method === "POST") {
     await connectDb();
     try {

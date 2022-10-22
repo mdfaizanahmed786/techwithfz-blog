@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {BlogSchema} from "./Blog"
 
 const UserSchema =new mongoose.Schema(
   {
@@ -6,7 +7,10 @@ const UserSchema =new mongoose.Schema(
     email: { type: String, required: true, unique:true },
     password: { type: String, required: true, minLength:5 },
     isAdmin:{type:Boolean, default:false },
-    createdAt:{type:Date, default:()=>Date.now()}
+    createdAt:{type:Date, default:()=>Date.now()},
+    // allow this if you are the admin else not.
+    blog:BlogSchema
+    
   },
  
 );

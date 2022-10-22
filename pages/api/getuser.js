@@ -1,8 +1,10 @@
 import User from "../../backend/models/User.js";
 import bcrypt from "bcryptjs"
+import connectDb from "../../backend/connect.js";
 
-export default async function getUser(req, res) {
+export default async function getuser(req, res) {
   if (req.method === "POST") {
+    await connectDb()
     try {
       const { email } = req.body;
       const user = await User.findOne({ email });
