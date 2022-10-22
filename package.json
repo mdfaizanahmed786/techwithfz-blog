@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "mongoose": "^6.6.7",
     "next": "latest",
     "nextjs-progressbar": "^0.0.16",

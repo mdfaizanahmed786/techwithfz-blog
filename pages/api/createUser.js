@@ -1,13 +1,17 @@
 import User from "../../backend/models/User";
 import connectDb from "../../backend/connect";
+import bcrypt from "bcryptjs";
 export default async function createUser(req, res) {
   if (req.method === "POST") {
-      await connectDb()
+    await connectDb();
     try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPass = await bcrypt.hash(req.body.password, salt);
+
       const user = await User.create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
+        password: hashedPass,
       });
       await user.save();
       res.json(user);
