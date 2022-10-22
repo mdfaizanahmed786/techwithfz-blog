@@ -3,7 +3,7 @@ import connectDb from "../../backend/connect";
 import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken"
 export default async function createuser(req, res) {
-  if (req.method === "POST") {
+  if (req.method === "POST") { 
     await connectDb();
     try {
       const salt = await bcrypt.genSalt(10);
@@ -15,8 +15,8 @@ export default async function createuser(req, res) {
         password: hashedPass,
       });
       await user.save();
-      const authToken = jsonwebtoken.sign(data, process.env.JWT_SECRET);
-      const {isAdmin}=user;
+      const {isAdmin, _id}=user;
+      const authToken = jsonwebtoken.sign({email, _id}, process.env.JWT_SECRET);
       res.json({isAdmin, success:true, authToken})
     } catch (er) {
       res.status(500).json({ error: er.message });

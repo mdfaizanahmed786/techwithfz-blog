@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
+import { userContext } from "../context/userContext";
 
 type Props = {};
 
 const Admin = (props: Props) => {
   const [user, setUser] = useState("");
+  const authContext=useContext(userContext)
+  const router=useRouter();
 
   useEffect(() => {
-    setUser(localStorage.getItem('token')!)
+   
+  authContext.isAuthState ? router.push("/admin") : router.push("/")
+ 
   }, []);
   return <div>Admin page</div>;
 };
 
 export default Admin;
+
+
