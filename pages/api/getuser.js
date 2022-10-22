@@ -1,6 +1,7 @@
 import User from "../../backend/models/User.js";
 import bcrypt from "bcryptjs"
 import connectDb from "../../backend/connect.js";
+import jsonwebtoken from "jsonwebtoken"
 
 export default async function getuser(req, res) {
   if (req.method === "POST") {
@@ -15,7 +16,9 @@ export default async function getuser(req, res) {
           .status(404)
           .json({ error: "Please enter valid credentials" });
       }
-      res.json(user);
+      const authToken = jsonwebtoken.sign(data, process.env.JWT_SECRET);
+      const {isAdmin}=user;
+      res.json({isAdmin, success:true, authToken})
     } catch (er) {
       res.status(500).json({ error: er.message });
     }

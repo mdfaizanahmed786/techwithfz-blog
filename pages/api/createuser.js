@@ -1,6 +1,7 @@
 import User from "../../backend/models/User";
 import connectDb from "../../backend/connect";
 import bcrypt from "bcryptjs";
+import jsonwebtoken from "jsonwebtoken"
 export default async function createuser(req, res) {
   if (req.method === "POST") {
     await connectDb();
@@ -14,7 +15,9 @@ export default async function createuser(req, res) {
         password: hashedPass,
       });
       await user.save();
-      res.json(user);
+      const authToken = jsonwebtoken.sign(data, process.env.JWT_SECRET);
+      const {isAdmin}=user;
+      res.json({isAdmin, success:true, authToken})
     } catch (er) {
       res.status(500).json({ error: er.message });
     }

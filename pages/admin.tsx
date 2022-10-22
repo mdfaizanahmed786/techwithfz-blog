@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
-type Props = {}
+type Props = {};
 
 const Admin = (props: Props) => {
-  return (
-    <div>Admin</div>
-  )
-}
+  const [user, setUser] = useState("");
 
-export default Admin
+  useEffect(() => {
+    setUser(localStorage.getItem('token')!)
+  }, []);
+  return <div>Admin page</div>;
+};
+
+export default Admin;

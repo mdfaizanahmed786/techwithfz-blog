@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
@@ -10,6 +11,7 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="text-green-500">Bismillah</div>
+      <Link href={'/signup'}>Signup</Link>
     </div>
   );
 };
