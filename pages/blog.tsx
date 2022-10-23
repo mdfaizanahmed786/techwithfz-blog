@@ -10,7 +10,7 @@ interface Response {
     createdAt:string
     __v:number
 }
-type Props = Response[]
+type Props = Response[] | any
 
 const Blog  = (props:Props) => {
     const {allBlogs}=props;

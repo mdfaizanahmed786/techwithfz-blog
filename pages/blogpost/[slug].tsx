@@ -13,7 +13,7 @@ interface Response {
 
 type Props = {}
 
-const slug = (props: Response) => {
+const slug = (props: Response | any) => {
  const {specificPost}=props;
   
   return (
@@ -33,7 +33,7 @@ const slug = (props: Response) => {
   )
 }
 
-export async function getServerSideProps(context){
+export async function getServerSideProps(context:any){
   const {params}=context
   console.log(params)
   const response=await fetch("http://localhost:3000/api/getposts")
