@@ -6,7 +6,8 @@ const { Provider } = userContext;
 const AppProvider = ({ children }) => {
   const [authState, setAuthState] = useState({ authToken: "", isAdmin: false });
   const isAuthSate = () => {
-    const auth = JSON.parse(localStorage.getItem("token"));
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    console.log(auth)
     if (auth.authToken && auth.isAdmin) return true;
     return false;
   };
