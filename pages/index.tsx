@@ -12,6 +12,7 @@ const Home: NextPage = () => {
 
       <div className="text-green-500">Bismillah</div>
       <Link href={'/signup'}>Signup</Link>
+      <Link href={'/blog'}>Blog</Link>
     </div>
   );
 };
