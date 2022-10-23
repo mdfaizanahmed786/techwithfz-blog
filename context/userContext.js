@@ -4,20 +4,21 @@ const userContext = createContext();
 const { Provider } = userContext;
 
 const AppProvider = ({ children }) => {
-  const [isAuth, setIsAuth]=useState()
+  const [isAuth, setIsAuth] = useState();
+
+  const isAuthenticated = () => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    if (auth) {
+      setIsAuth(auth);
+    }
+
+    if (auth?.isAdmin && auth?.authToken) return true;
+    else {
+      return false;
+    }
+  };
  
-const isAuthenticated=()=>{
-  const auth=JSON.parse(localStorage.getItem('auth'))
-  if(auth?.isAdmin && auth?.authToken) return true;
-  else{
-    return false;
-  }
-}
-  return (
-    <Provider value={{ isAuthenticated }}>
-      {children}
-    </Provider>
-  );
+  return <Provider value={{ isAuthenticated, isAuth }}>{children}</Provider>;
 };
 
-export {userContext, AppProvider}
+export { userContext, AppProvider };

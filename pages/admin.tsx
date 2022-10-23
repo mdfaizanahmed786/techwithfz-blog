@@ -38,7 +38,7 @@ const Admin = (props: Props) => {
       }),
     });
     const response=await addPost.json();
-  
+     router.push("/")
   };
 
   return (
