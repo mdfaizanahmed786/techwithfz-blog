@@ -9,7 +9,6 @@ export default async function addpost(req, res) {
     try {
       const {
         email,
-        isAdmin,
         blog: { title, author, desc, slug },
       } = req.body;
       const user = await User.findOne({ email });
@@ -18,7 +17,7 @@ export default async function addpost(req, res) {
         req.body.password,
         user.password
       );
-      if (comparePassword && isAdmin && email==="ahmedriyan528@gmail.com") {
+      if (comparePassword && user.isAdmin && email==="ahmedriyan528@gmail.com") {
      const response=await Blog.create({
           title,
           desc,

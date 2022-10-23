@@ -1,19 +1,20 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 const userContext = createContext();
 const { Provider } = userContext;
 
 const AppProvider = ({ children }) => {
-  const [authState, setAuthState] = useState({ authToken: "", isAdmin: false });
-  const isAuthSate = () => {
-    const auth = JSON.parse(localStorage.getItem("auth"));
-    console.log(auth)
-    if (auth.authToken && auth.isAdmin) return true;
+  const [isAuth, setIsAuth]=useState()
+ 
+const isAuthenticated=()=>{
+  const auth=JSON.parse(localStorage.getItem('auth'))
+  if(auth?.isAdmin && auth?.authToken) return true;
+  else{
     return false;
-  };
-
+  }
+}
   return (
-    <Provider value={{ authState, isAuthSate, setAuthState }}>
+    <Provider value={{ isAuthenticated }}>
       {children}
     </Provider>
   );

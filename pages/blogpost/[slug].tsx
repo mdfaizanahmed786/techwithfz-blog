@@ -20,7 +20,7 @@ const slug = (props: Response | any) => {
     <div>
    {
     specificPost.map((blog:Response)=>(
-      <div>
+      <div key={blog._id}>
         <h1 className='font-bold'>{blog.title}</h1>
         <p>{blog.author}</p> <p>{blog.createdAt}</p>
         <p>{blog.desc}</p>
