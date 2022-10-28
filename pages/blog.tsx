@@ -25,7 +25,7 @@ const Blog  = (props:Props) => {
 <div className='flex flex-col gap-7 py-6 max-w-[1100px] mx-auto'>
 
       {allBlogs.map((blog:Response)=>(
-        <div key={blog._id} className="flex flex-col gap-5 px-9 py-7 rounded-lg shadow-md bg-[#2E2E2E] hover:bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-lg">
+        <div key={blog._id} className="flex flex-col gap-5 px-9 py-7 rounded-lg shadow-md hover:bg-[#2E2E2E] bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-lg">
           <p className='text-xs textStyle font-semibold'>Date: {blog.createdAt.slice(0,10)}</p>
              <h2 className='font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 '><Link href={`blogpost/${blog.slug}`}>{blog.title}</Link></h2>
              <p className='text-white'>{blog.desc.slice(0, 200)+"..."}</p>
