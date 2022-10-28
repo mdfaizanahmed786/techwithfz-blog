@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
+import { AiOutlineClockCircle } from 'react-icons/ai'
 interface Response {
     _id:string
     title:string
@@ -29,7 +30,14 @@ const Blog  = (props:Props) => {
           <p className='text-xs textStyle font-semibold'>Date: {blog.createdAt.slice(0,10)}</p>
              <h2 className='font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 '><Link href={`blogpost/${blog.slug}`}>{blog.title}</Link></h2>
              <p className='text-white'>{blog.desc.slice(0, 200)+"..."}</p>
+             <div className='flex justify-between'>
+
              <Link href={`blogpost/${blog.slug}`}><button className='commonButton py-2 w-32 font-semibold text-white'>Read More</button></Link>
+             <div className="flex gap-2 items-center">
+            <AiOutlineClockCircle className='text-[#0BEF59]'/>
+            <p className="textStyle text-xs font-semibold">10 min read</p>
+            </div>
+             </div>
 
         </div>
 
