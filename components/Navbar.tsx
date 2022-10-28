@@ -9,20 +9,41 @@ type Props = {
 
 const Navbar = ({ authState }: Props) => {
   return (
-    <header>
-      <nav className="flex gap-10">
-        <Link href={"/"}>Home</Link>
-        <Link href={"/blog"}>Blog</Link>
-        {authState ? (
-          <button onClick={() => localStorage.removeItem("auth")}>
-            Signout
-          </button>
-        ) : (
-          <>
-            <Link href={"/login"}>Login</Link>
-            <Link href={"/signup"}>Signup</Link>
-          </>
-        )}
+    <header className="primary-bg sticky top-0 backdrop-blur-md z-20 shadow-md">
+      <nav className="flex justify-between p-2 h-[59px] items-center max-w-[1430px] mx-auto">
+        <Link href={"/"}>
+          <div className="font-bold text-white hover:text-gray-400 transition-all duration-300 cursor-pointer">
+            TechWithFZ
+          </div>
+        </Link>
+        <div className="flex items-center space-x-10">
+          <Link href={"/"}>
+            <p className="font-semibold text-sm cursor-pointer text-white hover:text-gray-400 transition-all duration-300">
+              Home
+            </p>
+          </Link>
+          <Link href={"/blog"}>
+            <p className="font-semibold text-sm cursor-pointer text-white hover:text-gray-400 transition-all duration-300">
+              Blog
+            </p>
+          </Link>
+          <Link href={"/about"}>
+            <p className="font-semibold text-sm cursor-pointer text-white hover:text-gray-400 transition-all duration-300">
+              About
+            </p>
+          </Link>
+        </div>
+
+        <div className="flex items-center space-x-12">
+          <Link href={"/login"}>
+            <p className="font-bold textStyle cursor-pointer">Login</p>
+          </Link>
+          <Link href={"/signup"}>
+            <p className="commonButton font-semibold cursor-pointer text-white px-5 py-1">
+              Signup
+            </p>
+          </Link>
+        </div>
       </nav>
     </header>
   );

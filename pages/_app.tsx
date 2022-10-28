@@ -4,6 +4,7 @@ import NextNProgress from "nextjs-progressbar";
 import { useEffect, useState } from "react";
 import { AppProvider } from "../context/userContext";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [authState, setAuthState] = useState<boolean | undefined>();
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <AppProvider>
         <NextNProgress
-          color="#29D"
+          color="#10935F"
           startPosition={0.3}
           stopDelayMs={200}
           height={3}
@@ -28,6 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <Navbar key={key} authState={authState} />
         <Component {...pageProps} />
+        <Footer/>
       </AppProvider>
     </>
   );
