@@ -10,7 +10,7 @@ type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <footer className="bg-[#1E1E1E] p-6">
+    <footer className="bg-[#1E1E1E] p-6 ">
       <div className="flex justify-between max-w-[1430px] mx-auto">
         <div className="font-semibold text-white">
           Copyright &copy; 2022 techwithfz.com

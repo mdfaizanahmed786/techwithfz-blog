@@ -25,7 +25,7 @@ const SinglePost = ({ title, slug, desc, createdAt }: Props) => {
           </Link>
           <p className="textStyle text-xs font-semibold">Date: {createdAt}</p>
           <div className="w-80">
-            <div className="info text-white">{desc.slice(0, 150)} . . .</div>
+            <div className="info text-white">{desc.slice(0, 150)+"..."}</div>
           </div>
           <div className="buttons flex justify-between items-center py-2">
           <Link href={`blogpost/${slug}`}>

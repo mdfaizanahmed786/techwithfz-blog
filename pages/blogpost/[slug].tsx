@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
 interface Response {
@@ -15,9 +16,16 @@ type Props = {}
 
 const slug = (props: Response | any) => {
  const {specificPost}=props;
+ const router=useRouter();
+ const { slug } = router.query
+ const getTitle=specificPost.filter((blog:Response)=> blog.slug===slug)
+
   
   return (
     <div>
+      <Head>
+        <title>{getTitle[0].title}</title>
+      </Head>
    {
     specificPost.map((blog:Response)=>(
       <div key={blog._id}>
