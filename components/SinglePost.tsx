@@ -12,14 +12,14 @@ type Props = {
 
 const SinglePost = ({ title, slug, desc, createdAt }: Props) => {
   return (
-    <article className="rounded-lg bg-[#1E1E1E] hover:shadow-2xl shadow-lg transition-all duration-300 cursor-pointer">
+    <article className="rounded-lg bg-[#1E1E1E] hover:shadow-2xl shadow-lg transition-all duration-200 cursor-pointer">
       <div className="flex flex-col gap-3">
         <div className="overflow-hidden rounded-lg cursor-pointer">
-          <img src={"/im1.png"} className="hover:scale-105  translate-all duration-300 object-cover w-full" alt="hero_section" />
+          <img src={"/im1.png"} className="hover:scale-105  translate-all duration-200 object-cover w-full" alt="hero_section" />
         </div>
         <div className="flex flex-col gap-5 px-7 py-5">
           <Link href={`blogpost/${slug}`}>
-            <h3 className="font-bold text-center text-white text-xl cursor-pointer hover:text-gray-400 transition-all duration-300">
+            <h3 className="font-bold text-center text-white text-xl cursor-pointer hover:text-gray-400 transition-all duration-200">
               {title}
             </h3>
           </Link>
