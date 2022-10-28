@@ -16,7 +16,7 @@ const Navbar = ({ authState }: Props) => {
             TechWithFZ
           </div>
         </Link>
-        <div className="flex items-center gap-28">
+        <div className="flex items-center gap-20">
           <Link href={"/"}>
             <p className="font-semibold text-md cursor-pointer text-white hover:text-gray-400 transition-all duration-300">
               Home
