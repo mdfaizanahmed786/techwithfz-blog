@@ -30,7 +30,7 @@ const Signup = (props: Props) => {
       const response = await addUser.json();
       
       if(response.success){
-        toast.success('Login Success!', {
+        toast.success('Signup Success!', {
           position: "top-right",
           autoClose: 1800,
           hideProgressBar: false,
