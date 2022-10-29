@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { userContext } from "../context/userContext";
@@ -42,8 +43,17 @@ const Admin = (props: Props) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-10 max-w-5xl m-auto">
+    <div className="adminPage text-white">
+      <Head>
+<title>Admins Only</title>
+      </Head>
+      <div className="max-w-[700px] mx-auto space-y-5 p-12">
+           <h2 className="font-semibold text-4xl text-white">Admin Panel </h2>
+           <div>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <div className="flex flex-col gap-1">
+
         <label htmlFor="email">Email</label>
         <input
           ref={emailRef}
@@ -52,9 +62,14 @@ const Admin = (props: Props) => {
           id="email"
           minLength={7}
           autoComplete="false"
-          className="border-2 "
+          className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
           required
+          placeholder="Enter you admin email"
+          pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
         />
+        </div>
+        <div className="flex flex-col gap-1">
+
         <label htmlFor="password">Password</label>
         <input
           ref={passwordRef}
@@ -63,9 +78,14 @@ const Admin = (props: Props) => {
           id="password"
           autoComplete="false"
           minLength={5}
-          className="border-2 "
+          className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
           required
+          placeholder="Enter your password"
         />
+
+        </div>
+
+        <div className="flex flex-col gap-1">
         <label htmlFor="title">Title</label>
         <input
           ref={titleRef}
@@ -74,9 +94,13 @@ const Admin = (props: Props) => {
           id="title"
           autoComplete="false"
           minLength={5}
-          className="border-2 "
+          className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
           required
+          placeholder="Enter blog title"
         />
+
+        </div>
+        <div className="flex flex-col gap-1">
         <label htmlFor="author">Author</label>
         <input
           ref={authorRef}
@@ -85,9 +109,14 @@ const Admin = (props: Props) => {
           id="author"
           autoComplete="false"
           minLength={5}
-          className="border-2 "
+          className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
           required
+          placeholder="Author Name"
         />
+
+        </div>
+        <div className="flex flex-col gap-1">
+
         <label htmlFor="slug">Slug</label>
         <input
           ref={slugRef}
@@ -96,9 +125,12 @@ const Admin = (props: Props) => {
           id="slug"
           autoComplete="false"
           minLength={5}
-          className="border-2 "
+          className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
           required
+          placeholder="how-to-add-slug"
         />
+        </div>
+        <div className="flex flex-col gap-1">
         <label htmlFor="description">Description</label>
         <textarea
           ref={descriptionRef}
@@ -106,11 +138,18 @@ const Admin = (props: Props) => {
           id="description"
           autoComplete="false"
           minLength={5}
-          className="border-2 "
+          className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
           required
+          placeholder="Enter proper description"
+          rows={10}
+          style={{resize:"none"}}
         />
-        <button type="submit">Add Post</button>
+
+        </div>
+        <button type="submit" className='commonButton py-2 font-semibold text-white w-32'>Add Post</button>
       </form>
+           </div>
+      </div>
     </div>
   );
 };

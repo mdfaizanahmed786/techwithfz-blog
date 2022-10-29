@@ -76,6 +76,7 @@ const Signup = (props: Props) => {
                 className="bg-[#2E2E2E] px-5 py-2 rounded-md outline-none text-white border-[#10935F] border-2 "
                 required
                 placeholder="Enter your email"
+                pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
               />
             </div>
             <div className="flex flex-col gap-1">

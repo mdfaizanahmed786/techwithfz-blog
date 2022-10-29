@@ -51,5 +51,11 @@
 
 .loginPage{
   
-  background: linear-gradient(185.49deg, #31BC50 -199.67%, #1E1E1E 122.96%);
+  background: linear-gradient(185.49deg, #10A65D -269.67%, #1E1E1E 155.96%);
 }
+.adminPage{
+   
+  background: linear-gradient(185.49deg, #117264 -269.67%, #1E1E1E 155.96%);
+}
+
+

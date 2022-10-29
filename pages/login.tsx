@@ -55,6 +55,7 @@ const Login = (props: Props) => {
           autoComplete="false"
           className="bg-[#2E2E2E] px-5 py-2 rounded-md outline-none text-white  border-[#10935F] border-2"
           required
+          pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
           placeholder='Enter your email'
         />
         </div>

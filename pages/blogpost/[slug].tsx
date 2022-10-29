@@ -74,7 +74,6 @@ const slug = (props: Response | any) => {
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
-  console.log(params);
   const response = await fetch("http://localhost:3000/api/getposts");
   const { allBlogs } = await response.json();
   let specificPost = allBlogs.filter((blog: Response) => {
