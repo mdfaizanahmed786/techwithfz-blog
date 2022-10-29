@@ -1,58 +1,88 @@
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import React from 'react'
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { FaUserCircle } from "react-icons/fa";
+import React from "react";
 interface Response {
-  _id:string
-  title:string
-  author:string
-  desc:string
-  slug:string
-  imgs:string[]
-  createdAt:string
-  __v:number
+  _id: string;
+  title: string;
+  author: string;
+  desc: string;
+  slug: string;
+  imgs: string[];
+  createdAt: string;
+  __v: number;
 }
 
-type Props = {}
+type Props = {};
 
 const slug = (props: Response | any) => {
- const {specificPost}=props;
- const router=useRouter();
- const { slug } = router.query
- const getTitle=specificPost.filter((blog:Response)=> blog.slug===slug)
+  const { specificPost } = props;
+  const router = useRouter();
+  const { slug } = router.query;
+  const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
 
-  
   return (
-    <div>
+    <div className="bg-[#2E2E2E]">
       <Head>
         <title>{getTitle[0].title}</title>
       </Head>
-   {
-    specificPost.map((blog:Response)=>(
-      <div key={blog._id}>
-        <h1 className='font-bold'>{blog.title}</h1>
-        <p>{blog.author}</p> <p>{blog.createdAt}</p>
-        <p>{blog.desc}</p>
-
+      <div className="flex items-center px-5 py-2 gap-1 cursor-pointer" onClick={()=>router.back()}>
+        <MdOutlineArrowBackIosNew className="text-green-500 font-bold" />
+        <p className="text-white font-bold  textStyle">Go back</p>
       </div>
-    ))
-    
-   }
+
+      <div className="max-w-[1030px] mx-auto p-14 ">
+        {specificPost.map((blog: Response) => (
+          <div key={blog._id} className="space-y-4">
+            <p className="text-xs textStyle font-semibold">
+              Date: {blog.createdAt.slice(0, 10)}
+            </p>
+            <h1 className="font-bold text-white text-4xl cursor-pointer ">
+              {blog.title}
+            </h1>
+            <div className="flex gap-2 items-center">
+              <FaUserCircle className="text-green-500" size={27} />
+              <p className="text-white font-semibold">{blog.author}</p>
+            </div>
+            <p className="text-white text-lg leading-9">{blog.desc}</p>
+            <img src="/hackathon.png" alt="img_programming" className="rounded-md" />
+            <p className="text-white text-lg leading-9">
+              Tailwind CSS v3.2 is here with an absolutely massive amount of new
+              stuff, including support for dynamic breakpoints, multiple config
+              files in a single project, nested groups, parameterized variants,
+              container queries, and more. As always check out the release notes
+              for every nitty-gritty fix and improvement, but here’s the
+              highlight reel: Multiple config files in one project using @config
+              Browser-support-based styling with supports-* ARIA attribute
+              variants Data attribute variants Max-width and dynamic breakpoints
+              Dynamic group-* and peer-* variants Dynamic variants with
+              matchVariant Nested group and multiple peer support using variant
+              modifiers Container queries
+            </p>
+            <p className="text-white text-lg leading-9">{blog.desc}</p>
+          </div>
+        ))}
+        <div className="ratings text-center mt-5 ">
+           <p className="font-semibold textStyle text-xl">Found it useful? Please rate us to improve.</p>
+
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export async function getServerSideProps(context:any){
-  const {params}=context
-  console.log(params)
-  const response=await fetch("http://localhost:3000/api/getposts")
- const {allBlogs}=await response.json();
-  let specificPost=allBlogs.filter((blog:Response)=>{
- 
-    return blog.slug===params.slug
-  })
+export async function getServerSideProps(context: any) {
+  const { params } = context;
+  console.log(params);
+  const response = await fetch("http://localhost:3000/api/getposts");
+  const { allBlogs } = await response.json();
+  let specificPost = allBlogs.filter((blog: Response) => {
+    return blog.slug === params.slug;
+  });
 
-  return{
-    props:{specificPost}
-  }
+  return {
+    props: { specificPost },
+  };
 }
 export default slug;

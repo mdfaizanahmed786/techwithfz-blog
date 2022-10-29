@@ -13,16 +13,16 @@ const HeroSection = (props: Props) => {
           <TypeAnimation
             sequence={[
               "",
-              700,
+              300,
               "Welcome",
-              700,
+              300,
               "Welcome To",
-              700,
+              300,
               "Welcome To Our",
-              700,
+              300,
 
               "Welcome To Our Blog!",
-              700,
+              300,
             ]}
             wrapper="p"
             repeat={Infinity}

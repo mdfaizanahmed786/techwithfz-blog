@@ -23,7 +23,7 @@ const Blog  = (props:Props) => {
 <title>techWithFZ - Blog</title>
       </Head>
       <h1 className='text-3xl text-white font-bold text-center py-5 '>All Blogs ({allBlogs.length})</h1>
-<div className='flex flex-col gap-7 py-6 max-w-[1100px] mx-auto'>
+<div className='flex flex-col gap-7 py-6 max-w-[1030px] mx-auto'>
 
       {allBlogs.map((blog:Response)=>(
         <div key={blog._id} className="flex flex-col gap-5 px-9 py-7 rounded-lg shadow-md hover:bg-[#2E2E2E] bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-lg">
