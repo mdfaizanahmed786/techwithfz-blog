@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { userContext } from "../context/userContext";
 
 type Props = {};
@@ -22,24 +23,51 @@ const Admin = (props: Props) => {
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const addPost = await fetch("http://localhost:3000/api/addpost", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
-        blog: {
-          title: titleRef.current?.value,
-          author: authorRef.current?.value,
-          desc: descriptionRef.current?.value,
-          slug: slugRef.current?.value,
+    try{
+      const addPost = await fetch("http://localhost:3000/api/addpost", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
         },
-      }),
-    });
-    const response=await addPost.json();
-     router.push("/")
+        body: JSON.stringify({
+          email: emailRef.current?.value,
+          password: passwordRef.current?.value,
+          blog: {
+            title: titleRef.current?.value,
+            author: authorRef.current?.value,
+            desc: descriptionRef.current?.value,
+            slug: slugRef.current?.value,
+          },
+        }),
+      });
+      const response=await addPost.json();
+      if(response.createAt){
+        toast.success('Success while adding your post!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+          router.push("/blog")
+      }
+    }
+    catch(er){
+      toast.error('An error occurred while posting your data!', {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    }
+    
   };
 
   return (

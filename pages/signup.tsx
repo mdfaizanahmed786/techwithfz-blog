@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -13,20 +14,61 @@ const Signup = (props: Props) => {
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const addUser = await fetch("http://localhost:3000/api/createuser", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        name: nameRef.current?.value,
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
-      }),
-    });
-    const response = await addUser.json();
-    router.push("/");
-    localStorage.setItem("auth", JSON.stringify(response));
+    try{
+
+      const addUser = await fetch("http://localhost:3000/api/createuser", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nameRef.current?.value,
+          email: emailRef.current?.value,
+          password: passwordRef.current?.value,
+        }),
+      });
+      const response = await addUser.json();
+      
+      if(response.success){
+        toast.success('Login Success!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+          router.push("/")
+          localStorage.setItem("auth", JSON.stringify(response));
+      }
+      else {
+        toast.error('Try again with another email or password!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+      }
+
+    }
+    catch(er){
+      toast.error('An error occurred while creating your Account!', {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    }
   };
   return (
     <div className="loginPage h-screen items-center flex">

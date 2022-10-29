@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react'
+import { toast } from 'react-toastify';
 
 type Props = {}
 
@@ -13,20 +14,61 @@ const Login = (props: Props) => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     
     e.preventDefault();
-    const getUser = await fetch("http://localhost:3000/api/getuser", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-  
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
-      }),
-    });
-    const response = await getUser.json();
-    router.push("/")
-    localStorage.setItem("auth", JSON.stringify(response));
+    try{
+
+      const getUser = await fetch("http://localhost:3000/api/getuser", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+    
+          email: emailRef.current?.value,
+          password: passwordRef.current?.value,
+        }),
+      });
+      const response = await getUser.json();
+      if(response.success){
+        toast.success('Login Success!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+          router.push("/")
+          localStorage.setItem("auth", JSON.stringify(response));
+      }
+      else{
+        toast.error('Check your credentials!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+
+      }
+
+    }
+    catch(er){
+      toast.error('Please try to login again with valid credentials!', {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    }
 
   };
   return (

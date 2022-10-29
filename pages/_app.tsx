@@ -1,4 +1,6 @@
 import "../styles/globals.css";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import type { AppProps } from "next/app";
 import NextNProgress from "nextjs-progressbar";
 import { useEffect, useState } from "react";
@@ -30,6 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Navbar key={key} authState={authState} />
         <Component {...pageProps} />
         <Footer/>
+        <ToastContainer />
       </AppProvider>
     </>
   );
