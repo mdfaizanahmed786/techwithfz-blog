@@ -58,7 +58,7 @@ const Signup = (props: Props) => {
 
     }
     catch(er){
-      toast.error('An error occurred while creating your Account!', {
+      toast.error('An error occurred while creating your account!', {
         position: "top-right",
         autoClose: 1800,
         hideProgressBar: false,

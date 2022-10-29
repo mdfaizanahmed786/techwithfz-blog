@@ -41,7 +41,7 @@ const Admin = (props: Props) => {
         }),
       });
       const response=await addPost.json();
-      if(response.createAt){
+      if(response.createdAt){
         toast.success('Success while adding your post!', {
           position: "top-right",
           autoClose: 1800,
@@ -53,6 +53,18 @@ const Admin = (props: Props) => {
           theme: "dark",
           });
           router.push("/blog")
+      }
+      else{
+        toast.error('You are not authorized!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
       }
     }
     catch(er){
