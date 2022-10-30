@@ -39,7 +39,7 @@ function MyApp({ Component,   pageProps}:  AppProps<{
           showOnShallow={true}
         />
         <Navbar  authState={authState} />
-        <Component {...pageProps} />
+        <Component {...pageProps} authState={authState} />
         <Footer />
         <ToastContainer />
       </AppProvider>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../context/userContext";
+import { useSession, signIn, signOut } from "next-auth/react"
 
 type Props = {
   key?: number;
@@ -11,6 +12,7 @@ type Props = {
 const Navbar = ({ authState }: Props) => {
   const { isAuthenticated } = useContext(userContext);
   const [admin, setAdmin] = useState<boolean>(false);
+  const { data: session } = useSession()
   const router = useRouter();
   useEffect(() => {
     if (isAuthenticated()) {
@@ -23,6 +25,7 @@ const Navbar = ({ authState }: Props) => {
   const logOut = () => {
     router.push("/")
     localStorage.removeItem("auth");
+    signOut()
   };
   return (
     <header className="primary-bg sticky top-0 backdrop-blur-md z-20 shadow-md">
@@ -49,8 +52,9 @@ const Navbar = ({ authState }: Props) => {
             </p>
           </Link>
         </div>
-        {authState ? (
+        {authState || session ? (
           <div className="flex items-center space-x-5">
+            <p  className="font-bold textStyle cursor-pointer">Welcome</p>
             <p
               className="commonButton font-semibold cursor-pointer text-white px-5 py-1"
               onClick={logOut}

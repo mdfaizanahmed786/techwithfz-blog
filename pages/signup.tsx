@@ -3,14 +3,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn} from "next-auth/react"
 
-type Props = {};
+type Props = {
+  authState:boolean
+};
 
 const Signup = (props: Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const {data:session}=useSession();
   const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -76,7 +79,7 @@ const Signup = (props: Props) => {
       <Head>
         <title>Signup |techWithFZ</title>
       </Head>
-      <div className="flex max-w-[1450px] mx-auto h-[32rem]">
+      <div className="flex max-w-[1450px] mx-auto h-[36rem]">
         <div className="imageContainer flex-[0.45]">
           <img
             src="/signup.png"
@@ -86,10 +89,15 @@ const Signup = (props: Props) => {
         </div>
         <div className="bg-[#1E1E1E] px-7 rounded-tr-md rounded-br-md flex flex-col gap-8  items-center flex-[0.55] justify-center shadow-lg">
           <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">
-            <div className="flex flex-col gap-1">
               <h2 className="font-bold text-2xl text-center text-white">
                 SignUp
               </h2>
+        
+              <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={signIn}>
+          <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
+             <p className='text-lg font-semibold'>Signup with Google</p>
+        </div>
+            <div className="flex flex-col gap-1">
               <label htmlFor="name" className="font-semibold text-white">
                 Name
               </label>
@@ -138,7 +146,7 @@ const Signup = (props: Props) => {
                 placeholder="Enter your password"
               />
             </div>
-            <button type="submit" className='commonButton py-2 font-semibold text-white'>Signup</button>
+            <button type="submit" className={`${session?.user || props.authState ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user || props.authState}>Signup</button>
           </form>
           <p className="text-white text-sm">
             Already have an account?{" "}

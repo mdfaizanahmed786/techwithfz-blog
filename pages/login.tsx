@@ -4,14 +4,33 @@ import { useRouter } from 'next/router';
 import React, { useRef } from 'react'
 import { toast } from 'react-toastify';
 import { useSession, signIn, signOut } from "next-auth/react"
+import { sign } from 'crypto';
 
-type Props = {}
+type Props = {
+  authState:boolean
+}
 
 const Login = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router=useRouter();
+  const {data:session}=useSession();
+const authSignin=()=>{
 
+signIn()
+if(session)
+toast.success('Login Success!', {
+  position: "top-right",
+  autoClose: 1800,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "dark",
+  });
+
+}
   const handleSubmit = async (e: React.SyntheticEvent) => {
     
     e.preventDefault();
@@ -86,9 +105,9 @@ const Login = (props: Props) => {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">
         <h2 className='font-bold text-2xl text-center text-white'>Login</h2>
-        <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer' onClick={signIn}>
+        <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={authSignin}>
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
-             <p className='text-lg font-semibold'>Sign in with Google</p>
+             <p className='text-lg font-semibold'>Login in with Google</p>
         </div>
         <div className='flex flex-col gap-1'>
 
@@ -121,7 +140,7 @@ const Login = (props: Props) => {
           placeholder='Enter your password'
         />
         </div>
-        <button type="submit" className='commonButton py-2 font-semibold text-white'>Login</button>
+        <button type="submit" className={`${session?.user || props.authState ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user || props.authState}>Login</button>
       </form>
       <p className='text-white text-sm'>Not a registered user? <Link href="/signup"><span className='textStyle font-bold cursor-pointer'>Signup</span></Link></p>
        </div>
