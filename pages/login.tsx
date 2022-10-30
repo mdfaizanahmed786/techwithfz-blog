@@ -86,6 +86,10 @@ const Login = (props: Props) => {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">
         <h2 className='font-bold text-2xl text-center text-white'>Login</h2>
+        <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer' onClick={signIn}>
+          <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
+             <p className='text-lg font-semibold'>Sign in with Google</p>
+        </div>
         <div className='flex flex-col gap-1'>
 
         <label htmlFor="email" className='font-semibold text-white'>Email</label>
