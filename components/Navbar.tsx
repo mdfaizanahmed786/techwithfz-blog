@@ -8,6 +8,20 @@ type Props = {
 };
 
 const Navbar = ({ authState }: Props) => {
+  const {isAuthenticated}=useContext(userContext)
+  const [admin, setAdmin]=useState<boolean>(false)
+  useEffect(()=>{
+    if(isAuthenticated()){
+         setAdmin(true)
+    }
+    else{
+      setAdmin(false)
+    }
+
+  },[])
+  const logOut=()=>{
+    localStorage.removeItem('auth')
+  }
   return (
     <header className="primary-bg sticky top-0 backdrop-blur-md z-20 shadow-md">
       <nav className="flex justify-between p-2 h-[59px] items-center max-w-[1430px] mx-auto">
@@ -33,17 +47,28 @@ const Navbar = ({ authState }: Props) => {
             </p>
           </Link>
         </div>
-
-        <div className="flex items-center space-x-12">
-          <Link href={"/login"}>
-            <p className="font-bold textStyle cursor-pointer">Login</p>
-          </Link>
-          <Link href={"/signup"}>
-            <p className="commonButton font-semibold cursor-pointer text-white px-5 py-1">
-              Signup
-            </p>
-          </Link>
-        </div>
+        {authState ? (
+          <div className="flex items-center space-x-5">
+          <p className="commonButton font-semibold cursor-pointer text-white px-5 py-1" onClick={logOut}>
+            Logout
+          </p>
+      {admin && ( <p className="commonButton font-semibold cursor-pointer text-white px-3 py-1">
+            Welcome Admin
+          </p>)}
+       </div>
+      
+        ) : (
+          <div className="flex items-center space-x-12">
+            <Link href={"/login"}>
+              <p className="font-bold textStyle cursor-pointer">Login</p>
+            </Link>
+            <Link href={"/signup"}>
+              <p className="commonButton font-semibold cursor-pointer text-white px-5 py-1">
+                Signup
+              </p>
+            </Link>
+          </div>
+        )}
       </nav>
     </header>
   );
