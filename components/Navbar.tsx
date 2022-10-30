@@ -59,7 +59,7 @@ const Navbar = ({ authState }: Props) => {
             </p>
             {admin && (
               <Link href={"/admin"} ><p className="commonButton font-semibold cursor-pointer text-white px-3 py-1">
-                Welcome Admin
+                Welcome Faizan
               </p>
               </Link>
             )}

@@ -1,3 +1,5 @@
+import { SessionProvider } from "next-auth/react"
+import { Session } from "next-auth";
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -9,10 +11,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useRouter } from "next/router";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component,   pageProps}:  AppProps<{
+  session: Session;
+}>) {
   const [authState, setAuthState] = useState<boolean>();
   const router=useRouter();
-  const [key, setKey] = useState<number>(90);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
@@ -26,6 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <SessionProvider session={pageProps.session}>
       <AppProvider>
         <NextNProgress
           color="#10935F"
@@ -39,6 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Footer />
         <ToastContainer />
       </AppProvider>
+      </SessionProvider>
     </>
   );
 }
