@@ -31,14 +31,15 @@ const Blog = (props: Props) => {
   }, [router.query]);
 
   return (
-    <div className="loginPage">
+    <div className="loginPage w-full">
       <Head>
         <title>techWithFZ - Blog</title>
       </Head>
       <h1 className="text-3xl text-white font-bold text-center py-5 ">
-        All Blogs ({allBlogs.length})
+        All Blogs ({}) 5
       </h1>
-      <div className="flex flex-col gap-7 py-6 max-w-[1030px] mx-auto">
+      <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-5">
+     
         {allBlogs.map((blog: Response) => (
           <div
             key={blog._id}
@@ -50,7 +51,7 @@ const Blog = (props: Props) => {
             <h2 className="font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 ">
               <Link href={`blogpost/${blog.slug}`}>{blog.title}</Link>
             </h2>
-            <p className="text-white">{blog.desc.slice(0, 200) + "..."}</p>
+            <p className="text-white">{blog.desc.slice(0, 120) + "..."}</p>
             <div className="flex justify-between">
               <div className="flex gap-5">
                 <Link href={`blogpost/${blog.slug}`}>

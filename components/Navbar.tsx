@@ -28,14 +28,14 @@ const Navbar = ({ authState }: Props) => {
     signOut()
   };
   return (
-    <header className="primary-bg sticky top-0 backdrop-blur-md z-20 shadow-md">
-      <nav className="flex justify-between p-2 h-[59px] items-center max-w-[1430px] mx-auto">
+    <header className="primary-bg sticky top-0 backdrop-blur-md z-20 shadow-md w-full">
+      <nav className="flex justify-between md:p-2 h-[59px] items-center max-w-[1430px] mx-auto px-3 md:px-3 ">
         <Link href={"/"}>
           <div className="font-bold text-white hover:text-gray-400 transition-all duration-200 cursor-pointer">
             TechWithFZ
           </div>
         </Link>
-        <div className="flex items-center gap-20">
+        <div className="items-center gap-20 hidden md:inline-flex">
           <Link href={"/"}>
             <p className="font-semibold text-md cursor-pointer text-white hover:text-gray-400 transition-all duration-200">
               Home
@@ -71,7 +71,7 @@ const Navbar = ({ authState }: Props) => {
         ) : (
           <div className="flex items-center space-x-12">
             <Link href={"/login"}>
-              <p className="font-bold textStyle cursor-pointer">Login</p>
+              <p className="font-bold textStyle cursor-pointer hidden md:inline-flex">Login</p>
             </Link>
             <Link href={"/signup"}>
               <p className="commonButton font-semibold cursor-pointer text-white px-5 py-1">
