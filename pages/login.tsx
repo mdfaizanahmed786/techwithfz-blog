@@ -92,16 +92,16 @@ toast.success('Login Success!', {
 
   };
   return (
-    <div className='loginPage h-screen items-center  flex'>
+    <div className='loginPage h-screen md:items-center  md:flex'>
       <Head>
   <title>Login | techWithFZ</title>
       </Head>
-      <div className='flex max-w-[1450px] mx-auto h-[32rem]'>
-      <div className='imageContainer flex-[0.45]'>
+      <div className='flex md:max-w-[1450px] md:mx-auto mx-5 '>
+      <div className='imageContainer md:flex-[0.45] hidden md:inline-flex'>
         <img src="/login.png" className='object-cover h-full rounded-tl-md rounded-bl-md' alt="login_image" />
 
       </div>
-       <div className='bg-[#1E1E1E] px-7 rounded-tr-md rounded-br-md flex flex-col gap-8  items-center flex-[0.55] justify-center shadow-lg'>
+       <div className='bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center md:flex-[0.55] justify-center shadow-lg  w-full py-7 mt-48 md:mt-0 md:py-0'>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">
         <h2 className='font-bold text-2xl text-center text-white'>Login</h2>

@@ -31,12 +31,13 @@ const Blog = (props: Props) => {
   }, [router.query]);
 
   return (
+
     <div className="loginPage w-full">
       <Head>
         <title>techWithFZ - Blog</title>
       </Head>
       <h1 className="text-3xl text-white font-bold text-center py-5 ">
-        All Blogs ({}) 5
+        All Blogs({allBlogs.length})
       </h1>
       <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-5">
      
