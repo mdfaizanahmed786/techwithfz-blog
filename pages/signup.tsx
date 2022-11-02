@@ -13,7 +13,9 @@ const Signup = (props: Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const {data:session}=useSession();
+  const {data}=useSession();
+  const session:any=data;
+  const loginWithGoogle:any=signIn
   const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -93,7 +95,7 @@ const Signup = (props: Props) => {
                 SignUp
               </h2>
         
-              <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={signIn}>
+              <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={loginWithGoogle}>
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
              <p className='text-lg font-semibold'>Signup with Google</p>
         </div>
