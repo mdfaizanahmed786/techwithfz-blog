@@ -38,7 +38,7 @@ toast.success('Login Success!', {
     e.preventDefault();
     try{
 
-      const getUser = await fetch("http://localhost:3000/api/getuser", {
+      const getUser = await fetch("https://techwithfz.vercel.app/api/getuser", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

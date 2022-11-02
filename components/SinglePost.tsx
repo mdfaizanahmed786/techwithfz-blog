@@ -46,5 +46,4 @@ const SinglePost = ({ title, slug, desc, createdAt }: Props) => {
 };
 
 export default SinglePost;
-// width: 393px;
-// height: 257px;
+
