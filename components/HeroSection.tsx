@@ -7,9 +7,9 @@ type Props = {};
 
 const HeroSection = (props: Props) => {
   return (
-    <div className="heroSection">
-      <div className="max-w-[1350px] mx-auto flex gap-5 items-center p-10">
-        <div className="flex flex-col gap-8 flex-1 ">
+    <div className="heroSection -mb-3 md:-mb-0">
+      <div className="md:max-w-[1350px] md:mx-auto flex gap-5 items-center p-9 md:p-10">
+        <div className="flex flex-col md:gap-8 gap-6 flex-1 ">
           <TypeAnimation
             sequence={[
               "",
@@ -27,21 +27,24 @@ const HeroSection = (props: Props) => {
             wrapper="p"
             repeat={Infinity}
             speed={30}
-            className="text-5xl text-white font-semibold"
+            className="md:text-5xl text-3xl text-center md:text-left text-white font-semibold"
           />
           <p
-            className="font-semibold text-4xl hover:underline decoration-green-400  cursor-pointer textStyle"
+            className="font-semibold md:text-4xl text-2xl hover:underline decoration-green-400  cursor-pointer textStyle md:text-left text-center"
             title="coming soon"
           >
             Subscribe to our Newsletter
           </p>
+          <div className="flex justify-center md:block py-2 md:py-0 ">
+
           <Link href={"/blog"}>
             <p className="commonButton font-semibold cursor-pointer px-4  text-white w-32 py-2 ">
               Explore Blog
             </p>
           </Link>
+          </div>
         </div>
-        <div className="imageSection relative h-[396.96px] w-[607px] shadow-md">
+        <div className="imageSection relative h-[396.96px] hidden md:inline-flex w-[607px] shadow-md">
           <Image
             src={"/hero.png"}
             className="shadow-xl"

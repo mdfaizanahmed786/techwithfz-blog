@@ -47,19 +47,7 @@ const slug = (props: Response | any) => {
             </div>
             <p className="text-white text-lg leading-9">{blog.desc}</p>
             <img src="/hackathon.png" alt="img_programming" className="rounded-md" />
-            <p className="text-white text-lg leading-9">
-              Tailwind CSS v3.2 is here with an absolutely massive amount of new
-              stuff, including support for dynamic breakpoints, multiple config
-              files in a single project, nested groups, parameterized variants,
-              container queries, and more. As always check out the release notes
-              for every nitty-gritty fix and improvement, but here’s the
-              highlight reel: Multiple config files in one project using @config
-              Browser-support-based styling with supports-* ARIA attribute
-              variants Data attribute variants Max-width and dynamic breakpoints
-              Dynamic group-* and peer-* variants Dynamic variants with
-              matchVariant Nested group and multiple peer support using variant
-              modifiers Container queries
-            </p>
+          
             <p className="text-white text-lg leading-9">{blog.desc}</p>
           </div>
         ))}

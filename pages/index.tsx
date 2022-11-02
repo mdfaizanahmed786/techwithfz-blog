@@ -27,10 +27,10 @@ const Home: NextPage = (props: Props) => {
         <section>
           <HeroSection />
         </section>
-        <section className="bg-[#2E2E2E] p-12">
-          <div className="max-w-[1430px] mx-auto px-4">
-            <p className="text-white font-semibold text-2xl py-4">Recent Posts</p>
-            <div className="grid grid-cols-3 gap-24 mt-10">
+        <section className="bg-[#2E2E2E] py-5 px-2 md:p-12 ">
+          <div className="md:max-w-[1430px] md:mx-auto px-4">
+            <p className="text-white font-semibold text-2xl md:py-4 py-3 text-center md:text-left">Recent Posts</p>
+            <div className="grid md:grid-cols-3 grid-cols-1 gap-24 md:mt-10 mt-3">
               {allBlogs.slice(0, 3).map((blog: Response) => (
                 <SinglePost
                   id={blog._id}
