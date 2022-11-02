@@ -32,7 +32,7 @@ const slug = (props: Response | any) => {
         <p className="text-white font-bold  textStyle">Go back</p>
       </div>
 
-      <div className="max-w-[1030px] mx-auto p-14 ">
+      <div className="md:max-w-[1030px] md:mx-auto md:p-14 px-6 py-7 ">
         {specificPost.map((blog: Response) => (
           <div key={blog._id} className="space-y-4">
             <p className="text-xs textStyle font-semibold">
