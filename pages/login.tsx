@@ -16,9 +16,10 @@ const Login = (props: Props) => {
   const router=useRouter();
   const {data}=useSession();
   const session:any=data
+  const loginWithGoogle:any=signIn;
 const authSignin=()=>{
 
-signIn()
+  loginWithGoogle()
 if(session)
 toast.success('Login Success!', {
   position: "top-right",
