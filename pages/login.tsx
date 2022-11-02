@@ -14,7 +14,8 @@ const Login = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router=useRouter();
-  const {data:session}=useSession();
+  const {data}=useSession();
+  const session:any=data
 const authSignin=()=>{
 
 signIn()
