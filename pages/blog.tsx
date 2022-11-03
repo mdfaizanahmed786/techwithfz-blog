@@ -61,7 +61,7 @@ const Blog = (props: Props) => {
                   </button>
                 </Link>
                 {admin && (
-                  <button className="commonButton py-2 w-32 font-semibold text-white">
+                  <button className="commonButton py-2 hidden md:inline-flex w-32 font-semibold text-white">
                     Delete Post
                   </button>
                 )}
