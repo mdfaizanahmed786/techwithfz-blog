@@ -97,7 +97,7 @@ const Signup = (props: Props) => {
         
               <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={loginWithGoogle}>
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
-             <p className='text-lg font-semibold'>Signup with Google</p>
+             <p className='text-lg'>Signup with Google</p>
         </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="name" className="font-semibold text-white">

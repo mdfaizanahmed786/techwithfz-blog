@@ -109,7 +109,7 @@ toast.success('Login Success!', {
         <h2 className='font-bold text-2xl text-center text-white'>Login</h2>
         <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={authSignin}>
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
-             <p className='text-lg font-semibold'>Login in with Google</p>
+             <p className='text-lg'>Login in with Google</p>
         </div>
         <div className='flex flex-col gap-1'>
 
