@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../context/userContext";
 import { useSession, signIn, signOut } from "next-auth/react"
+import { toast } from "react-toastify";
 
 type Props = {
   key?: number;
@@ -25,6 +26,16 @@ const Navbar = ({ authState }: Props) => {
   const logOut = () => {
     router.push("/")
     localStorage.removeItem("auth");
+    toast.success('Logout Success!', {
+      position: "top-right",
+      autoClose: 1800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
     signOut()
   };
   return (
