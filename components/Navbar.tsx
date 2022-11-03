@@ -73,7 +73,7 @@ const Navbar = ({ authState }: Props) => {
               Logout
             </p>
             {admin && (
-              <Link href={"/admin"} ><p className="commonButton font-semibold cursor-pointer text-white px-3 py-1">
+              <Link href={"/admin"} ><p className="commonButton hidden md:inline-flex font-semibold cursor-pointer text-white px-3 py-1">
                 Welcome Faizan
               </p>
               </Link>
