@@ -28,7 +28,7 @@ type Props = {
 const Login = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [captcha, setCaptcha]=useState<string>("")
+  const [captcha, setCaptcha]=useState<string| null>("")
   const router=useRouter();
   const {data}=useSession();
  
@@ -124,7 +124,7 @@ toast.success('Login Success!', {
     }
 
   };
-  function onChange(value:string) {
+  function onChange(value:string|null) {
     setCaptcha(value)
   }
   

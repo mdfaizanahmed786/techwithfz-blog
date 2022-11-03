@@ -26,7 +26,7 @@ const Signup = (props: Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [captcha, setCaptcha]=useState<string>("")
+  const [captcha, setCaptcha]=useState<string| null>("")
   const {data}=useSession();
   const session:any=data;
   const loginWithGoogle:any=signIn
@@ -118,7 +118,7 @@ const Signup = (props: Props) => {
     });
   
   }
-  function onChange(value:string) {
+  function onChange(value:string|null) {
     setCaptcha(value)
   }
   
