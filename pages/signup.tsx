@@ -1,9 +1,10 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useSession, signIn, getProviders} from "next-auth/react"
+import ReCAPTCHA from "react-google-recaptcha";
 interface Auth{
   
   callbackUrl:string
@@ -25,6 +26,7 @@ const Signup = (props: Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [captcha, setCaptcha]=useState<string>("")
   const {data}=useSession();
   const session:any=data;
   const loginWithGoogle:any=signIn
@@ -46,8 +48,20 @@ const Signup = (props: Props) => {
         }),
       });
       const response = await addUser.json();
-      
-      if(response.success){
+      if(!captcha){
+        toast.error('Invalid captcha', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+        return;
+      }
+      if(response.success && captcha){
         toast.success('Signup Success!', {
           position: "top-right",
           autoClose: 1800,
@@ -104,6 +118,10 @@ const Signup = (props: Props) => {
     });
   
   }
+  function onChange(value:string) {
+    setCaptcha(value)
+  }
+  
   return (
     <div className="loginPage min-h-screen md:items-center md:flex">
       <Head>
@@ -176,6 +194,13 @@ const Signup = (props: Props) => {
                 placeholder="Enter your password"
               />
             </div>
+            <div className='flex justify-start w-full'>
+        <ReCAPTCHA
+    sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
+   
+    onChange={onChange}
+  />
+  </div>
             <button type="submit" className={`${session?.user || props.authState ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user || props.authState}>Signup</button>
           </form>
           <p className="text-white text-sm">
