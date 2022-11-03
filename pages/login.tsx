@@ -3,23 +3,38 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react'
 import { toast } from 'react-toastify';
-import { useSession, signIn, signOut } from "next-auth/react"
-import { sign } from 'crypto';
+import { useSession, signOut } from "next-auth/react"
+import { getProviders, signIn } from "next-auth/react"
 
+interface Auth{
+  
+  callbackUrl:string
+  id:string
+  name:string
+  signinUrl:string
+  type:string
+}
+interface GoogleAuth{
+  google:Auth
+}
 type Props = {
   authState:boolean
+  providers:GoogleAuth
 }
+
 
 const Login = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const router=useRouter();
   const {data}=useSession();
+ 
   const session:any=data
   const loginWithGoogle:any=signIn;
+
 const authSignin=()=>{
 
-  loginWithGoogle()
+  loginWithGoogle(props.providers.google.id)
 if(session)
 toast.success('Login Success!', {
   position: "top-right",
@@ -109,7 +124,7 @@ toast.success('Login Success!', {
         <h2 className='font-bold text-2xl text-center text-white'>Login</h2>
         <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={authSignin}>
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
-             <p className='text-lg'>Login in with Google</p>
+             <p className='text-lg'>Login in with {props.providers.google.name}</p>
         </div>
         <div className='flex flex-col gap-1'>
 
@@ -150,5 +165,10 @@ toast.success('Login Success!', {
     </div>
   );
 }
-
+export async function getServerSideProps(context:object) {
+  const providers = await getProviders()
+  return {
+    props: { providers },
+  }
+}
 export default Login

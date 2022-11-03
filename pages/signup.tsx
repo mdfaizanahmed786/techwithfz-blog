@@ -3,11 +3,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
-import { useSession, signIn} from "next-auth/react"
-
+import { useSession, signIn, getProviders} from "next-auth/react"
+interface Auth{
+  
+  callbackUrl:string
+  id:string
+  name:string
+  signinUrl:string
+  type:string
+}
+interface GoogleAuth{
+  google:Auth
+}
 type Props = {
   authState:boolean
-};
+  providers:GoogleAuth
+}
+
 
 const Signup = (props: Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -76,6 +88,22 @@ const Signup = (props: Props) => {
         });
     }
   };
+  const authSignin=()=>{
+
+    loginWithGoogle(props.providers.google.id)
+  if(session)
+  toast.success('Singup Success!', {
+    position: "top-right",
+    autoClose: 1800,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    });
+  
+  }
   return (
     <div className="loginPage min-h-screen md:items-center md:flex">
       <Head>
@@ -95,9 +123,9 @@ const Signup = (props: Props) => {
                 SignUp
               </h2>
         
-              <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={loginWithGoogle}>
+              <div className='google bg-white flex gap-7 text-black justify-center items-center rounded-md py-1 px-2 cursor-pointer border-blue-500 border-2' onClick={authSignin}>
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
-             <p className='text-lg'>Signup with Google</p>
+             <p className='text-lg'>Signup with {props.providers.google.name}</p>
         </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="name" className="font-semibold text-white">
@@ -161,5 +189,11 @@ const Signup = (props: Props) => {
     </div>
   );
 };
+export async function getServerSideProps(context:object) {
+  const providers = await getProviders()
+  return {
+    props: { providers },
+  }
+}
 
 export default Signup;
