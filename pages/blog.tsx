@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
-import { userContext } from "../context/userContext";
+import { toast } from "react-toastify";
+
 interface Response {
   _id: string;
   title: string;
@@ -38,6 +39,16 @@ const Blog = (props: Props) => {
       await fetch(`https://techwithfz.vercel.app/api/deletepost/${id}`, {
         method: "DELETE",
       });
+      toast.success('Deleted you Post!', {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
 
     }
   }
