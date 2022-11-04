@@ -21,6 +21,7 @@ const Blog = (props: Props) => {
   const { allBlogs } = props;
   const router = useRouter();
   const [admin, setAdmin] = useState<boolean>(false);
+  const [newPosts, setNewPosts]=useState(allBlogs)
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.isAdmin) {
@@ -29,6 +30,17 @@ const Blog = (props: Props) => {
       setAdmin(false);
     }
   }, [router.query]);
+  async function deletePost(id: string) {
+    let user = JSON.parse(localStorage.getItem("auth")!);
+    if (user?.isAdmin) {
+      let afterDelete = allBlogs.filter((post: Response) => post._id !== id);
+      setNewPosts(afterDelete);
+      await fetch(`https://techwithfz.vercel.app/api/deletepost/${id}`, {
+        method: "DELETE",
+      });
+
+    }
+  }
 
   return (
 
@@ -37,11 +49,11 @@ const Blog = (props: Props) => {
         <title>techWithFZ - Blog</title>
       </Head>
       <h1 className="text-3xl text-white font-bold text-center py-5 ">
-        All Blogs({allBlogs.length})
+        All Blogs({newPosts.length})
       </h1>
       <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-4">
      
-        {allBlogs.map((blog: Response) => (
+        {newPosts.map((blog: Response) => (
           <div
             key={blog._id}
             className="flex flex-col gap-5 px-9 py-7 rounded-lg shadow-md hover:bg-[#2E2E2E] bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-lg"
@@ -61,7 +73,7 @@ const Blog = (props: Props) => {
                   </button>
                 </Link>
                 {admin && (
-                  <button className="commonButton py-2 hidden md:block w-32 font-semibold text-white">
+                  <button className="commonButton py-2 hidden md:block w-32 font-semibold text-white" onClick={()=>deletePost(blog._id)}>
                     Delete Post
                   </button>
                 )}
