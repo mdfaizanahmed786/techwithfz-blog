@@ -6,7 +6,7 @@ export default async function forgot(req, res) {
     try {
       await connectDb();
 
-      const { email,token } = req.body;
+      const { email } = req.body;
       // checking if the user exists in our database
 
       const user = await User.findOne({ email });
@@ -17,8 +17,8 @@ export default async function forgot(req, res) {
           .json({ error: "User with this email do not exist!" });
 
       let addDetails = await Forgot.create({
-        token,
-        email,
+        token:req.body.token,
+        email:req.body.email
       });
       await addDetails.save();
 

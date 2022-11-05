@@ -184,7 +184,7 @@ toast.success('Login Success!', {
         </div>
         <div className='flex justify-start w-full'>
         <ReCAPTCHA
-    sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
+    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY}
    
     onChange={onChange}
   />

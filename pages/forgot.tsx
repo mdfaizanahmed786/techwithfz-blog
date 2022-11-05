@@ -3,12 +3,13 @@ import React, { useRef } from "react";
 import { toast } from "react-toastify";
 
 type Props = {};
-
+const token=process.env.NEXT_PUBLIC_FORGOT_TOKEN
 const Forgot = (props: Props) => {
+  
+    console.log(token)
   const emailRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const token = process.env.FORGOT_TOKEN;
     try{
       const forgotPassword = await fetch("https://techwithfz.vercel.app/api/forgot", {
         method: "POST",
