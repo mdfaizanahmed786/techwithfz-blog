@@ -1,12 +1,67 @@
 import Head from "next/head";
 import React, { useRef } from "react";
+import { toast } from "react-toastify";
 
 type Props = {};
 
 const Forgot = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try{
+      const forgotPassword = await fetch("https://techwithfz.vercel.app/api/forgot", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: emailRef.current?.value,
+          
+        }),
+      });
+      const response=await forgotPassword.json();
+      if(response.success){
+        toast.success('Instructions have been sent to your email to reset your password!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+    
+      }
+      else{
+        toast.error('User with this email do not exist!', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+      }
+    }
+    catch(er){
+      toast.error('Server error!', {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    }
+    
+  };
 
-  const handleSubmit = () => {};
+  
   return (
     <div className="loginPage min-h-screen md:items-center md:flex">
     <Head>
