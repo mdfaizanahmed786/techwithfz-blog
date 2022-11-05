@@ -8,6 +8,7 @@ const Forgot = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    const token = process.env.FORGOT_TOKEN;
     try{
       const forgotPassword = await fetch("https://techwithfz.vercel.app/api/forgot", {
         method: "POST",
@@ -15,6 +16,7 @@ const Forgot = (props: Props) => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
+            token,
           email: emailRef.current?.value,
           
         }),
