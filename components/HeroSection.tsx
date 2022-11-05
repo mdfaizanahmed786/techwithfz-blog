@@ -2,10 +2,23 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
+import { toast } from "react-toastify";
 
 type Props = {};
 
 const HeroSection = (props: Props) => {
+  const displayMessage=()=>{
+    toast.success('Coming soon!', {
+      position: "top-right",
+      autoClose: 1800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+  }
   return (
     <div className="heroSection -mb-3 md:-mb-0">
       <div className="md:max-w-[1350px] md:mx-auto flex gap-5 items-center p-9 md:p-10">
@@ -32,6 +45,7 @@ const HeroSection = (props: Props) => {
           <p
             className="font-semibold md:text-4xl text-2xl hover:underline decoration-green-400  cursor-pointer textStyle md:text-left text-center"
             title="coming soon"
+            onClick={displayMessage}
           >
             Subscribe to our Newsletter
           </p>
