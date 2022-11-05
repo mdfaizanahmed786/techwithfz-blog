@@ -146,6 +146,7 @@ toast.success('Login Success!', {
           <img src="https://developers.google.com/identity/images/g-logo.png" alt="google_logo" className='h-10 w-10' />
              <p className='text-lg'>Login in with {props.providers.google.name}</p>
         </div>
+        
         <div className='flex flex-col gap-1'>
 
         <label htmlFor="email" className='font-semibold text-white'>Email</label>
@@ -176,6 +177,10 @@ toast.success('Login Success!', {
           required
           placeholder='Enter your password'
         />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <p className='text-white text-center'>Forgot your password? <Link href="/forgot"><span className='textStyle font-bold cursor-pointer'>Reset Password</span></Link></p>
+
         </div>
         <div className='flex justify-start w-full'>
         <ReCAPTCHA
