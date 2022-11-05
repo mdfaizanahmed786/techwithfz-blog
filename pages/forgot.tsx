@@ -151,7 +151,7 @@ const Forgot = (props: Props) => {
               } `}
               disabled={session?.user || props.authState}
             >
-              Login
+           Continue
             </button>
           </form>
           <p className="text-white text-sm">
