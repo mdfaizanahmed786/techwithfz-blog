@@ -5,8 +5,8 @@ export default async function forgot(req, res) {
   if (req.method === "POST") {
     try {
       await connectDb();
-      const token = process.env.FORGOT_TOKEN;
-      const { email } = req.body;
+
+      const { email,token } = req.body;
       // checking if the user exists in our database
 
       const user = await User.findOne({ email });
