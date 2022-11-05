@@ -35,19 +35,6 @@ const Signup = (props: Props) => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try{
-
-      const addUser = await fetch("https://techwithfz.vercel.app/api/createuser", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          name: nameRef.current?.value,
-          email: emailRef.current?.value,
-          password: passwordRef.current?.value,
-        }),
-      });
-      const response = await addUser.json();
       if(!captcha){
         toast.error('Invalid captcha', {
           position: "top-right",
@@ -61,6 +48,19 @@ const Signup = (props: Props) => {
           });
         return;
       }
+
+      const addUser = await fetch("https://techwithfz.vercel.app/api/createuser", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nameRef.current?.value,
+          email: emailRef.current?.value,
+          password: passwordRef.current?.value,
+        }),
+      });
+      const response = await addUser.json();
       if(response.success && captcha){
         toast.success('Signup Success!', {
           position: "top-right",

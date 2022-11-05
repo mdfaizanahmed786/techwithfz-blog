@@ -13,6 +13,19 @@ const Forgot = (props: Props) => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try{
+        if(!captcha){
+          toast.error('Invalid captcha', {
+            position: "top-right",
+            autoClose: 1800,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+          return;
+        }
       const forgotPassword = await fetch("https://techwithfz.vercel.app/api/forgot", {
         method: "POST",
         headers: {
@@ -25,19 +38,6 @@ const Forgot = (props: Props) => {
         }),
       });
       const response=await forgotPassword.json();
-      if(!captcha){
-        toast.error('Invalid captcha', {
-          position: "top-right",
-          autoClose: 1800,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          });
-        return;
-      }
       if(response.success && captcha){
         toast.success('Instructions have been sent to your email to reset your password!', {
           position: "top-right",

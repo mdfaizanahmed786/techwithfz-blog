@@ -55,19 +55,7 @@ toast.success('Login Success!', {
     
     e.preventDefault();
     try{
-
-      const getUser = await fetch("https://techwithfz.vercel.app/api/getuser", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-    
-          email: emailRef.current?.value,
-          password: passwordRef.current?.value,
-        }),
-      });
-      const response = await getUser.json();
+      
       if(!captcha){
         toast.error('Invalid captcha', {
           position: "top-right",
@@ -81,6 +69,18 @@ toast.success('Login Success!', {
           });
         return;
       }
+      const getUser = await fetch("https://techwithfz.vercel.app/api/getuser", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+    
+          email: emailRef.current?.value,
+          password: passwordRef.current?.value,
+        }),
+      });
+      const response = await getUser.json();
       if(response.success && captcha){
         toast.success('Login Success!', {
           position: "top-right",
