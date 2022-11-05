@@ -196,7 +196,7 @@ const Signup = (props: Props) => {
             </div>
             <div className='flex justify-start w-full'>
         <ReCAPTCHA
-      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY}
+      sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
    
     onChange={onChange}
   />

@@ -1,5 +1,6 @@
 import Head from "next/head";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 
 type Props = {};
@@ -8,6 +9,7 @@ const Forgot = (props: Props) => {
   
     console.log(token)
   const emailRef = useRef<HTMLInputElement>(null);
+  const [captcha, setCaptcha]=useState<string| null>("")
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try{
@@ -23,7 +25,20 @@ const Forgot = (props: Props) => {
         }),
       });
       const response=await forgotPassword.json();
-      if(response.success){
+      if(!captcha){
+        toast.error('Invalid captcha', {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+        return;
+      }
+      if(response.success && captcha){
         toast.success('Instructions have been sent to your email to reset your password!', {
           position: "top-right",
           autoClose: 1800,
@@ -63,7 +78,9 @@ const Forgot = (props: Props) => {
     }
     
   };
-
+  function onChange(value:string|null) {
+    setCaptcha(value)
+  }
   
   return (
     <div className="loginPage min-h-screen md:items-center md:flex">
@@ -103,7 +120,13 @@ const Forgot = (props: Props) => {
               pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
             />
           </div>
-          
+          <div className='flex justify-start w-full'>
+        <ReCAPTCHA
+      sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
+   
+    onChange={onChange}
+  />
+  </div>
           
           <button type="submit" className="commonButton py-2 font-semibold text-white" >Continue</button>
         </form>
