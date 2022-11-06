@@ -7,12 +7,12 @@ export default async function update(req, res) {
   if (req.method === "PUT") {
     try {
       await connectDb();
-      const { password } = req.body;
+      console.log(req.body.password)
       let [recentDocument] = await Forgot.find().sort({ $natural: -1 });
       if (recentDocument.token !== process.env.NEXT_PUBLIC_FORGOT_TOKEN)
         return res.status(401).json({ error: "You are not authorized" });
         const salt = await bcrypt.genSalt(10);
-        const hashedPass = await bcrypt.hash(password, salt);
+        const hashedPass = await bcrypt.hash(req.body.password, salt);
   
       let user = await User.findOneAndUpdate(
         { email: recentDocument.email },

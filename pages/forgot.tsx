@@ -62,6 +62,40 @@ const Forgot = (props: Props) => {
           });
           return;
         }
+        let updateData = await fetch("https://techwithfz.vercel.app/api/update", {
+          method: "PUT",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ password: passwordRef?.current?.value }),
+        });
+      
+        let response = await updateData.json();
+      
+        if (response.success) {
+          toast.success("Your password updated successfully!", {
+            position: "top-right",
+            autoClose: 1800,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          router.push("/login")
+        } else {
+          toast.error("We are facing some issues, please try again later!", {
+            position: "top-right",
+            autoClose: 1800,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
       } catch (er) {
         toast.error(
           "There was an error while resetting your password. Please try again later!",
