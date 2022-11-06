@@ -36,12 +36,9 @@ const Forgot = (props: Props) => {
     e.preventDefault();
     let secretId = localStorage.getItem("secret");
    
-    if (authToken && authToken === token && secretId) {
+    if (authToken === token && secretId) {
       try {
-        if (!secretId) {
-          router.push("/signup");
-          return;
-        }
+      
         if (!captcha) {
           toast.error("Invalid captcha", {
             position: "top-right",
