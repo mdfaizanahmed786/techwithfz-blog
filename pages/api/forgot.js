@@ -2,6 +2,7 @@ import { Forgot } from "../../backend/models/Forgot";
 import User from "../../backend/models/User";
 import connectDb from "../../backend/connect";
 import sgMail from "@sendgrid/mail";
+import jsonwebtoken from "jsonwebtoken";
 export default async function forgot(req, res) {
   if (req.method === "POST") {
     try {
@@ -22,6 +23,7 @@ export default async function forgot(req, res) {
         email: req.body.email,
       });
       await addDetails.save();
+
       sgMail.setApiKey(process.env.SENDGRID_KEY);
       const msg = {
         to: email, // Change to your recipient
@@ -38,8 +40,8 @@ export default async function forgot(req, res) {
       } catch (er) {
         return res.status(500).json({ error: "Internal server error" });
       }
-
-      res.json({ success: true });
+      const { id } = addDetails;
+      res.json({ success: true, id });
     } catch (er) {
       res.status(500).json({ error: "Internal Server Error", err: er.message });
     }

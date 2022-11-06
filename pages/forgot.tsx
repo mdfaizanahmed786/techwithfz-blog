@@ -34,6 +34,11 @@ const Forgot = (props: Props) => {
   const session: any = data;
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    let secretId = localStorage.getItem("secret");
+    if (!secretId) {
+      router.push("/singup");
+      return;
+    }
     if (authToken && authToken === token) {
       try {
         if (!captcha) {
@@ -62,16 +67,19 @@ const Forgot = (props: Props) => {
           });
           return;
         }
-        let updateData = await fetch("https://techwithfz.vercel.app/api/update", {
-          method: "PUT",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ password: passwordRef?.current?.value }),
-        });
-      
+        let updateData = await fetch(
+          "https://techwithfz.vercel.app/api/update",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ password: passwordRef?.current?.value }),
+          }
+        );
+
         let response = await updateData.json();
-      
+
         if (response.success) {
           toast.success("Your password updated successfully!", {
             position: "top-right",
@@ -83,7 +91,7 @@ const Forgot = (props: Props) => {
             progress: undefined,
             theme: "dark",
           });
-          router.push("/login")
+          router.push("/login");
         } else {
           toast.error("We are facing some issues, please try again later!", {
             position: "top-right",
@@ -140,7 +148,8 @@ const Forgot = (props: Props) => {
           }
         );
         const response = await forgotPassword.json();
-        if (response.success && captcha) {
+        if (response.success && captcha && response.id) {
+          localStorage.setItem("secret", response.id);
           toast.success(
             "Instructions have been sent to your email to reset your password!",
             {
@@ -154,6 +163,7 @@ const Forgot = (props: Props) => {
               theme: "dark",
             }
           );
+          localStorage.removeItem("secret")
         } else {
           toast.error("User with this email do not exist!", {
             position: "top-right",
@@ -165,6 +175,7 @@ const Forgot = (props: Props) => {
             progress: undefined,
             theme: "dark",
           });
+          router.push("/signup");
         }
       } catch (er) {
         toast.error("Server error!", {
