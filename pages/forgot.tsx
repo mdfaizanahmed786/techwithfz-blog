@@ -229,7 +229,7 @@ const Forgot = (props: Props) => {
 
                 <input
                   ref={passwordRef}
-                  type={`${show ? "text" : "password"}`}
+                  type="password"
                   name="password"
                   id="password"
                   autoComplete="false"
@@ -246,7 +246,7 @@ const Forgot = (props: Props) => {
                 <div className="bg-[#2E2E2E] py-2 px-2 items-center rounded-md outline-none  text-white border-[#10935F] border-2 flex ">
                   <input
                     ref={cpasswordRef}
-                    type="password"
+                    type={`${show ? "text" : "password"}`}
                     name="password"
                     id="cpassword"
                     minLength={7}
