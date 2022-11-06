@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
@@ -25,18 +25,26 @@ const token = process.env.NEXT_PUBLIC_FORGOT_TOKEN;
 const Forgot = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [secret, setSecret]=useState("")
   const cpasswordRef = useRef<HTMLInputElement>(null);
   const [captcha, setCaptcha] = useState<string | null>("");
   const { data } = useSession();
   const router = useRouter();
   const { authToken } = router.query;
 
+  useEffect(()=>{
+    let secretId = localStorage.getItem("secret");
+    if(secretId){
+      setSecret(secretId)
+    }
+  },[])
+
   const session: any = data;
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    let secretId = localStorage.getItem("secret");
    
-    if (authToken === token && secretId) {
+   
+    if (authToken === token && secret) {
       try {
       
         if (!captcha) {
