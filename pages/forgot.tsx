@@ -44,7 +44,7 @@ const Forgot = (props: Props) => {
     e.preventDefault();
    
    
-    if (authToken === token && secret) {
+    if (authToken === token ) {
       try {
       
         if (!captcha) {
@@ -215,7 +215,7 @@ const Forgot = (props: Props) => {
           className="object-cover w-72 rounded-tl-md rounded-bl-md hidden md:inline-flex"
           alt="login_image"
         />
-        {authToken && authToken === token ? (
+        {authToken === token && secret ? (
           <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center  justify-center shadow-lg  w-full py-7 mt-28 md:mt-0 md:py-6 mb-12 md:mb-0 flex-1">
             <form
               onSubmit={handleSubmit}
