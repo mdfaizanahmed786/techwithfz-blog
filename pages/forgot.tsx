@@ -35,12 +35,13 @@ const Forgot = (props: Props) => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     let secretId = localStorage.getItem("secret");
-    if (!secretId) {
-      router.push("/singup");
-      return;
-    }
+   
     if (authToken && authToken === token) {
       try {
+        if (!secretId) {
+          router.push("/signup");
+          return;
+        }
         if (!captcha) {
           toast.error("Invalid captcha", {
             position: "top-right",
