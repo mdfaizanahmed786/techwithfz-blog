@@ -188,7 +188,7 @@ const Login = (props: Props) => {
                 </Link>
               </p>
             </div>
-            <div className="flex justify-start w-full">
+            <div className="flex justify-center w-full">
               <ReCAPTCHA
                 sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
                 onChange={onChange}

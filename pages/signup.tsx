@@ -194,7 +194,7 @@ const Signup = (props: Props) => {
                 placeholder="Enter your password"
               />
             </div>
-            <div className='flex justify-start w-full'>
+            <div className='flex justify-center w-full'>
         <ReCAPTCHA
       sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
    

@@ -257,7 +257,7 @@ const Forgot = (props: Props) => {
                   placeholder="Confirm your password"
                 />
               </div>
-              <div className="flex justify-start w-full">
+              <div className="flex justify-center w-full">
                 <ReCAPTCHA
                   sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
                   onChange={onChange}
@@ -304,7 +304,7 @@ const Forgot = (props: Props) => {
                   pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
                 />
               </div>
-              <div className="flex justify-start w-full">
+              <div className="flex justify-center w-full">
                 <ReCAPTCHA
                   sitekey="6LcGfNYiAAAAALXVdk9psJDgpo_nUEb6D5RdqW7T"
                   onChange={onChange}
