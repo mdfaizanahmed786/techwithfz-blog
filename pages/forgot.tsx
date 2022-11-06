@@ -36,7 +36,7 @@ const Forgot = (props: Props) => {
     e.preventDefault();
     let secretId = localStorage.getItem("secret");
    
-    if (authToken && authToken === token) {
+    if (authToken && authToken === token && secretId) {
       try {
         if (!secretId) {
           router.push("/signup");
@@ -93,6 +93,7 @@ const Forgot = (props: Props) => {
             theme: "dark",
           });
           router.push("/login");
+          localStorage.removeItem("secret")
         } else {
           toast.error("We are facing some issues, please try again later!", {
             position: "top-right",
@@ -120,7 +121,9 @@ const Forgot = (props: Props) => {
           }
         );
       }
-    } else {
+    } 
+  
+    else {
       try {
         if (!captcha) {
           toast.error("Invalid captcha", {
@@ -164,7 +167,7 @@ const Forgot = (props: Props) => {
               theme: "dark",
             }
           );
-          localStorage.removeItem("secret")
+       
         } else {
           toast.error("User with this email do not exist!", {
             position: "top-right",
