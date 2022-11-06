@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import { getProviders, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 interface Auth {
   callbackUrl: string;
@@ -25,28 +26,27 @@ const token = process.env.NEXT_PUBLIC_FORGOT_TOKEN;
 const Forgot = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [secret, setSecret]=useState("")
+  const [secret, setSecret] = useState("");
   const cpasswordRef = useRef<HTMLInputElement>(null);
   const [captcha, setCaptcha] = useState<string | null>("");
   const { data } = useSession();
   const router = useRouter();
   const { authToken } = router.query;
+  const [show, setShow] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     let secretId = localStorage.getItem("secret");
-    if(secretId){
-      setSecret(secretId)
+    if (secretId) {
+      setSecret(secretId);
     }
-  },[])
+  }, []);
 
   const session: any = data;
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-   
-   
-    if (authToken === token ) {
+
+    if (authToken === token) {
       try {
-      
         if (!captcha) {
           toast.error("Invalid captcha", {
             position: "top-right",
@@ -98,7 +98,7 @@ const Forgot = (props: Props) => {
             theme: "dark",
           });
           router.push("/login");
-          localStorage.removeItem("secret")
+          localStorage.removeItem("secret");
         } else {
           toast.error("We are facing some issues, please try again later!", {
             position: "top-right",
@@ -126,9 +126,7 @@ const Forgot = (props: Props) => {
           }
         );
       }
-    } 
-  
-    else {
+    } else {
       try {
         if (!captcha) {
           toast.error("Invalid captcha", {
@@ -172,7 +170,6 @@ const Forgot = (props: Props) => {
               theme: "dark",
             }
           );
-       
         } else {
           toast.error("User with this email do not exist!", {
             position: "top-right",
@@ -229,33 +226,53 @@ const Forgot = (props: Props) => {
                 <label htmlFor="password" className="font-semibold text-white">
                   New Password
                 </label>
+
                 <input
                   ref={passwordRef}
-                  type="password"
+                  type={`${show ? "text" : "password"}`}
                   name="password"
                   id="password"
-                  minLength={7}
                   autoComplete="false"
-                  className="bg-[#2E2E2E] px-5 py-2 rounded-md outline-none text-white border-[#10935F] border-2 "
+                  minLength={5}
+                  className="bg-[#2E2E2E] py-2 px-2 items-center rounded-md outline-none  text-white border-[#10935F] border-2"
                   required
-                  placeholder="Enter your new password"
+                  placeholder="Enter your password"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label htmlFor="cpassword" className="font-semibold text-white">
                   Confirm new Password
                 </label>
-                <input
-                  ref={cpasswordRef}
-                  type="password"
-                  name="password"
-                  id="cpassword"
-                  minLength={7}
-                  autoComplete="false"
-                  className="bg-[#2E2E2E] px-5 py-2 rounded-md outline-none text-white border-[#10935F] border-2 "
-                  required
-                  placeholder="Confirm your password"
-                />
+                <div className="bg-[#2E2E2E] py-2 px-2 items-center rounded-md outline-none  text-white border-[#10935F] border-2 flex ">
+                  <input
+                    ref={cpasswordRef}
+                    type="password"
+                    name="password"
+                    id="cpassword"
+                    minLength={7}
+                    autoComplete="false"
+                    className="bg-[#2E2E2E] px-2  rounded-md outline-none  text-white flex-1 "
+                    required
+                    placeholder="Confirm your password"
+                  />
+                  <div>
+                    {show ? (
+                      <BsEyeSlash
+                        onClick={() => setShow(false)}
+                        className="cursor-pointer"
+                        size={27}
+                        title="Hide password"
+                      />
+                    ) : (
+                      <BsEye
+                        onClick={() => setShow(true)}
+                        className="cursor-pointer"
+                        size={27}
+                        title="Show password"
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="flex justify-center w-full">
                 <ReCAPTCHA

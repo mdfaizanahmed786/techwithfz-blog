@@ -5,6 +5,7 @@ import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useSession, signIn, getProviders} from "next-auth/react"
 import ReCAPTCHA from "react-google-recaptcha";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 interface Auth{
   
   callbackUrl:string
@@ -30,6 +31,7 @@ const Signup = (props: Props) => {
   const {data}=useSession();
   const session:any=data;
   const loginWithGoogle:any=signIn
+  const [show, setShow] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -182,17 +184,26 @@ const Signup = (props: Props) => {
               <label htmlFor="password" className="font-semibold text-white">
                 Password
               </label>
-              <input
-                ref={passwordRef}
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="false"
-                minLength={5}
-                className="bg-[#2E2E2E] px-5 py-2 rounded-md outline-none text-white border-[#10935F] border-2 "
-                required
-                placeholder="Enter your password"
-              />
+              <div className="bg-[#2E2E2E] py-2 px-2 items-center rounded-md outline-none  text-white border-[#10935F] border-2 flex ">
+                <input
+                  ref={passwordRef}
+                  type={`${show ? "text": "password"}`}
+                  name="password"
+                  id="password"
+                  autoComplete="false"
+                  minLength={5}
+                  className="bg-[#2E2E2E] px-2  rounded-md outline-none  text-white flex-1"
+                  required
+                  placeholder="Enter your password"
+                />
+                <div>
+                  {show ? (
+                    <BsEyeSlash onClick={() => setShow(false)} className="cursor-pointer" size={27} title="Hide password"/>
+                  ) : (
+                    <BsEye onClick={() => setShow(true)} className="cursor-pointer" size={27} title="Show password"/>
+                  )}
+                </div>
+              </div>
             </div>
             <div className='flex justify-center w-full'>
         <ReCAPTCHA

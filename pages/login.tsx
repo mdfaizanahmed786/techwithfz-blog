@@ -5,6 +5,7 @@ import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import { getProviders, signIn } from "next-auth/react";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 import ReCAPTCHA from "react-google-recaptcha";
 
 interface Auth {
@@ -26,6 +27,7 @@ const Login = (props: Props) => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [captcha, setCaptcha] = useState<string | null>("");
+  const [show, setShow] = useState(false);
   const router = useRouter();
   const { data } = useSession();
 
@@ -166,17 +168,26 @@ const Login = (props: Props) => {
               <label htmlFor="password" className="font-semibold text-white">
                 Password
               </label>
-              <input
-                ref={passwordRef}
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="false"
-                minLength={5}
-                className="bg-[#2E2E2E] px-2 py-2 rounded-md outline-none  text-white border-[#10935F] border-2"
-                required
-                placeholder="Enter your password"
-              />
+              <div className="bg-[#2E2E2E] py-2 px-2 items-center rounded-md outline-none  text-white border-[#10935F] border-2 flex ">
+                <input
+                  ref={passwordRef}
+                  type={`${show ? "text": "password"}`}
+                  name="password"
+                  id="password"
+                  autoComplete="false"
+                  minLength={5}
+                  className="bg-[#2E2E2E] px-2  rounded-md outline-none  text-white flex-1"
+                  required
+                  placeholder="Enter your password"
+                />
+                <div>
+                  {show ? (
+                    <BsEyeSlash onClick={() => setShow(false)} className="cursor-pointer" size={27} title="Hide password"/>
+                  ) : (
+                    <BsEye onClick={() => setShow(true)} className="cursor-pointer" size={27} title="Show password"/>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-white text-center">
