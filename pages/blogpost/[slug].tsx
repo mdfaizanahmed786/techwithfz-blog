@@ -4,7 +4,7 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import React from "react";
 interface Response {
-  _id: string;
+  id: string;
   title: string;
   author: string;
   desc: string;
@@ -34,7 +34,7 @@ const slug = (props: Response | any) => {
 
       <div className="md:max-w-[1030px] md:mx-auto md:p-14 px-6 py-7 ">
         {specificPost.map((blog: Response) => (
-          <div key={blog._id} className="space-y-4">
+          <div key={blog.id} className="space-y-4">
             <p className="text-xs textStyle font-semibold">
               Date: {blog.createdAt.slice(0, 10)}
             </p>
@@ -60,7 +60,23 @@ const slug = (props: Response | any) => {
   );
 };
 
-export async function getServerSideProps(context: any) {
+
+export async function getStaticPaths() {
+  const res = await fetch('https://techwithfz.vercel.app/api/getposts')
+  const {allBlogs:posts} = await res.json()
+
+  // Get the paths we want to pre-render based on posts
+  const paths = posts.map((post:Response) => ({
+    params: { slug: post.slug },
+  }))
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths, fallback: 'blocking' }
+}
+
+export async function getStaticProps(context: any) {
   const { params } = context;
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
@@ -70,6 +86,8 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: { specificPost },
+    // When the requests hits to the page, it still shows us the stale or cached page, after the 30s window, it will server render in the background and immediate after that it will invalidate the cache and show us the new page.
+    revalidate: 30,
   };
 }
 export default slug;
