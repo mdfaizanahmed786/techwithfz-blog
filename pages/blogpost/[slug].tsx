@@ -50,7 +50,7 @@ const slug = (props: Response | any) => {
             <div className="text-white text-lg leading-9">{parse(blog.desc)}</div>
             <img src="/hackathon.png" alt="img_programming" className="rounded-md" />
           
-            <p className="text-white text-lg leading-9">{blog.desc}</p>
+            <p className="text-white text-lg leading-9">{parse(blog.desc)}</p>
           </div>
         ))}
         <div className="ratings text-center mt-5 ">
@@ -62,9 +62,24 @@ const slug = (props: Response | any) => {
   );
 };
 
-export async function getServerSideProps(context: any) {
+export async function getStaticPaths() {
+  const res = await fetch('https://techwithfz.vercel.app/api/getposts')
+  const {allBlogs:posts} = await res.json()
+
+  // Get the paths we want to pre-render based on posts
+  const paths = posts.map((post:Response) => ({
+    params: { slug: post.slug },
+  }))
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths, fallback: 'blocking' }
+}
+
+export async function getStaticProps(context: any) {
   const { params } = context;
-  const response = await fetch("https://techwithfz.vercel.app//api/getposts");
+  const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
   let specificPost = allBlogs.filter((blog: Response) => {
     return blog.slug === params.slug;
@@ -72,6 +87,9 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: { specificPost },
+    
+    // When the requests hits to the page, it still shows us the stale or cached page, after the 30s window, it will server render in the background and immediate after that it will invalidate the cache and show us the new page.
+   revalidate:30
   };
 }
 export default slug;
