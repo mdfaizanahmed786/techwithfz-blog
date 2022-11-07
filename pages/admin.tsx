@@ -27,7 +27,7 @@ const Admin = (props: Props) => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const addPost = await fetch("http://localhost:3000/api/addpost", {
+      const addPost = await fetch("https://techwithfz.vercel.app/api/addpost", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
