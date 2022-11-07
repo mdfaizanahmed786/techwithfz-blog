@@ -85,9 +85,10 @@ export async function getStaticProps(context: any) {
   });
 
   return {
-    props: { specificPost }
+    props: { specificPost },
+    
     // When the requests hits to the page, it still shows us the stale or cached page, after the 30s window, it will server render in the background and immediate after that it will invalidate the cache and show us the new page.
-   
+   revalidate:30
   };
 }
 export default slug;
