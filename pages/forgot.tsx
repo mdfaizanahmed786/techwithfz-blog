@@ -127,6 +127,7 @@ const Forgot = (props: Props) => {
         );
       }
     } else {
+      router.replace("/signup")
       try {
         if (!captcha) {
           toast.error("Invalid captcha", {
