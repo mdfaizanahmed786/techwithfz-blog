@@ -2,9 +2,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+import parse from 'html-react-parser';
 import React from "react";
 interface Response {
-  id: string;
+  _id: string;
   title: string;
   author: string;
   desc: string;
@@ -17,6 +18,7 @@ interface Response {
 type Props = {};
 
 const slug = (props: Response | any) => {
+
   const { specificPost } = props;
   const router = useRouter();
   const { slug } = router.query;
@@ -34,7 +36,7 @@ const slug = (props: Response | any) => {
 
       <div className="md:max-w-[1030px] md:mx-auto md:p-14 px-6 py-7 ">
         {specificPost.map((blog: Response) => (
-          <div key={blog.id} className="space-y-4">
+          <div key={blog._id} className="space-y-4">
             <p className="text-xs textStyle font-semibold">
               Date: {blog.createdAt.slice(0, 10)}
             </p>
@@ -45,7 +47,7 @@ const slug = (props: Response | any) => {
               <FaUserCircle className="text-green-500" size={27} />
               <p className="text-white font-semibold">{blog.author}</p>
             </div>
-            <p className="text-white text-lg leading-9">{blog.desc}</p>
+            <div className="text-white text-lg leading-9">{parse(blog.desc)}</div>
             <img src="/hackathon.png" alt="img_programming" className="rounded-md" />
           
             <p className="text-white text-lg leading-9">{blog.desc}</p>
@@ -60,25 +62,9 @@ const slug = (props: Response | any) => {
   );
 };
 
-
-export async function getStaticPaths() {
-  const res = await fetch('https://techwithfz.vercel.app/api/getposts')
-  const {allBlogs:posts} = await res.json()
-
-  // Get the paths we want to pre-render based on posts
-  const paths = posts.map((post:Response) => ({
-    params: { slug: post.slug },
-  }))
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } will server-render pages
-  // on-demand if the path doesn't exist.
-  return { paths, fallback: 'blocking' }
-}
-
-export async function getStaticProps(context: any) {
+export async function getServerSideProps(context: any) {
   const { params } = context;
-  const response = await fetch("https://techwithfz.vercel.app/api/getposts");
+  const response = await fetch("http://localhost:3000/api/getposts");
   const { allBlogs } = await response.json();
   let specificPost = allBlogs.filter((blog: Response) => {
     return blog.slug === params.slug;
@@ -86,9 +72,6 @@ export async function getStaticProps(context: any) {
 
   return {
     props: { specificPost },
-    
-    // When the requests hits to the page, it still shows us the stale or cached page, after the 30s window, it will server render in the background and immediate after that it will invalidate the cache and show us the new page.
-   revalidate:30
   };
 }
 export default slug;
