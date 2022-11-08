@@ -29,7 +29,7 @@ const slug = (props: Response | any) => {
   const router = useRouter();
   const { slug } = router.query;
   const [comments, setComments] = useState<Comment[]>();
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
   const loadComments = async () => {
     let allComments = await fetch(
@@ -93,18 +93,14 @@ const slug = (props: Response | any) => {
           </div>
         ))}
         <div className="ratings text-center mt-5 ">
-        <button className="text-white font-semibold commonButton  px-5 py-2">
-           Load Comments
-            </button>
+          <button
+            className="text-white font-semibold commonButton  px-5 py-2"
+            onClick={loadComments}
+          >
+            Load Comments
+          </button>
         </div>
-        <div>
-{loader ? <h2>Loading....</h2> : <div>
-  
-  Hello comments
-  
-  </div>}
-
-        </div>
+        <div>{loader ? <h2>Loading....</h2> : <div>Hello comments</div>}</div>
       </div>
     </div>
   );
