@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { getProviders, signIn } from "next-auth/react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import ReCAPTCHA from "react-google-recaptcha";
+import Image from "next/image";
 
 interface Auth {
   callbackUrl: string;
@@ -124,11 +125,7 @@ const Login = (props: Props) => {
       </Head>
       <div className="flex md:max-w-[1450px] md:mx-auto mx-5 ">
         <div className="imageContainer md:flex-[0.45] hidden md:inline-flex">
-          <img
-            src="/login.png"
-            className="object-cover h-full rounded-tl-md rounded-bl-md"
-            alt="login_image"
-          />
+        <Image src="/login.png" className='object-cover h-full rounded-tl-md rounded-bl-md' alt="login_image" width={500} height={900} />
         </div>
         <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center md:flex-[0.55] justify-center shadow-lg  w-full py-7 mt-16 md:mt-0 md:py-0 mb-12 md:mb-0">
           <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">

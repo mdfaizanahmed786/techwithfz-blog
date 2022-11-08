@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useSession, signIn, getProviders} from "next-auth/react"
 import ReCAPTCHA from "react-google-recaptcha";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import Image from "next/image";
 interface Auth{
   
   callbackUrl:string
@@ -131,11 +132,7 @@ const Signup = (props: Props) => {
       </Head>
       <div className="flex md:max-w-[1450px] md:mx-auto mx-5 md:py-5">
         <div className="imageContainer md:flex-[0.45] hidden md:inline-flex">
-          <img
-            src="/signup.png"
-            className="object-cover h-full rounded-tl-md rounded-bl-md"
-            alt="login_image"
-          />
+        <Image src="/signup.png" className='object-cover h-full rounded-tl-md rounded-bl-md' alt="login_image" width={500} height={900} />
         </div>
         <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center md:flex-[0.55] justify-center shadow-lg  w-full py-7 mt-16 md:mt-0 md:py-6 mb-12 md:mb-0 ">
           <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">
