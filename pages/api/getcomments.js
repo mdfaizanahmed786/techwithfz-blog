@@ -10,10 +10,10 @@ export default async function getcomments(req,res){
             console.log(slug)
             let allComments=await Blog.findOne({slug})
             if(!allComments) return res.status(404).json({"error":"Not found"})
-            let all=[];
-            let allComment=[]
-            if(allComments?.userComments){
-                allComments?.userComments?.forEach((elem)=>all.push(elem.id))
+            if(allComments.userComments){
+                let all=[];
+                let allComment=[]
+                allComments.userComments?.forEach((elem)=>all.push(elem.id))
                 for(let i of all){
                     let data=await Comment.findById(i);
                     allComment.push(data)
@@ -22,7 +22,7 @@ export default async function getcomments(req,res){
               return res.json(allComment)
 
             }
-        res.status(404).json({er:"No comments on this post"}, slug)
+        res.json({er:"No comments on this post"}, slug)
         
         }catch(er){
         res.status(500).json({err:"Internal Server error", er:er.message})
