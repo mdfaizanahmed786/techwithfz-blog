@@ -1,6 +1,6 @@
 import connectDb from "../../backend/connect";
-import {Comment} from "../../backend/models/Comments";
-import{ Blog }from "../../backend/models/Blog";
+import {Comment} from "../../backend/models/Comment";
+import{ Blog } from "../../backend/models/Blog";
 export default async function getcomments(req,res){
     if(req.method==="POST"){
 
