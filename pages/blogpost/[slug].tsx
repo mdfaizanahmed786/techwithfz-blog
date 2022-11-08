@@ -35,11 +35,11 @@ const slug = (props: Response | any) => {
     let allComments = await fetch(
       "https://techwithfz.vercel.app/api/getcomments",
       {
-        method: "POST",
+        method:"POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ slug }),
+        body:JSON.stringify({slug})
       }
     );
     if (allComments) {
