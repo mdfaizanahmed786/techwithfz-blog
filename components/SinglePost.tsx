@@ -1,6 +1,7 @@
 import { AiOutlineClockCircle } from 'react-icons/ai'
 import Link from "next/link";
 import React from "react";
+import Image from 'next/image';
 
 type Props = {
   id?: string;
@@ -15,7 +16,7 @@ const SinglePost = ({ title, slug, desc, createdAt }: Props) => {
     <article className="rounded-lg bg-[#1E1E1E] hover:shadow-2xl shadow-lg transition-all duration-200 cursor-pointer">
       <div className="flex flex-col gap-3">
         <div className="overflow-hidden rounded-lg cursor-pointer">
-          <img src={"/im1.png"} className="hover:scale-105  translate-all duration-200 object-cover w-full" alt="hero_section" />
+          <Image src={"/im1.png"} className="hover:scale-105  translate-all duration-200 object-cover w-full" alt="hero_section" width={500} height={300} />
         </div>
         <div className="flex flex-col gap-5 px-7 py-5">
           <Link href={`blogpost/${slug}`}>

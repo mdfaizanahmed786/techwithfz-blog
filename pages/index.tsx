@@ -22,6 +22,7 @@ const Home: NextPage = (props: Props) => {
       <Head>
         <title>Home | TechwithFZ</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Welcome to our blog where the tech gets covered with ease." />
       </Head>
       <main>
         <section>
