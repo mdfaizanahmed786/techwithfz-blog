@@ -209,7 +209,7 @@ const Forgot = (props: Props) => {
         <title>Reset your password</title>
       </Head>
       <div className="flex md:max-w-[1450px] md:mx-auto mx-5 md:py-5">
-      <Image src="/forgot.png" className='object-cover h-full rounded-tl-md rounded-bl-md' alt="login_image" width={300} height={600} />
+      <Image src="/forgot.png" className='object-cover h-full rounded-tl-md rounded-bl-md hidden md:inline-flex' alt="login_image" width={300} height={600} />
         {authToken === token && secret ? (
           <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center  justify-center shadow-lg  w-full py-7 mt-28 md:mt-0 md:py-6 mb-12 md:mb-0 flex-1">
             <form
