@@ -4,6 +4,7 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from 'html-react-parser';
 import React from "react";
+import Image from "next/image";
 interface Response {
   _id: string;
   title: string;
@@ -48,8 +49,7 @@ const slug = (props: Response | any) => {
               <p className="text-white font-semibold">{blog.author}</p>
             </div>
             <div className="text-white text-lg leading-9">{parse(blog.desc)}</div>
-            <img src="/hackathon.png" alt="img_programming" className="rounded-md" />
-          
+            <Image src="/hackathon.png" alt="img_programming" className="rounded-md"  width={900} height={400} objectFit="cover"/>
             <p className="text-white text-lg leading-9">{parse(blog.desc)}</p>
           </div>
         ))}
