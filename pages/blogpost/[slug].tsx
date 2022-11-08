@@ -46,6 +46,7 @@ const slug = (props: Response | any) => {
       setLoader(true);
     }
     let response = await allComments.json();
+    console.log(response)
     if (response) {
       setLoader(false);
       setComments(response);
