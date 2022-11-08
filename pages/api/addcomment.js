@@ -25,7 +25,7 @@ export default async function addcomment(req, res) {
     let oldComment=postSlug.userComments
       let updatedPost = await Blog.findOneAndUpdate(
         { slug: slug },
-        { $set: { userComments: [...oldComment, newComment] } },
+        { $set: { userComments: oldComment.push(newComment) } },
         { new: true }
       );
       res.send(updatedPost);
