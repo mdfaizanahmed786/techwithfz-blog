@@ -208,10 +208,12 @@ const Forgot = (props: Props) => {
       <Head>
         <title>Reset your password</title>
       </Head>
-      <div className="flex md:max-w-[1450px] md:mx-auto mx-5 md:py-5">
-      <Image src="/forgot.png" className='object-cover h-full rounded-tl-md rounded-bl-md hidden md:inline-flex' alt="login_image" width={300} height={600} />
+      <div className="flex md:max-w-[1490px] md:mx-auto mx-5 md:py-5 justify-center">
+      <div className="imageContainer md:flex-[0.45] hidden md:inline-flex  ">
+        <Image src="/forgot.png" className='object-cover h-full rounded-tl-md rounded-bl-md' alt="login_image" width={400} height={800} />
+        </div>
         {authToken === token && secret ? (
-          <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center  justify-center shadow-lg  w-full py-7 mt-28 md:mt-0 md:py-6 mb-12 md:mb-0 flex-1">
+          <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center  justify-center shadow-lg  w-full py-7 mt-28 md:mt-0 md:py-6 mb-12 md:mb-0 flex=[0.5]">
             <form
               onSubmit={handleSubmit}
               className="flex flex-col gap-7 w-full"
@@ -293,7 +295,7 @@ const Forgot = (props: Props) => {
             </form>
           </div>
         ) : (
-          <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center  justify-center shadow-lg  w-full py-7 mt-28 md:mt-0 md:py-6 mb-12 md:mb-0 flex-1">
+          <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center  sm:justify-center shadow-lg  w-full py-7 mt-28 md:mt-0 md:py-6 mb-12 md:mb-0 flex-[0.4] ">
             <form
               onSubmit={handleSubmit}
               className="flex flex-col gap-7 w-full"
