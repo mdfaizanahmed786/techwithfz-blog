@@ -12,13 +12,17 @@ export default async function getcomments(req,res){
             if(!allComments) return res.status(404).json({"error":"Not found"})
             let all=[];
             let allComment=[]
-            allComments.userComments.forEach((elem)=>all.push(elem.id))
-            for(let i of all){
-                let data=await Comment.findById(i);
-                allComment.push(data)
-        
+            if(allComments?.userComments){
+                allComments?.userComments?.forEach((elem)=>all.push(elem.id))
+                for(let i of all){
+                    let data=await Comment.findById(i);
+                    allComment.push(data)
+            
+                }
+              return res.json(allComment)
+
             }
-           res.json(allComment)
+        res.status(404).json({er:"No comments on this post"})
         
         }catch(er){
         res.status(500).json({err:"Internal Server error", er:er.message})
