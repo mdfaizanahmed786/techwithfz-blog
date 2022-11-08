@@ -22,7 +22,7 @@ export default async function getcomments(req,res){
               return res.json(allComment)
 
             }
-        res.json({er:"No comments on this post"}, slug)
+        res.json({er:"No comments on this post", slug:slug})
         
         }catch(er){
         res.status(500).json({err:"Internal Server error", er:er.message})
