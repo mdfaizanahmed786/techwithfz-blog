@@ -22,13 +22,13 @@ export default async function addcomment(req, res) {
         slug,
       });
       await newComment.save();
+      res.json({postSlug});
     let oldComment=postSlug.userComments
       let updatedPost = await Blog.findOneAndUpdate(
         { slug: slug },
-        { $set: { userComments: oldComment.push(newComment) } },
+        { $set: { userComments: [...postSlug.userComments, newComment] } },
         { new: true }
       );
-      res.send(updatedPost);
     } catch (er) {
       res.status(500).json({ err: er.message });
     }
