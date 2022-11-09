@@ -17,7 +17,7 @@ export default async function createuser(req, res) {
       await user.save();
       const {isAdmin, id, email}=user;
       const authToken = jsonwebtoken.sign({email, id}, process.env.JWT_SECRET);
-      res.json({isAdmin, success:true, authToken})
+      res.json({isAdmin, success:true, authToken, email})
     } catch (er) {
       res.status(500).json({ error: er.message });
     }

@@ -3,13 +3,14 @@ import User from "../../backend/models/User";
 import { Comment } from "../../backend/models/Comment";
 import { Blog } from "../../backend/models/Blog";
 export default async function addcomment(req, res) {
-  console.log(res.headers);
+ 
   if (req.method === "POST") {
     try {
       let { comment, email, authToken, slug } = req.body;
       await connectDb();
       let user = await User.findOne({ email });
       let postSlug = await Blog.findOne({ slug });
+      res.json({postSlug});
 
       if (!user)
         return res.status(401).json({ er: "You are not authenticated" });
@@ -22,7 +23,6 @@ export default async function addcomment(req, res) {
         slug,
       });
       await newComment.save();
-      res.json({postSlug});
     let oldComment=postSlug.userComments
       let updatedPost = await Blog.findOneAndUpdate(
         { slug: slug },

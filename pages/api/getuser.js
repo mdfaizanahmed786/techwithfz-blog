@@ -18,7 +18,7 @@ export default async function getuser(req, res) {
       }
       const {isAdmin, _id}=user;
       const authToken = jsonwebtoken.sign({email, _id}, process.env.JWT_SECRET);
-      res.json({isAdmin, success:true, authToken})
+      res.json({isAdmin, success:true, authToken, email})
     } catch (er) {
       res.status(500).json({ error: er.message });
     }
