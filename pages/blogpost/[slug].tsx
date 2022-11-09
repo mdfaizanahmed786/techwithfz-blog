@@ -55,7 +55,7 @@ const slug = (props: Response | any) => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth) {
       const comment = await fetch(
-        "http://localhost:3000/api/addcomment",
+        "https://techwithfz.vercel.app/api/addcomment",
         {
           method: "POST",
           headers: {
