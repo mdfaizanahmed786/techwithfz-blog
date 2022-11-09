@@ -119,8 +119,11 @@ export async function getStaticProps(context: any) {
   let specificPost = allBlogs.filter((blog: Response) => {
     return blog.slug === params.slug;
   });
+  let comments=[]
+if(specificPost[0]?.userComments){
+  comments = specificPost[0]?.userComments;
+}
 
-  let comments = specificPost[0]?.userComments;
 
   return {
     props: { specificPost, comments },
