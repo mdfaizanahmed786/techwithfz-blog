@@ -65,7 +65,7 @@ const Login = (props: Props) => {
         });
         return;
       }
-      const getUser = await fetch("https://techwithfz.vercel.app/api/getuser", {
+      const getUser = await fetch("http://localhost:3000/api/getuser", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

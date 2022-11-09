@@ -32,7 +32,7 @@ export default async function forgot(req, res) {
         text: "and easy to do anywhere, even with Node.js",
         html: `<div>
         <p>Hi there, we've received a request to reset your password. Click the below link to reset your password.</p>
-        <a href=https://techwithfz.vercel.app/forgot?authToken=${addDetails.token} target="_blank">Reset Password</a>
+        <a href=http://localhost:3000/forgot?authToken=${addDetails.token} target="_blank">Reset Password</a>
         </div>`,
       };
       try {

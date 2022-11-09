@@ -56,7 +56,7 @@ const slug = (props: Response | any) => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth) {
       const comment = await fetch(
-        "https://techwithfz.vercel.app/api/addcomment",
+        "http://localhost:3000/api/addcomment",
         {
           method: "POST",
           headers: {
@@ -220,7 +220,7 @@ const slug = (props: Response | any) => {
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
-  const response = await fetch("https://techwithfz.vercel.app/api/getposts");
+  const response = await fetch("http://localhost:3000/api/getposts");
   const { allBlogs } = await response.json();
   let specificPost = allBlogs.filter((blog: Response) => {
     return blog.slug === params.slug;
