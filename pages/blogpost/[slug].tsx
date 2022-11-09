@@ -35,6 +35,7 @@ const slug = (props: Response | any) => {
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
   const [user, setUser] = useState<string | null | undefined>("");
   const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [loader, setLoader]=useState(false)
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const slug = (props: Response | any) => {
           }),
         }
       );
+      setLoader(true)
       const response = await comment.json();
       if (response.success) {
         toast.success("Comment Added!", {
@@ -79,6 +81,7 @@ const slug = (props: Response | any) => {
           theme: "dark",
         });
       }
+      setLoader(false)
       if (response.err) {
         toast.error(`${response.err}`, {
           position: "top-right",
@@ -178,6 +181,7 @@ const slug = (props: Response | any) => {
           </div>
 
           <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
+            {loader && <h2>Loading.....</h2>}
             {comments.map(({ comment, email, _id, createdAt }: Comment) => (
               <div
                 key={_id}
@@ -186,7 +190,7 @@ const slug = (props: Response | any) => {
                 <div className="flex gap-3">
                   <FaUserCircle className="text-green-500" size={27} />
                   <p className="font-bold">{email.replace("@gmail.com", "")}</p>
-                  {/* <p className="">{createdAt.slice(0, 10)}</p> */}
+                  <p className="">{createdAt.slice(0, 10)}</p>
                 </div>
                 <p>{comment}</p>
                 <div>
@@ -203,20 +207,7 @@ const slug = (props: Response | any) => {
   );
 };
 
-// export async function getStaticPaths() {
-//   const res = await fetch("https://techwithfz.vercel.app/api/getposts");
-//   const { allBlogs: posts } = await res.json();
 
-//   // Get the paths we want to pre-render based on posts
-//   const paths = posts.map((post: Response) => ({
-//     params: { slug: post.slug },
-//   }));
-
-//   // We'll pre-render only these paths at build time.
-//   // { fallback: blocking } will server-render pages
-//   // on-demand if the path doesn't exist.
-//   return { paths, fallback: "blocking" };
-// }
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
