@@ -112,7 +112,7 @@ export async function getStaticPaths() {
   return { paths, fallback: "blocking" };
 }
 
-export async function getServerSideProps(context: any) {
+export async function getStaticProps(context: any) {
   const { params } = context;
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
