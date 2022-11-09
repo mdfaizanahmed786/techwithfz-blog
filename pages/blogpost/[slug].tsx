@@ -51,6 +51,7 @@ const slug = (props: Response | any) => {
   }, [router.query]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoader(true)
     e.preventDefault();
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth) {
@@ -69,13 +70,14 @@ const slug = (props: Response | any) => {
           }),
         }
       );
-      setLoader(true)
+   
       const response = await comment.json();
       setLoader(true)
       if (response.success) {
+        router.reload()
         toast.success("Comment Added!", {
           position: "top-right",
-          autoClose: 1800,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -84,7 +86,6 @@ const slug = (props: Response | any) => {
           theme: "dark",
           
         });
-        router.reload()
        
       }
       setLoader(false)
