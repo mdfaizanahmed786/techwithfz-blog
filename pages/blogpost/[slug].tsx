@@ -36,7 +36,7 @@ const slug = (props: Response | any) => {
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
   const [user, setUser] = useState<string | null | undefined>("");
-  const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [feedback, setFeedBack]=useState("")
   const [loader, setLoader]=useState(false)
   const { data: session } = useSession();
 
@@ -48,21 +48,21 @@ const slug = (props: Response | any) => {
     if (!auth) {
       setUser(session?.user?.email);
     }
-  }, [router.query, loader]);
+  }, [router.query]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth) {
       const comment = await fetch(
-        "https://techwithfz.vercel.app/api/addcomment",
+        "http://localhost:3000/api/addcomment",
         {
           method: "POST",
           headers: {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
-            comment: commentRef?.current?.value,
+            comment:feedback,
 
             email: auth?.email,
             slug,
@@ -71,6 +71,7 @@ const slug = (props: Response | any) => {
       );
       setLoader(true)
       const response = await comment.json();
+      setLoader(true)
       if (response.success) {
         toast.success("Comment Added!", {
           position: "top-right",
@@ -81,7 +82,10 @@ const slug = (props: Response | any) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
+          
         });
+        router.reload()
+       
       }
       setLoader(false)
       if (response.err) {
@@ -97,6 +101,7 @@ const slug = (props: Response | any) => {
         });
       }
     }
+    
   };
 
   return (
@@ -159,7 +164,8 @@ const slug = (props: Response | any) => {
                     cols={10}
                     style={{ resize: "none" }}
                     required
-                    ref={commentRef}
+                    value={feedback}
+                    onChange={(e)=>setFeedBack(e.target.value)}
                   ></textarea>
                   <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                     Add Comment
