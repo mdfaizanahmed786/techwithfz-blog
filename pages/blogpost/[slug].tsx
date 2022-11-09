@@ -124,7 +124,7 @@ const slug = (props: Response | any) => {
             <p className="text-xs textStyle font-semibold">
               Date: {blog.createdAt.slice(0, 10)}
             </p>
-            <h1 className="font-bold text-white text-4xl cursor-pointer ">
+            <h1 className="font-bold text-white text-2xl md:text-4xl ">
               {blog.title}
             </h1>
             <div className="flex gap-2 items-center">
