@@ -16,8 +16,9 @@ interface Response {
   __v: number;
 }
 interface Comment {
-  id: string;
+  _id: string;
   comment: string;
+  email: string;
   slug: string;
   _v: number;
 }
@@ -25,33 +26,10 @@ interface Comment {
 type Props = {};
 
 const slug = (props: Response | any) => {
-  const { specificPost } = props;
+  const { specificPost, comments } = props;
   const router = useRouter();
   const { slug } = router.query;
-  const [comments, setComments] = useState<Comment[]>();
-  const [loader, setLoader] = useState(true);
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
-  const loadComments = async () => {
-    let allComments = await fetch(
-      "https://techwithfz.vercel.app/api/getcomments",
-      {
-        method:"POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body:JSON.stringify({slug})
-      }
-    );
-    if (allComments) {
-      setLoader(true);
-    }
-    let response = await allComments.json();
-    console.log(response)
-    if (response) {
-      setLoader(false);
-      setComments(response);
-    }
-  };
 
   return (
     <div className="bg-[#2E2E2E]">
@@ -94,33 +72,45 @@ const slug = (props: Response | any) => {
           </div>
         ))}
         <div className="ratings text-center mt-5 ">
-          <button
-            className="text-white font-semibold commonButton  px-5 py-2"
-            onClick={loadComments}
-          >
-            Load Comments
-          </button>
+          <form>
+            <div>
+              <label htmlFor="comment">Add Comment</label>
+              <textarea
+                name="comment"
+                id="comment"
+                cols={30}
+                rows={10}
+                style={{ resize: "none" }}
+              ></textarea>
+              <button className="text-white font-semibold commonButton  px-5 py-2">Add Comment</button>
+            </div>
+          </form>
         </div>
-        <div>{loader ? <h2>Loading....</h2> : <div>Hello comments</div>}</div>
+        {comments.map(({ comment, email, _id }: Comment) => (
+          <div key={_id}>
+            <p>{comment}</p>
+            <p>{email}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-// export async function getStaticPaths() {
-//   const res = await fetch("https://techwithfz.vercel.app/api/getposts");
-//   const { allBlogs: posts } = await res.json();
+export async function getStaticPaths() {
+  const res = await fetch("https://techwithfz.vercel.app/api/getposts");
+  const { allBlogs: posts } = await res.json();
 
-//   // Get the paths we want to pre-render based on posts
-//   const paths = posts.map((post: Response) => ({
-//     params: { slug: post.slug },
-//   }));
+  // Get the paths we want to pre-render based on posts
+  const paths = posts.map((post: Response) => ({
+    params: { slug: post.slug },
+  }));
 
-//   // We'll pre-render only these paths at build time.
-//   // { fallback: blocking } will server-render pages
-//   // on-demand if the path doesn't exist.
-//   return { paths, fallback: "blocking" };
-// }
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths, fallback: "blocking" };
+}
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
@@ -130,11 +120,10 @@ export async function getServerSideProps(context: any) {
     return blog.slug === params.slug;
   });
 
-  return {
-    props: { specificPost },
+  let comments = specificPost[0]?.userComments;
 
-   
-  
+  return {
+    props: { specificPost, comments },
   };
 }
 export default slug;
