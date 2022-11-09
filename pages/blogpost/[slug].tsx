@@ -190,14 +190,16 @@ const slug = (props: Response | any) => {
           </div>
 
           <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
-            {loader && <Oval />}
+            {loader && (<div className="flex justify-center">
+              <Oval stroke="#10b45b" strokeWidth={3}/>
+              </div>)}
             {comments.map(({ comment, email, _id, createdAt }: Comment) => (
               <div
                 key={_id}
                 className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
               >
                 <div className="flex items-center gap-3">
-                  <FaUserCircle className="text-green-500" size={27} />
+                  <FaUserCircle className="text-green-500" size={10} />
                   <p className="font-bold">{email.replace("@gmail.com", "")}</p>
                   <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
                 </div>
