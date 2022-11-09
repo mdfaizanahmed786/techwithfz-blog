@@ -34,59 +34,65 @@ const slug = (props: Response | any) => {
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
   const [user, setUser] = useState<string | null | undefined>("");
-  const commentRef=useRef<HTMLTextAreaElement>(null)
+  const commentRef = useRef<HTMLTextAreaElement>(null);
   const { data: session } = useSession();
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
-      setUser(auth.email);
+      setUser(auth?.email);
     }
-    if(!auth){
-      setUser(session?.user?.email)
+    if (!auth) {
+      setUser(session?.user?.email);
     }
   }, [router.query]);
-  const addComment=async (e:React.FormEvent<HTMLFormElement>)=>{
-    e.preventDefault();
-    const comment=await fetch("https://techwithfz.vercel.app/api/addcomment", {
-      method:"POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body:JSON.stringify({
-        comment:commentRef?.current?.value,
-       
-        user,
-        slug,
 
-      })
-    })
-    const response=await comment.json();
-    if(response.success){
-      toast.success("Comment Added!", {
-        position: "top-right",
-        autoClose: 1800,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+  const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const auth = JSON.parse(localStorage.getItem("auth")!);
+    if (auth) {
+      const comment = await fetch(
+        "https://techwithfz.vercel.app/api/addcomment",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            comment: commentRef?.current?.value,
+
+            email: auth?.email,
+            slug,
+          }),
+        }
+      );
+      const response = await comment.json();
+      if (response.success) {
+        toast.success("Comment Added!", {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      if (response.err) {
+        toast.error(`${response.err}`, {
+          position: "top-right",
+          autoClose: 1800,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
     }
-    if(response.err){
-      toast.error(`${response.err}`, {
-        position: "top-right",
-        autoClose: 1800,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
-  }
+  };
 
   return (
     <div className="bg-[#2E2E2E]">
@@ -131,7 +137,10 @@ const slug = (props: Response | any) => {
         <div className="mt-5 py-6">
           {user || session?.user?.email ? (
             <div className=" mt-5 md:w-96">
-              <form className="flex flex-col bg-[#1e1e1e]  shadow-md p-4 rounded-md justify-center" onSubmit={addComment}>
+              <form
+                className="flex flex-col bg-[#1e1e1e]  shadow-md p-4 rounded-md justify-center"
+                onSubmit={addComment}
+              >
                 <div className="flex flex-col gap-5">
                   <label htmlFor="comment " className="textStyle font-bold">
                     Add Comment
@@ -147,31 +156,36 @@ const slug = (props: Response | any) => {
                     required
                     ref={commentRef}
                   ></textarea>
-                  <button className="text-white font-semibold commonButton  px-3 py-2 w-36" >
+                  <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                     Add Comment
                   </button>
                 </div>
               </form>
             </div>
-          ): <h2 className="text-white text-xl md:text-2xl font-semibold text-center">You must be logged in to comment!</h2>}
+          ) : (
+            <h2 className="text-white text-xl md:text-2xl font-semibold text-center">
+              You must be logged in to comment!
+            </h2>
+          )}
         </div>
 
-       <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-7">
+          <div className="space-y-3">
+            <h2 className="font-semibold md:text-3xl text-xl text-white">
+              Comments ({comments.length})
+            </h2>
+            <div className="border border-gray-500" />
+          </div>
 
-        <div className="space-y-3">
-          <h2 className="font-semibold md:text-3xl text-xl text-white">Comments ({comments.length})</h2>
-          <div className="border border-gray-500"/>
-        </div>
-
-        <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
-          {comments.map(({ comment, email, _id, createdAt }: Comment) => (
-          
-            
-
-              <div key={_id} className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 ">
+          <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
+            {comments.map(({ comment, email, _id, createdAt }: Comment) => (
+              <div
+                key={_id}
+                className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+              >
                 <div className="flex gap-3">
-                <FaUserCircle className="text-green-500" size={27} />
-                  <p className="font-bold">{email.replace('@gmail.com', "")}</p>
+                  <FaUserCircle className="text-green-500" size={27} />
+                  <p className="font-bold">{email.replace("@gmail.com", "")}</p>
                   {/* <p className="">{createdAt.slice(0, 10)}</p> */}
                 </div>
                 <p>{comment}</p>
@@ -181,9 +195,8 @@ const slug = (props: Response | any) => {
                   </button>
                 </div>
               </div>
-           
-          ))}
-        </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -219,7 +232,7 @@ export async function getStaticProps(context: any) {
 
   return {
     props: { specificPost, comments },
-    revalidate:30
+    revalidate: 30,
   };
 }
 export default slug;
