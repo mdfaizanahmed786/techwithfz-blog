@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-import {CommentSchema} from "./Comment"
+import mongoose, { Schema } from "mongoose";
+import {CommentSchema} from "./Comments"
+
 
 const BlogSchema = new mongoose.Schema({
   title: { type: String, required: true, minLength: 5 },
@@ -7,10 +8,8 @@ const BlogSchema = new mongoose.Schema({
   desc: { type: String, required: true, minLength: 10 },
   createdAt: { type: Date, default: () => Date.now(), immutable: true },
   slug: { type: String, required: true },
-  imgs:[ { type: String}],
-  userComments:{
-    type:CommentSchema
-  }
+  userComments:[ { type: CommentSchema}],
+  imgs:[String]
  
 });
 
