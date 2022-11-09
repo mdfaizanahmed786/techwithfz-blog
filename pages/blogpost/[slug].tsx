@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 interface Response {
   _id: string;
   title: string;
@@ -20,16 +21,26 @@ interface Comment {
   comment: string;
   email: string;
   slug: string;
+  createdAt: string;
   _v: number;
 }
 
 type Props = {};
 
 const slug = (props: Response | any) => {
-  const { specificPost, comments } = props;
+  const { specificPost, comments, authState } = props;
   const router = useRouter();
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
+  const [user, setUser] = useState("");
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    const auth = JSON.parse(localStorage.getItem("auth")!);
+    if (auth?.success && auth?.authToken) {
+      setUser(auth.email);
+    }
+  }, [router.query]);
 
   return (
     <div className="bg-[#2E2E2E]">
@@ -71,27 +82,62 @@ const slug = (props: Response | any) => {
             <p className="text-white text-lg leading-9">{parse(blog.desc)}</p>
           </div>
         ))}
-        <div className="ratings text-center mt-5 ">
-          <form>
-            <div>
-              <label htmlFor="comment">Add Comment</label>
-              <textarea
-                name="comment"
-                id="comment"
-                cols={30}
-                rows={10}
-                style={{ resize: "none" }}
-              ></textarea>
-              <button className="text-white font-semibold commonButton  px-5 py-2">Add Comment</button>
+        <div className="mt-5 py-6">
+          {user ? (
+            <div className=" mt-5 md:w-96">
+              <form className="flex flex-col bg-[#1e1e1e]  shadow-md p-4 rounded-md justify-center">
+                <div className="flex flex-col gap-5">
+                  <label htmlFor="comment " className="textStyle font-bold">
+                    Add Comment
+                  </label>
+                  <textarea
+                    name="comment"
+                    id="comment"
+                    className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
+                    placeholder="Enter your comment"
+                    rows={2}
+                    cols={10}
+                    style={{ resize: "none" }}
+                    required
+                  ></textarea>
+                  <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
+                    Add Comment
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          ): <h2 className="text-white text-xl md:text-2xl font-semibold text-center">You must be logged in to comment!</h2>}
         </div>
-        {comments.map(({ comment, email, _id }: Comment) => (
-          <div key={_id}>
-            <p>{comment}</p>
-            <p>{email}</p>
-          </div>
-        ))}
+
+       <div className="flex flex-col gap-7">
+
+        <div className="space-y-3">
+          <h2 className="font-semibold md:text-3xl text-xl text-white">Comments ({comments.length})</h2>
+          <div className="border border-gray-500"/>
+        </div>
+
+        <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
+          {comments.map(({ comment, email, _id, createdAt }: Comment) => (
+          
+            
+
+              <div key={_id} className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 ">
+                <div className="flex gap-3">
+                <FaUserCircle className="text-green-500" size={27} />
+                  <p className="font-bold">{email.replace('@gmail.com', "")}</p>
+                  {/* <p className="">{createdAt.slice(0, 10)}</p> */}
+                </div>
+                <p>{comment}</p>
+                <div>
+                  <button className="text-white font-semibold commonButton  px-2 py-1 ">
+                    Reply
+                  </button>
+                </div>
+              </div>
+           
+          ))}
+        </div>
+        </div>
       </div>
     </div>
   );
@@ -119,11 +165,10 @@ export async function getStaticProps(context: any) {
   let specificPost = allBlogs.filter((blog: Response) => {
     return blog.slug === params.slug;
   });
-  let comments=[]
-if(specificPost[0]?.userComments){
-  comments = specificPost[0]?.userComments;
-}
-
+  let comments = [];
+  if (specificPost[0]?.userComments) {
+    comments = specificPost[0]?.userComments;
+  }
 
   return {
     props: { specificPost, comments },
