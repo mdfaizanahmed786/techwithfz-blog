@@ -7,6 +7,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import {Oval} from "react-loading-icons"
+
 interface Response {
   _id: string;
   title: string;
@@ -181,7 +183,7 @@ const slug = (props: Response | any) => {
           </div>
 
           <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
-            {loader && <h2>Loading.....</h2>}
+            {loader && <Oval />}
             {comments.map(({ comment, email, _id, createdAt }: Comment) => (
               <div
                 key={_id}
