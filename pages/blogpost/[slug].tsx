@@ -46,7 +46,7 @@ const slug = (props: Response | any) => {
     if (!auth) {
       setUser(session?.user?.email);
     }
-  }, [router.query]);
+  }, [router.query, loader]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -187,10 +187,10 @@ const slug = (props: Response | any) => {
                 key={_id}
                 className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
               >
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                   <FaUserCircle className="text-green-500" size={27} />
                   <p className="font-bold">{email.replace("@gmail.com", "")}</p>
-                  <p className="">{createdAt.slice(0, 10)}</p>
+                  <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
                 </div>
                 <p>{comment}</p>
                 <div>
