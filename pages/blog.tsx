@@ -39,7 +39,7 @@ const Blog = (props: Props) => {
       await fetch(`https://techwithfz.vercel.app/api/deletepost/${id}`, {
         method: "DELETE",
       });
-      toast.success('Deleted you Post!', {
+      toast.success('Deleted your Post!', {
         position: "top-right",
         autoClose: 1800,
         hideProgressBar: false,
