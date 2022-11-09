@@ -190,7 +190,9 @@ const slug = (props: Response | any) => {
           </div>
 
           <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
-            {loader && <Oval />}
+          {loader && (<div className="flex justify-center">
+              <Oval stroke="#10b45b" strokeWidth={3}/>
+              </div>)}
             {comments.map(({ comment, email, _id, createdAt }: Comment) => (
               <div
                 key={_id}
