@@ -10,14 +10,12 @@ export default async function addcomment(req, res) {
       await connectDb();
       let user = await User.findOne({ email });
       let postSlug = await Blog.findOne({ slug });
-      console.log(postSlug)
-      console.log(postSlug?.userComments)
+   
 
       if (!user)
-        return res.status(401).json({ er: "You are not authenticated" });
-      if (!authToken)
-        return res.status(401), json({ er: "Login first to add a comment" });
-      if (!postSlug) return res.status(404).json({ err: "Not found" });
+        return res.status(401).json({ err: "You are not authenticated" });
+      
+      if (!postSlug) return res.status(404).json({ err: "Post not found" });
 
       let newComment = await Comment.create({
         comment,
@@ -30,7 +28,7 @@ export default async function addcomment(req, res) {
         { $set: { userComments: [...postSlug.userComments, newComment] } },
         { new: true }
       );
-      res.send(updatedPost);
+      res.json({success:true});
     } catch (er) {
       res.status(500).json({ err: er.message });
     }

@@ -3,9 +3,10 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 interface Response {
   _id: string;
   title: string;
@@ -32,7 +33,8 @@ const slug = (props: Response | any) => {
   const router = useRouter();
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<string | null | undefined>("");
+  const commentRef=useRef<HTMLTextAreaElement>(null)
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -40,7 +42,51 @@ const slug = (props: Response | any) => {
     if (auth?.success && auth?.authToken) {
       setUser(auth.email);
     }
+    if(!auth){
+      setUser(session?.user?.email)
+    }
   }, [router.query]);
+  const addComment=async (e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+    const comment=await fetch("https://techwithfz.vercel.app/api/addcomment", {
+      method:"POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body:JSON.stringify({
+        comment:commentRef?.current?.value,
+       
+        user,
+        slug,
+
+      })
+    })
+    const response=await comment.json();
+    if(response.success){
+      toast.success("Comment Added!", {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    if(response.err){
+      toast.error(`${response.err}`, {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  }
 
   return (
     <div className="bg-[#2E2E2E]">
@@ -83,9 +129,9 @@ const slug = (props: Response | any) => {
           </div>
         ))}
         <div className="mt-5 py-6">
-          {user ? (
+          {user || session?.user?.email ? (
             <div className=" mt-5 md:w-96">
-              <form className="flex flex-col bg-[#1e1e1e]  shadow-md p-4 rounded-md justify-center">
+              <form className="flex flex-col bg-[#1e1e1e]  shadow-md p-4 rounded-md justify-center" onSubmit={addComment}>
                 <div className="flex flex-col gap-5">
                   <label htmlFor="comment " className="textStyle font-bold">
                     Add Comment
@@ -99,8 +145,9 @@ const slug = (props: Response | any) => {
                     cols={10}
                     style={{ resize: "none" }}
                     required
+                    ref={commentRef}
                   ></textarea>
-                  <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
+                  <button className="text-white font-semibold commonButton  px-3 py-2 w-36" >
                     Add Comment
                   </button>
                 </div>
@@ -172,6 +219,7 @@ export async function getStaticProps(context: any) {
 
   return {
     props: { specificPost, comments },
+    revalidate:30
   };
 }
 export default slug;
