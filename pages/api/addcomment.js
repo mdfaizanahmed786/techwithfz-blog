@@ -10,7 +10,7 @@ export default async function addcomment(req, res) {
       await connectDb();
       let user = await User.findOne({ email });
       let postSlug = await Blog.findOne({ slug });
-      res.json({postSlug});
+    
 
       if (!user)
         return res.status(401).json({ er: "You are not authenticated" });
@@ -29,6 +29,7 @@ export default async function addcomment(req, res) {
         { $set: { userComments: [...postSlug.userComments, newComment] } },
         { new: true }
       );
+      res.json(updatedPost)
     } catch (er) {
       res.status(500).json({ err: er.message });
     }

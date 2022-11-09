@@ -7,7 +7,7 @@ export default async function getcomments(req,res){
         try{
         await connectDb();
             const {slug}=req.body;
-            console.log(slug)
+        
             let allComments=await Blog.findOne({slug})
             if(!allComments) return res.status(404).json({"error":"Not found"})
             if(allComments.userComments){
