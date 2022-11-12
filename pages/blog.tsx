@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import parse from "html-react-parser";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
@@ -75,7 +76,7 @@ const Blog = (props: Props) => {
             <h2 className="font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 ">
               <Link href={`blogpost/${blog.slug}`}>{blog.title}</Link>
             </h2>
-            <p  className="text-white hidden md:block">{blog.desc.slice(0, 120) + "..."}</p>
+            <p  className="text-white hidden md:block line-clamp-4">{parse(blog.desc)}</p>
             <div className="flex justify-between">
               <div className="flex gap-5">
                 <Link href={`blogpost/${blog.slug}`}>
