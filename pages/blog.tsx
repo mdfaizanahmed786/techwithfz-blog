@@ -68,7 +68,7 @@ const Blog = (props: Props) => {
         {newPosts.map((blog: Response) => (
           <div
             key={blog._id}
-            className="flex flex-col gap-5 px-9 py-7 rounded-lg shadow-md hover:bg-[#2E2E2E] bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-lg"
+            className="flex flex-col md:gap-5 gap-4 md:px-9 md:py-7 px-6 py-5 rounded-lg shadow-md hover:bg-[#2E2E2E] bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-lg"
           >
             <p className="text-xs textStyle font-semibold">
               Date: {blog.createdAt.slice(0, 10)}
@@ -76,7 +76,9 @@ const Blog = (props: Props) => {
             <h2 className="font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 ">
               <Link href={`blogpost/${blog.slug}`}>{blog.title}</Link>
             </h2>
-            <p  className="text-white hidden md:block line-clamp-4">{parse(blog.desc)}</p>
+            <div className="">
+            <p className="info text-white line-clamp-2">{parse(blog.desc)}</p>
+          </div>
             <div className="flex justify-between">
               <div className="flex gap-5">
                 <Link href={`blogpost/${blog.slug}`}>
