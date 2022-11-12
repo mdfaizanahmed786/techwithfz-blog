@@ -121,7 +121,7 @@ const Login = (props: Props) => {
   return (
     <div className="loginPage min-h-screen md:items-center  md:flex">
       <Head>
-        <title>Login | techWithFZ</title>
+        <title>Login - TechWithFZ</title>
       </Head>
       <div className="flex md:max-w-[1450px] md:mx-auto mx-5 ">
         <div className="imageContainer md:flex-[0.45] hidden md:inline-flex">

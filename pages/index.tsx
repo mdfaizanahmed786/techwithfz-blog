@@ -20,7 +20,7 @@ const Home: NextPage = (props: Props) => {
   return (
     <div>
       <Head>
-        <title>Home | TechwithFZ</title>
+        <title>Home - TechwithFZ</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="Welcome to our blog where the tech gets covered with ease." />
       </Head>

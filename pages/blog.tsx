@@ -58,7 +58,7 @@ const Blog = (props: Props) => {
 
     <div className="loginPage w-full">
       <Head>
-        <title>techWithFZ - Blog</title>
+        <title>TechWithFZ - Blog</title>
       </Head>
       <h1 className="text-3xl text-white font-bold text-center py-5 ">
         All Blogs({newPosts.length})
