@@ -18,7 +18,7 @@ export default async function addcomment(req, res) {
       let newComment = await Comment.create({
         comment,
         slug,
-        email
+      
       });
       await newComment.save();
       await Blog.findOneAndUpdate(
