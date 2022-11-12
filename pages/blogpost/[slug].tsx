@@ -45,16 +45,14 @@ const slug = (props: Response | any) => {
     if (auth?.success && auth?.authToken) {
       setUser(auth?.email);
     }
-    if (!auth) {
-      setUser(session?.user?.email);
-    }
+    
   }, [router.query]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoader(true)
     e.preventDefault();
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth) {
+  
+   
       const comment = await fetch(
         "https://techwithfz.vercel.app/api/addcomment",
         {
@@ -65,8 +63,8 @@ const slug = (props: Response | any) => {
           body: JSON.stringify({
             comment:feedback,
 
-            email: auth?.email,
             slug,
+            email: !user ? session?.user?.email : user,
           }),
         }
       );
@@ -101,7 +99,7 @@ const slug = (props: Response | any) => {
           theme: "dark",
         });
       }
-    }
+    
     
   };
 
