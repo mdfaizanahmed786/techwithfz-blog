@@ -6,14 +6,12 @@ export default async function addcomment(req, res) {
   console.log(res.headers);
   if (req.method === "POST") {
     try {
-      let { comment, email, authToken, slug } = req.body;
+      let { comment, authToken, slug } = req.body;
       await connectDb();
-      let user = await User.findOne({ email });
+    
       let postSlug = await Blog.findOne({ slug });
    
 
-      if (!user)
-        return res.status(401).json({ err: "You are not authenticated" });
       
       if (!postSlug) return res.status(404).json({ err: "Post not found" });
 
@@ -23,7 +21,7 @@ export default async function addcomment(req, res) {
         email
       });
       await newComment.save();
-      let updatedPost = await Blog.findOneAndUpdate(
+      await Blog.findOneAndUpdate(
         { slug: slug },
         { $set: { userComments: [...postSlug.userComments, newComment] } },
         { new: true }
