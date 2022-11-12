@@ -6,7 +6,7 @@ export default async function addcomment(req, res) {
   console.log(res.headers);
   if (req.method === "POST") {
     try {
-      let { comment, authToken, slug } = req.body;
+      let { comment, authToken, slug, email } = req.body;
       await connectDb();
     
       let postSlug = await Blog.findOne({ slug });
@@ -18,6 +18,7 @@ export default async function addcomment(req, res) {
       let newComment = await Comment.create({
         comment,
         slug,
+        email
       
       });
       await newComment.save();

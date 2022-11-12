@@ -45,16 +45,16 @@ const slug = (props: Response | any) => {
     if (auth?.success && auth?.authToken) {
       setUser(auth?.email);
     }
-    if (!auth) {
-      setUser(session?.user?.email);
-    }
+    
   }, [router.query]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
+   
+    
     setLoader(true)
     e.preventDefault();
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth) {
+   
+
       const comment = await fetch(
         "http://localhost:3000/api/addcomment",
         {
@@ -65,6 +65,7 @@ const slug = (props: Response | any) => {
           body: JSON.stringify({
             comment:feedback,
             slug,
+            email:!user ? session?.user?.email : user
           }),
         }
       );
@@ -99,14 +100,14 @@ const slug = (props: Response | any) => {
           theme: "dark",
         });
       }
-    }
+    
     
   };
 
   return (
     <div className="bg-[#2E2E2E]">
       <Head>
-        <title>{getTitle[0].title}</title>
+        <title>{getTitle[0]?.title}</title>
       </Head>
       <div
         className="flex items-center px-5 py-2 gap-1 cursor-pointer"
@@ -191,14 +192,14 @@ const slug = (props: Response | any) => {
             {loader && (<div className="flex justify-center">
               <Oval stroke="#10b45b" strokeWidth={3}/>
               </div>)}
-            {comments.map(({ comment, _id, createdAt }: Comment) => (
+            {comments.map(({ comment, email, _id, createdAt }: Comment) => (
               <div
                 key={_id}
                 className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
               >
                 <div className="flex items-center gap-3">
                   <FaUserCircle className="text-green-500" size={10} />
-                  <p className="font-bold">{user?.replace("@gmail.com", "")}</p>
+                  <p className="font-bold">{email.replace("@gmail.com", "")}</p>
                   <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
                 </div>
                 <p>{comment}</p>
