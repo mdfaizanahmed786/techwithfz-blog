@@ -1,5 +1,4 @@
 import connectDb from "../../backend/connect";
-import User from "../../backend/models/User";
 import { Comment } from "../../backend/models/Comment";
 import { Blog } from "../../backend/models/Blog";
 export default async function addcomment(req, res) {
@@ -27,6 +26,7 @@ export default async function addcomment(req, res) {
         { $set: { userComments: [...postSlug.userComments, newComment] } },
         { new: true }
       );
+      await Comment.findOneAndDelete({slug})
       res.json({success:true});
     } catch (er) {
       res.status(500).json({ err: er.message });
