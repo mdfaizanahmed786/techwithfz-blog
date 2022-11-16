@@ -27,6 +27,7 @@ export default async function addcomment(req, res) {
         { $set: { userComments: [...postSlug.userComments, newComment] } },
         { new: true }
       );
+      await Comment.findOneAndDelete({slug})
       res.json({success:true});
     } catch (er) {
       res.status(500).json({ err: er.message });

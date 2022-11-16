@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import {Oval} from "react-loading-icons"
+import { Oval } from "react-loading-icons";
 
 interface Response {
   _id: string;
@@ -36,72 +36,62 @@ const slug = (props: Response | any) => {
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
   const [user, setUser] = useState<string | null | undefined>("");
-  const [feedback, setFeedBack]=useState("")
-  const [loader, setLoader]=useState(false)
+  const [feedback, setFeedBack] = useState("");
+  const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
+  const [showReply, setShowReply] = useState(false);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
       setUser(auth?.email);
     }
-    
   }, [router.query]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
-   
-    
-    setLoader(true)
+    setLoader(true);
     e.preventDefault();
-   
 
-      const comment = await fetch(
-        "http://localhost:3000/api/addcomment",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            comment:feedback,
-            slug,
-            email:!user ? session?.user?.email : user
-          }),
-        }
-      );
-   
-      const response = await comment.json();
-      setLoader(true)
-      if (response.success) {
-        router.reload()
-        toast.success("Comment Added!", {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          
-        });
-       
-      }
-      setLoader(false)
-      if (response.err) {
-        toast.error(`${response.err}`, {
-          position: "top-right",
-          autoClose: 1800,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      }
-    
-    
+    const comment = await fetch("http://localhost:3000/api/addcomment", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        comment: feedback,
+        slug,
+        email: !user ? session?.user?.email : user,
+      }),
+    });
+
+    const response = await comment.json();
+    setLoader(true);
+    if (response.success) {
+      router.reload();
+      toast.success("Comment Added!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    setLoader(false);
+    if (response.err) {
+      toast.error(`${response.err}`, {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   };
 
   return (
@@ -165,7 +155,7 @@ const slug = (props: Response | any) => {
                     style={{ resize: "none" }}
                     required
                     value={feedback}
-                    onChange={(e)=>setFeedBack(e.target.value)}
+                    onChange={(e) => setFeedBack(e.target.value)}
                   ></textarea>
                   <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                     Add Comment
@@ -189,9 +179,11 @@ const slug = (props: Response | any) => {
           </div>
 
           <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
-            {loader && (<div className="flex justify-center">
-              <Oval stroke="#10b45b" strokeWidth={3}/>
-              </div>)}
+            {loader && (
+              <div className="flex justify-center">
+                <Oval stroke="#10b45b" strokeWidth={3} />
+              </div>
+            )}
             {comments.map(({ comment, email, _id, createdAt }: Comment) => (
               <div
                 key={_id}
@@ -200,13 +192,36 @@ const slug = (props: Response | any) => {
                 <div className="flex items-center gap-3">
                   <FaUserCircle className="text-green-500" size={10} />
                   <p className="font-bold">{email.replace("@gmail.com", "")}</p>
-                  <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
+                  <p className="text-xs text-gray-300">
+                    {createdAt.slice(0, 10)}
+                  </p>
                 </div>
                 <p>{comment}</p>
                 <div>
-                  <button className="text-white font-semibold commonButton  px-2 py-1 ">
+                  <button
+                    className="text-white font-semibold commonButton  px-2 py-1 "
+                    onClick={() => setShowReply(!showReply)}
+                  >
                     Reply
                   </button>
+                  {showReply && (
+                    <div className="flex flex-col gap-5 mt-5 ">
+                      <textarea
+                        name="comment"
+                        id="comment"
+                        className="bg-[#1e1e1e] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
+                        placeholder="Add a reply"
+                        rows={2}
+                        cols={10}
+                        style={{ resize: "none" }}
+                        required
+                        value={feedback}
+                      ></textarea>
+                      <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
+                        Add Reply
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -216,8 +231,6 @@ const slug = (props: Response | any) => {
     </div>
   );
 };
-
-
 
 export async function getServerSideProps(context: any) {
   const { params } = context;

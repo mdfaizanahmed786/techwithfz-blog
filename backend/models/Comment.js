@@ -3,6 +3,7 @@ const CommentSchema=new mongoose.Schema({
     comment:{type:String, date:Date.now(), immutable:true, required:true},
     createdAt: { type: Date, default: () => Date.now(), immutable: true },
     slug:{type:String, required:true},
+    replies:[{type:String, date:Date.now()}],
     email:{type:String, required:true},
   })
 
