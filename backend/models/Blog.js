@@ -8,7 +8,7 @@ const BlogSchema = new mongoose.Schema({
   desc: { type: String, required: true, minLength: 10 },
   createdAt: { type: Date, default: () => Date.now(), immutable: true },
   slug: { type: String, required: true },
-  userComments:[ { type: CommentSchema}],
+  userComments:[ { type: CommentSchema, unique:false}],
   imgs:[String]
  
 });
