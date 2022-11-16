@@ -1,5 +1,4 @@
 import connectDb from "../../backend/connect";
-import User from "../../backend/models/User";
 import { Comment } from "../../backend/models/Comment";
 import { Blog } from "../../backend/models/Blog";
 export default async function addcomment(req, res) {
