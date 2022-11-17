@@ -21,9 +21,9 @@ export default async function addreply(req, res) {
         { new: true }
       );
 
-      res.json({ success: true, comments });
+      res.json({ success: true});
     } catch (er) {
-      res.status(500).json({ error: er.message });
+      res.status(500).json({ er: er.message });
     }
   } else {
     res.status(400).send("You are not allowed to do so!");

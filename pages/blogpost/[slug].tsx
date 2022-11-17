@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
@@ -25,6 +25,7 @@ interface Comment {
   email: string;
   slug: string;
   createdAt: string;
+  replies: string[];
   _v: number;
 }
 
@@ -39,7 +40,8 @@ const slug = (props: Response | any) => {
   const [feedback, setFeedBack] = useState("");
   const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
-  const [showReply, setShowReply] = useState(false);
+  const [showReply, setShowReply] = useState("");
+  const replyToComment = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
@@ -93,6 +95,56 @@ const slug = (props: Response | any) => {
       });
     }
   };
+
+  const toggleReply = (comment: string) => {
+    let allComments = comments.filter(
+      (item: Comment) => item.comment === comment
+    );
+    if (allComments) {
+      setShowReply(comment);
+    }
+  };
+  const addReply = (e: FormEvent) => {
+    e.preventDefault();
+  };
+  const addNewReply = async (comment: string) => {
+    const reply = await fetch("http://localhost:3000/api/addreply", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        comment,
+        slug,
+        reply: replyToComment.current!.value,
+      }),
+    });
+    const response = await reply.json();
+    if (response.success) {
+      toast.success("Reply Added!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } else {
+      toast.error(`${response.err}`, {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+  console.log(comments);
 
   return (
     <div className="bg-[#2E2E2E]">
@@ -184,47 +236,86 @@ const slug = (props: Response | any) => {
                 <Oval stroke="#10b45b" strokeWidth={3} />
               </div>
             )}
-            {comments.map(({ comment, email, _id, createdAt }: Comment) => (
-              <div
-                key={_id}
-                className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
-              >
-                <div className="flex items-center gap-3">
-                  <FaUserCircle className="text-green-500" size={10} />
-                  <p className="font-bold">{email.replace("@gmail.com", "")}</p>
-                  <p className="text-xs text-gray-300">
-                    {createdAt.slice(0, 10)}
-                  </p>
-                </div>
-                <p>{comment}</p>
-                <div>
-                  <button
-                    className="text-white font-semibold commonButton  px-2 py-1 "
-                    onClick={() => setShowReply(!showReply)}
-                  >
-                    Reply
-                  </button>
-                  {showReply && (
-                    <div className="flex flex-col gap-5 mt-5 ">
-                      <textarea
-                        name="comment"
-                        id="comment"
-                        className="bg-[#1e1e1e] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
-                        placeholder="Add a reply"
-                        rows={2}
-                        cols={10}
-                        style={{ resize: "none" }}
-                        required
-                        value={feedback}
-                      ></textarea>
-                      <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
-                        Add Reply
-                      </button>
+            {comments.map(
+              ({ comment, email, _id, createdAt, replies }: Comment) => (
+                <div
+                  key={_id}
+                  className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+                >
+                  <div className="flex items-center gap-3">
+                    <FaUserCircle className="text-green-500" size={10} />
+                    <p className="font-bold">
+                      {email.replace("@gmail.com", "")}
+                    </p>
+                    <p className="text-xs text-gray-300">
+                      {createdAt.slice(0, 10)}
+                    </p>
+                  </div>
+                  <p>{comment}</p>
+                  {/* @ts-ignore */}
+
+                  {replies.map((reply, i) => (
+                    <div
+                      key={i}
+                      className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+                    >
+                      <div className="flex items-center gap-3">
+                        <FaUserCircle className="text-green-500" size={10} />
+                        <p className="font-bold">
+                          {user!.replace("@gmail.com", "")}
+                        </p>
+                      </div>
+                      <p>{reply}</p>
                     </div>
-                  )}
+                  ))}
+
+                  <div>
+                    {(session?.user || user) && (
+                      <button
+                        className="text-white font-semibold commonButton  px-2 py-1 "
+                        onClick={() => toggleReply(comment)}
+                      >
+                        Reply
+                      </button>
+                    )}
+                    {showReply === comment && (
+                      <form onSubmit={addReply}>
+                        <div className="flex flex-col gap-5 mt-5 ">
+                          <textarea
+                            name="comment"
+                            ref={replyToComment}
+                            id="comment"
+                            className="bg-[#1e1e1e] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
+                            placeholder="Add a reply"
+                            rows={2}
+                            cols={10}
+                            style={{ resize: "none" }}
+                            required
+                          ></textarea>
+                          <div className="flex gap-4">
+
+                          <button
+                            className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                            onClick={() => addNewReply(comment)}
+                          >
+                            Add Reply
+                            </button>
+
+                          <button
+                            className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                            onClick={() => setShowReply('')}
+                          >
+                            Cancel
+                          </button>
+
+                          </div>
+                        </div>
+                      </form>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </div>
       </div>
