@@ -6,14 +6,14 @@ export default async function addreply(req, res) {
   if (req.method === "POST") {
     await connectDb();
     try {
-      const { comment, slug, reply } = req.body;
+      const { comment, slug, reply, email } = req.body;
       let post = await Blog.findOne({ slug });
 
       if (!post) return res.status(404).json({ error: "Post not found!" });
       let comments = post.userComments.filter((com) => com.comment === comment);
       if (comments.length === 0)
         return res.status(404).json({ error: "No comment found!" });
-      comments[0].replies.push(reply);
+      comments[0].replies.push({email, reply});
       post.userComments.filter((com) => com.comment === comment);
       await Blog.findOneAndUpdate(
         { slug: slug },

@@ -19,13 +19,17 @@ interface Response {
   createdAt: string;
   __v: number;
 }
+type Reply = {
+  email: string;
+  reply: string;
+};
 interface Comment {
   _id: string;
   comment: string;
   email: string;
   slug: string;
   createdAt: string;
-  replies: string[];
+  replies: Reply[];
   _v: number;
 }
 
@@ -42,6 +46,8 @@ const slug = (props: Response | any) => {
   const { data: session } = useSession();
   const [showReply, setShowReply] = useState("");
   const replyToComment = useRef<HTMLTextAreaElement>(null);
+  const [showReplies, setShowReplies] = useState("");
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
@@ -117,10 +123,12 @@ const slug = (props: Response | any) => {
         comment,
         slug,
         reply: replyToComment.current!.value,
+        email: !user ? session?.user?.email : user,
       }),
     });
     const response = await reply.json();
     if (response.success) {
+      router.reload();
       toast.success("Reply Added!", {
         position: "top-right",
         autoClose: 2500,
@@ -144,7 +152,16 @@ const slug = (props: Response | any) => {
       });
     }
   };
-  console.log(comments);
+  const toggleShowReplies = (comment: string) => {
+    let allComments = comments.filter(
+      (item: Comment) => item.comment === comment
+    );
+    if (allComments) {
+      setShowReplies(comment);
+      setShow(!show);
+    }
+    if (show) setShowReplies("");
+  };
 
   return (
     <div className="bg-[#2E2E2E]">
@@ -252,22 +269,32 @@ const slug = (props: Response | any) => {
                     </p>
                   </div>
                   <p>{comment}</p>
-                  {/* @ts-ignore */}
 
-                  {replies.map((reply, i) => (
+                  {replies.length !== 0 && (
                     <div
-                      key={i}
-                      className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+                      onClick={() => toggleShowReplies(comment)}
+                      className="text-white font-semibold cursor-pointer hover:text-gray-400"
                     >
-                      <div className="flex items-center gap-3">
-                        <FaUserCircle className="text-green-500" size={10} />
-                        <p className="font-bold">
-                          {user!.replace("@gmail.com", "")}
-                        </p>
-                      </div>
-                      <p>{reply}</p>
+                      {show && showReplies === comment ? "Hide" : "View"} all{" "}
+                      {replies.length} replies
                     </div>
-                  ))}
+                  )}
+                  {replies.length !== 0 &&
+                    showReplies === comment &&
+                    replies.map(({ reply, email }: Reply, i) => (
+                      <div
+                        key={i}
+                        className="bg-[#1e1e1e] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+                      >
+                        <div className="flex items-center gap-3">
+                          <FaUserCircle className="text-green-500" size={10} />
+                          <p className="font-bold">
+                            {email.replace("@gmail.com", "")}
+                          </p>
+                        </div>
+                        <p>{reply}</p>
+                      </div>
+                    ))}
 
                   <div>
                     {(session?.user || user) && (
@@ -293,21 +320,19 @@ const slug = (props: Response | any) => {
                             required
                           ></textarea>
                           <div className="flex gap-4">
-
-                          <button
-                            className="text-white font-semibold commonButton  px-3 py-2 w-36"
-                            onClick={() => addNewReply(comment)}
-                          >
-                            Add Reply
+                            <button
+                              className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                              onClick={() => addNewReply(comment)}
+                            >
+                              Add Reply
                             </button>
 
-                          <button
-                            className="text-white font-semibold commonButton  px-3 py-2 w-36"
-                            onClick={() => setShowReply('')}
-                          >
-                            Cancel
-                          </button>
-
+                            <button
+                              className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                              onClick={() => setShowReply("")}
+                            >
+                              Cancel
+                            </button>
                           </div>
                         </div>
                       </form>
