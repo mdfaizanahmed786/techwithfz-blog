@@ -60,7 +60,7 @@ const slug = (props: Response | any) => {
     setLoader(true);
     e.preventDefault();
 
-    const comment = await fetch("https://techwithfz.vercel.app/addcomment", {
+    const comment = await fetch("https://techwithfz.vercel.app/api/addcomment", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
