@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import {Oval} from "react-loading-icons"
+import { Oval } from "react-loading-icons";
 
 interface Response {
   _id: string;
@@ -19,12 +19,17 @@ interface Response {
   createdAt: string;
   __v: number;
 }
+type Reply = {
+  email: string;
+  reply: string;
+};
 interface Comment {
   _id: string;
   comment: string;
   email: string;
   slug: string;
   createdAt: string;
+  replies: Reply[];
   _v: number;
 }
 
@@ -36,77 +41,132 @@ const slug = (props: Response | any) => {
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
   const [user, setUser] = useState<string | null | undefined>("");
-  const [feedback, setFeedBack]=useState("")
-  const [loader, setLoader]=useState(false)
+  const [feedback, setFeedBack] = useState("");
+  const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
+  const [showReply, setShowReply] = useState("");
+  const replyToComment = useRef<HTMLTextAreaElement>(null);
+  const [showReplies, setShowReplies] = useState("");
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
       setUser(auth?.email);
     }
-    
   }, [router.query]);
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoader(true)
+    setLoader(true);
     e.preventDefault();
-  
-   
-      const comment = await fetch(
-        "https://techwithfz.vercel.app/api/addcomment",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            comment:feedback,
 
-            slug,
-            email: !user ? session?.user?.email : user,
-          }),
-        }
-      );
-   
-      const response = await comment.json();
-      setLoader(true)
-      if (response.success) {
-        router.reload()
-        toast.success("Comment Added!", {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          
-        });
-       
-      }
-      setLoader(false)
-      if (response.err) {
-        toast.error(`${response.err}`, {
-          position: "top-right",
-          autoClose: 1800,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      }
-    
-    
+    const comment = await fetch("https://techwithfz.vercel.app/addcomment", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        comment: feedback,
+        slug,
+        email: !user ? session?.user?.email : user,
+      }),
+    });
+
+    const response = await comment.json();
+    setLoader(true);
+    if (response.success) {
+      router.reload();
+      toast.success("Comment Added!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    setLoader(false);
+    if (response.err) {
+      toast.error(`${response.err}`, {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+
+  const toggleReply = (comment: string) => {
+    let allComments = comments.filter(
+      (item: Comment) => item.comment === comment
+    );
+    if (allComments) {
+      setShowReply(comment);
+    }
+  };
+  const addReply = (e: FormEvent) => {
+    e.preventDefault();
+  };
+  const addNewReply = async (comment: string) => {
+    const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        comment,
+        slug,
+        reply: replyToComment.current!.value,
+        email: !user ? session?.user?.email : user,
+      }),
+    });
+    const response = await reply.json();
+    if (response.success) {
+      router.reload();
+      toast.success("Reply Added!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } else {
+      toast.error(`${response.err}`, {
+        position: "top-right",
+        autoClose: 1800,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+  const toggleShowReplies = (comment: string) => {
+    let allComments = comments.filter(
+      (item: Comment) => item.comment === comment
+    );
+    if (allComments) {
+      setShowReplies(comment);
+      setShow(!show);
+    }
+    if (show) setShowReplies("");
   };
 
   return (
     <div className="bg-[#2E2E2E]">
       <Head>
-        <title>{getTitle[0].title}</title>
+        <title>{getTitle[0]?.title}</title>
       </Head>
       <div
         className="flex items-center px-5 py-2 gap-1 cursor-pointer"
@@ -122,7 +182,7 @@ const slug = (props: Response | any) => {
             <p className="text-xs textStyle font-semibold">
               Date: {blog.createdAt.slice(0, 10)}
             </p>
-            <h1 className="font-bold text-white text-3xl md:text-4xl ">
+            <h1 className="font-bold text-white text-4xl cursor-pointer ">
               {blog.title}
             </h1>
             <div className="flex gap-2 items-center">
@@ -164,7 +224,7 @@ const slug = (props: Response | any) => {
                     style={{ resize: "none" }}
                     required
                     value={feedback}
-                    onChange={(e)=>setFeedBack(e.target.value)}
+                    onChange={(e) => setFeedBack(e.target.value)}
                   ></textarea>
                   <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                     Add Comment
@@ -188,34 +248,105 @@ const slug = (props: Response | any) => {
           </div>
 
           <div className="flex flex-col gap-4 md:w-96 overflow-x-auto">
-          {loader && (<div className="flex justify-center">
-              <Oval stroke="#10b45b" strokeWidth={3}/>
-              </div>)}
-            {comments.map(({ comment, email, _id, createdAt }: Comment) => (
-              <div
-                key={_id}
-                className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
-              >
-                <div className="flex items-center gap-3">
-                  <FaUserCircle className="text-green-500" size={27} />
-                  <p className="font-bold">{email.replace("@gmail.com", "")}</p>
-                  <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
-                </div>
-                <p>{comment}</p>
-                <div>
-                  <button className="text-white font-semibold commonButton  px-2 py-1 ">
-                    Reply
-                  </button>
-                </div>
+            {loader && (
+              <div className="flex justify-center">
+                <Oval stroke="#10b45b" strokeWidth={3} />
               </div>
-            ))}
+            )}
+            {comments.map(
+              ({ comment, email, _id, createdAt, replies }: Comment) => (
+                <div
+                  key={_id}
+                  className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+                >
+                  <div className="flex items-center gap-3">
+                    <FaUserCircle className="text-green-500" size={27} />
+                    <p className="font-bold">
+                      {email.replace("@gmail.com", "")}
+                    </p>
+                    <p className="text-xs text-gray-300">
+                      {createdAt.slice(0, 10)}
+                    </p>
+                  </div>
+                  <p>{comment}</p>
+
+                  {replies.length !== 0 && (
+                    <div
+                      onClick={() => toggleShowReplies(comment)}
+                      className="text-white font-semibold cursor-pointer hover:text-gray-400"
+                    >
+                      {show && showReplies === comment ? "Hide" : "View"} all{" "}
+                      {replies.length} replies
+                    </div>
+                  )}
+                  {replies.length !== 0 &&
+                    showReplies === comment &&
+                    replies.map(({ reply, email }: Reply, i) => (
+                      <div
+                        key={i}
+                        className="bg-[#1e1e1e] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+                      >
+                        <div className="flex items-center gap-3">
+                          <FaUserCircle className="text-green-500" size={27} />
+                          <p className="font-bold">
+                            {email.replace("@gmail.com", "")}
+                          </p>
+                        </div>
+                        <p>{reply}</p>
+                      </div>
+                    ))}
+
+                  <div>
+                    {(session?.user || user) && (
+                      <button
+                        className="text-white font-semibold commonButton  px-2 py-1 "
+                        onClick={() => toggleReply(comment)}
+                      >
+                        Reply
+                      </button>
+                    )}
+                    {showReply === comment && (
+                      <form onSubmit={addReply}>
+                        <div className="flex flex-col gap-5 mt-5 ">
+                          <textarea
+                            name="comment"
+                            ref={replyToComment}
+                            id="comment"
+                            className="bg-[#1e1e1e] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
+                            placeholder="Add a reply"
+                            rows={2}
+                            cols={10}
+                            style={{ resize: "none" }}
+                            required
+                          ></textarea>
+                          <div className="flex gap-4">
+                            <button
+                              className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                              onClick={() => addNewReply(comment)}
+                            >
+                              Add Reply
+                            </button>
+
+                            <button
+                              className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                              onClick={() => setShowReply("")}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 
 export async function getServerSideProps(context: any) {
