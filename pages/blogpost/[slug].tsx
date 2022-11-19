@@ -281,7 +281,7 @@ const slug = (props: Response | any) => {
                   {replies.length !== 0 && (
                     <div
                       onClick={() => toggleShowReplies(comment)}
-                      className="text-white font-semibold cursor-pointer hover:text-gray-400"
+                      className="text-white font-semibold cursor-pointer"
                     >
                       {show && showReplies === comment ? "Hide" : "View"} all{" "}
                       {replies.length} replies
