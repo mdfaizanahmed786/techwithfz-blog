@@ -7,6 +7,12 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import {
+  AiOutlineLike,
+  AiOutlineDislike,
+  AiFillLike,
+  AiFillDislike,
+} from "react-icons/ai";
 import { Oval } from "react-loading-icons";
 
 interface Response {
@@ -48,13 +54,19 @@ const slug = (props: Response | any) => {
   const replyToComment = useRef<HTMLTextAreaElement>(null);
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
-
+  const [like, setLike] = useState("");
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
       setUser(auth?.email);
     }
   }, [router.query]);
+  const matchResults = (comment: string) => {
+    let allComments = comments.filter(
+      (item: Comment) => item.comment === comment
+    );
+    return allComments;
+  };
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoader(true);
@@ -103,9 +115,7 @@ const slug = (props: Response | any) => {
   };
 
   const toggleReply = (comment: string) => {
-    let allComments = comments.filter(
-      (item: Comment) => item.comment === comment
-    );
+    let allComments = matchResults(comment);
     if (allComments) {
       setShowReply(comment);
     }
@@ -153,9 +163,7 @@ const slug = (props: Response | any) => {
     }
   };
   const toggleShowReplies = (comment: string) => {
-    let allComments = comments.filter(
-      (item: Comment) => item.comment === comment
-    );
+    let allComments = matchResults(comment);
     if (allComments) {
       setShowReplies(comment);
       setShow(!show);
@@ -297,14 +305,45 @@ const slug = (props: Response | any) => {
                     ))}
 
                   <div>
-                    {(session?.user || user) && (
-                      <button
-                        className="text-white font-semibold commonButton  px-2 py-1 "
-                        onClick={() => toggleReply(comment)}
-                      >
-                        Reply
-                      </button>
-                    )}
+                  <div className="flex gap-4 items-center">
+                      <div className="space-x-1 flex items-center">
+                        <div className="cursor-pointer">
+                          {like === comment ? (
+                            <AiFillLike
+                              size={20}
+                              className="cursor-pointer textStyle"
+                              title="Like"
+                              onClick={() => setLike("")}
+                            />
+                          ) : (
+                            <AiOutlineLike
+                              size={20}
+                              className="cursor-pointer"
+                              title="Like"
+                              onClick={() => setLike(comment)}
+                            />
+                          )}
+                        </div>
+                        <p className="font-semibold text-base">3</p>
+                      </div>
+                      <div className="space-x-1 flex items-center">
+                        <AiOutlineDislike
+                          size={20}
+                          className="cursor-pointer"
+                          title="Dislike"
+                        />
+                        <p className="font-semibold text-base">2</p>
+                      </div>
+
+                      {(session?.user || user) && (
+                        <button
+                          className="text-white font-semibold commonButton  px-2 py-1 "
+                          onClick={() => toggleReply(comment)}
+                        >
+                          Reply
+                        </button>
+                      )}
+                    </div>
                     {showReply === comment && (
                       <form onSubmit={addReply}>
                         <div className="flex flex-col gap-5 mt-5 ">
