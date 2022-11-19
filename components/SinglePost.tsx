@@ -10,14 +10,15 @@ type Props = {
   slug: string;
   desc: string;
   createdAt:string
+  imgs:string
 };
 
-const SinglePost = ({ title, slug, desc, createdAt }: Props) => {
+const SinglePost = ({ title, slug, desc, createdAt, imgs }: Props) => {
   return (
     <article className="rounded-lg bg-[#1E1E1E] hover:shadow-2xl shadow-lg transition-all duration-200 cursor-pointer">
       <div className="flex flex-col gap-3">
         <div className="overflow-hidden rounded-lg cursor-pointer">
-          <Image src={"/im1.png"} className="hover:scale-105  translate-all duration-200 object-cover w-full" alt="hero_section" width={500} height={300} />
+          <Image src={`/${imgs}.png`} className="hover:scale-105  translate-all duration-200 object-cover w-full" alt="hero_section" width={500} height={300} />
         </div>
         <div className="flex flex-col px-7 gap-5 py-5">
           <Link href={`blogpost/${slug}`}>

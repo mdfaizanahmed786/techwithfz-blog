@@ -9,8 +9,9 @@ interface Response {
   author: string;
   desc: string;
   slug: string;
-  imgs: string[];
+  imgs: string;
   createdAt: string;
+ 
   __v: number;
 }
 type Props = Response[] | any;
@@ -32,7 +33,7 @@ const Home: NextPage = (props: Props) => {
           <div className="md:max-w-[1430px] md:mx-auto px-4">
             <p className="text-white font-semibold text-2xl md:py-4 py-3 text-center md:text-left">Recent Posts</p>
             <div className="grid md:grid-cols-3 grid-cols-1 gap-24 md:mt-10 mt-3">
-              {allBlogs.slice(0, 3).map((blog: Response) => (
+              {allBlogs.slice(0, 3).map((blog: Response, i:number) => (
                 <SinglePost
                   id={blog._id}
                   key={blog._id}
@@ -40,6 +41,8 @@ const Home: NextPage = (props: Props) => {
                   title={blog.title}
                   desc={blog.desc}
                   createdAt={blog.createdAt.slice(0,10)}
+                  imgs={`main${i+1}`}
+                  
                 />
               ))}
             </div>
