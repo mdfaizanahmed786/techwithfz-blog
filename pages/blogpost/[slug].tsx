@@ -1,11 +1,12 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { MdOutlineArrowBackIosNew, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+
 import { toast } from "react-toastify";
 import {
   AiOutlineLike,
@@ -277,14 +278,13 @@ const slug = (props: Response | any) => {
                     </p>
                   </div>
                   <p>{comment}</p>
-
                   {replies.length !== 0 && (
                     <div
                       onClick={() => toggleShowReplies(comment)}
-                      className="text-white font-semibold cursor-pointer"
+                      className="text-white font-semibold cursor-pointer flex gap-1 items-center"
                     >
-                      {show && showReplies === comment ? "Hide" : "View"} all{" "}
-                      {replies.length} replies
+                      {show && showReplies === comment ? <div> <p className="flex items-center "> <MdArrowDropUp className="text-white" size={27} /> <span className="font-bold text-white">Hide</span></p></div> : <div> <p className="flex items-center "> <MdArrowDropDown className="text-white" size={27} /> <span className="font-bold text-white">View</span></p></div>} <div> all
+                      replies ({replies.length})</div>
                     </div>
                   )}
                   {replies.length !== 0 &&
