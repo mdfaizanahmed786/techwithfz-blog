@@ -121,10 +121,9 @@ const slug = (props: Response | any) => {
       setShowReply(comment);
     }
   };
-  const addReply = (e: FormEvent) => {
+ 
+  const addNewReply = async (e:FormEvent, comment: string) => {
     e.preventDefault();
-  };
-  const addNewReply = async (comment: string) => {
     const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
       method: "POST",
       headers: {
@@ -345,7 +344,7 @@ const slug = (props: Response | any) => {
                       )}
                     </div>
                     {showReply === comment && (
-                      <form onSubmit={addReply}>
+                      <form onSubmit={(e)=>addNewReply(e, comment)}>
                         <div className="flex flex-col gap-5 mt-5 ">
                           <textarea
                             name="comment"
@@ -361,7 +360,7 @@ const slug = (props: Response | any) => {
                           <div className="flex gap-4">
                             <button
                               className="text-white font-semibold commonButton  px-3 py-2 w-36"
-                              onClick={() => addNewReply(comment)}
+                            
                             >
                               Add Reply
                             </button>
