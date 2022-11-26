@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import React from "react";
 import HeroSection from "../components/HeroSection";
 import SinglePost from "../components/SinglePost";
 interface Response {
