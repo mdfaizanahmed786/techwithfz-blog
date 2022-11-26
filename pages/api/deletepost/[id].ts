@@ -1,7 +1,8 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import connectDb from "../../../backend/connect";
 import { Blog } from "../../../backend/models/Blog";
 import User from "../../../backend/models/User";
-export default async function handler(req, res) {
+export default async function handler(req:NextApiRequest, res:NextApiResponse) {
   try {
     if (req.method === "DELETE") {
       await connectDb();
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
 
 
     }
-  } catch (er) {
+  } catch (er:any) {
     res.status(500).json({ error: "Internal Server Error", err: er.message });
   }
 }

@@ -3,7 +3,10 @@ import User from "../../backend/models/User";
 import connectDb from "../../backend/connect";
 import sgMail from "@sendgrid/mail";
 import jsonwebtoken from "jsonwebtoken";
-export default async function forgot(req, res) {
+import { NextApiRequest, NextApiResponse } from "next";
+import { Secret } from "next-auth/jwt/types.js";
+
+export default async function forgot(req:NextApiRequest, res:NextApiResponse) {
   if (req.method === "POST") {
     try {
       await connectDb();
@@ -24,7 +27,7 @@ export default async function forgot(req, res) {
       });
       await addDetails.save();
 
-      sgMail.setApiKey(process.env.SENDGRID_KEY);
+      sgMail.setApiKey(process.env.SENDGRID_KEY as string);
       const msg = {
         to: email, // Change to your recipient
         from: "techwithfz@gmail.com", // Change to your verified sender
@@ -42,7 +45,7 @@ export default async function forgot(req, res) {
       }
       const { id } = addDetails;
       res.json({ success: true, id });
-    } catch (er) {
+    } catch (er:any) {
       res.status(500).json({ error: "Internal Server Error", err: er.message });
     }
   } else {

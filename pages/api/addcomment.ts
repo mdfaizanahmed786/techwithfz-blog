@@ -1,8 +1,9 @@
 import connectDb from "../../backend/connect";
 import { Comment } from "../../backend/models/Comment";
 import { Blog } from "../../backend/models/Blog";
-export default async function addcomment(req, res) {
-  console.log(res.headers);
+import { NextApiRequest, NextApiResponse } from "next";
+export default async function addcomment(req:NextApiRequest, res:NextApiResponse) {
+
   if (req.method === "POST") {
     try {
       let { comment, email, slug } = req.body;
@@ -28,7 +29,7 @@ export default async function addcomment(req, res) {
       );
       await Comment.findOneAndDelete({slug})
       res.json({success:true});
-    } catch (er) {
+    } catch (er:any) {
       res.status(500).json({ err: er.message });
     }
   } else {

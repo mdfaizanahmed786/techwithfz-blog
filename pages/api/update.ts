@@ -2,8 +2,9 @@ import { Forgot } from "../../backend/models/Forgot";
 import User from "../../backend/models/User";
 import bcrypt from "bcryptjs";
 import connectDb from "../../backend/connect";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function update(req, res) {
+export default async function update(req:NextApiRequest, res:NextApiResponse) {
   if (req.method === "PUT") {
     try {
       await connectDb();
@@ -23,7 +24,7 @@ export default async function update(req, res) {
         return res.status(404).json({ error: "Your email does not exist" });
 
       res.json({ success: true });
-    } catch (er) {
+    } catch (er:any) {
       res.status(500).json({ error: "Internal server error", err: er.message });
     }
   } else {

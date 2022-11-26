@@ -8,6 +8,8 @@
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
     "@tailwindcss/line-clamp": "^0.4.2",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/react-google-recaptcha": "^2.1.5",
     "bcryptjs": "^2.4.3",
     "html-react-parser": "^3.0.4",
