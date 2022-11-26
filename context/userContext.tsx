@@ -1,13 +1,14 @@
+import React from "react";
 import { createContext, useEffect, useState } from "react";
 
-const userContext = createContext();
+const userContext = createContext({} as any);
 const { Provider } = userContext;
 
 const AppProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState();
 
-  const isAuthenticated = () => {
-    const auth = JSON.parse(localStorage.getItem("auth"));
+  const isAuthenticated = ():any => {
+    const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth) {
       setIsAuth(auth);
     }
