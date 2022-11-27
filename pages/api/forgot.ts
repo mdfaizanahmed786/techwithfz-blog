@@ -6,7 +6,10 @@ import jsonwebtoken from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Secret } from "next-auth/jwt/types.js";
 
-export default async function forgot(req:NextApiRequest, res:NextApiResponse) {
+export default async function forgot(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "POST") {
     try {
       await connectDb();
@@ -45,7 +48,7 @@ export default async function forgot(req:NextApiRequest, res:NextApiResponse) {
       }
       const { id } = addDetails;
       res.json({ success: true, id });
-    } catch (er:any) {
+    } catch (er: any) {
       res.status(500).json({ error: "Internal Server Error", err: er.message });
     }
   } else {

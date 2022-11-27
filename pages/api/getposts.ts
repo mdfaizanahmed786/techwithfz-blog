@@ -3,7 +3,10 @@ import { Blog } from "../../backend/models/Blog";
 import connectDb from "../../backend/connect";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function getposts(req:NextApiRequest, res:NextApiResponse) {
+export default async function getposts(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     await connectDb();
     let allBlogs = await Blog.find();

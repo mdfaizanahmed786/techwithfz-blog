@@ -1,10 +1,13 @@
 import connectDb from "../../backend/connect";
 import User from "../../backend/models/User";
 import bcrypt from "bcryptjs";
-import{ Blog }from "../../backend/models/Blog";
+import { Blog } from "../../backend/models/Blog";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function addpost(req:NextApiRequest, res:NextApiResponse) {
+export default async function addpost(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "POST") {
     await connectDb();
     try {
@@ -18,20 +21,24 @@ export default async function addpost(req:NextApiRequest, res:NextApiResponse) {
         req.body.password,
         user.password
       );
-      if (comparePassword && user.isAdmin && email==="ahmedriyan528@gmail.com") {
-     const response=await Blog.create({
+      if (
+        comparePassword &&
+        user.isAdmin &&
+        email === "ahmedriyan528@gmail.com"
+      ) {
+        const response = await Blog.create({
           title,
           desc,
           author,
           slug,
         });
-        return res.json(response)
+        return res.json(response);
       } else {
         return res
           .status(401)
           .json({ error: "You are not authorized to visit this page." });
       }
-    } catch (er:any) {
+    } catch (er: any) {
       res.status(500).json({ error: er.message });
     }
   } else {
