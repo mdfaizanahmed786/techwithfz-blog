@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 const userContext = createContext({} as any);
 const { Provider } = userContext;
 
-const AppProvider = ({ children }) => {
+const AppProvider = ({ children }:any) => {
   const [isAuth, setIsAuth] = useState();
 
   const isAuthenticated = ():any => {
