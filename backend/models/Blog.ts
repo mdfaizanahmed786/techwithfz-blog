@@ -1,8 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 import {CommentSchema} from "./Comment"
 
+interface Blog{
+  title: string;
+  author:string;
+  desc:string;
+  createdAt:string | undefined;
+  slug:string;
+  userComments:typeof CommentSchema[];
+  imgs:string[];
 
-const BlogSchema = new mongoose.Schema({
+
+}
+const BlogSchema = new mongoose.Schema<Blog>({
   title: { type: String, required: true, minLength: 5 },
   author: { type: String, required:true },
   desc: { type: String, required: true, minLength: 10 },
@@ -14,7 +24,7 @@ const BlogSchema = new mongoose.Schema({
 });
 
 // we are using this below syntax because next js already complies it on the fly and tries to re-compile it which throws an error because it has already created it once.
-let Blog= mongoose.models.Blog || mongoose.model("Blog", BlogSchema) 
+let Blog= mongoose.models.Blog<Blog> || mongoose.model("Blog", BlogSchema)
 
 
 export {Blog, BlogSchema};
