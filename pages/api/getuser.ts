@@ -1,6 +1,6 @@
-import User from "../../backend/models/User.js";
+import User from "../../backend/models/User";
 import bcrypt from "bcryptjs";
-import connectDb from "../../backend/connect.js";
+import connectDb from "../../backend/connect";
 import jsonwebtoken from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Secret } from "next-auth/jwt/types.js";
