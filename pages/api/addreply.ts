@@ -6,7 +6,7 @@ type Reply = {
   email: string;
   reply: string;
 };
-interface Comment {
+interface UserComment {
   _id: string;
   comment: string;
   email: string;
@@ -24,11 +24,11 @@ export default async function addreply(req:NextApiRequest, res:NextApiResponse) 
       let post = await Blog.findOne({ slug });
 
       if (!post) return res.status(404).json({ error: "Post not found!" });
-      let comments = post.userComments.filter((com:Comment) => com.comment === comment);
+      let comments = post.userComments.filter((com:UserComment) => com.comment === comment);
       if (comments.length === 0)
         return res.status(404).json({ error: "No comment found!" });
         comments[0].replies.push({email, reply});
-      post.userComments.filter((com:Comment) => com.comment === comment);
+      post.userComments.filter((com:UserComment) => com.comment === comment);
       await Blog.findOneAndUpdate(
         { slug: slug },
         { $set: { userComments: [...post.userComments] } },
