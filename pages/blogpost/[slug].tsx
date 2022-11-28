@@ -9,10 +9,8 @@ import { useSession } from "next-auth/react";
 
 import { toast } from "react-toastify";
 import {
-  AiOutlineLike,
-  AiOutlineDislike,
-  AiFillLike,
-  AiFillDislike,
+  AiOutlineHeart,
+  AiFillHeart,
 } from "react-icons/ai";
 import { Oval } from "react-loading-icons";
 
@@ -307,15 +305,15 @@ const slug = (props: Response | any) => {
                   <div className="flex gap-4 items-center">
                       <div className="space-x-1 flex items-center">
                         <div className="cursor-pointer">
-                          {like === comment ? (
-                            <AiFillLike
+                          {like && (session?.user?.email || user)   ? (
+                            <AiFillHeart
                               size={20}
                               className="cursor-pointer textStyle"
                               title="Like"
                               onClick={() => setLike("")}
                             />
                           ) : (
-                            <AiOutlineLike
+                            <AiOutlineHeart
                               size={20}
                               className="cursor-pointer"
                               title="Like"
@@ -323,16 +321,9 @@ const slug = (props: Response | any) => {
                             />
                           )}
                         </div>
-                        <p className="font-semibold text-base">3</p>
+                        <p className="font-semibold text-base">1</p>
                       </div>
-                      <div className="space-x-1 flex items-center">
-                        <AiOutlineDislike
-                          size={20}
-                          className="cursor-pointer"
-                          title="Dislike"
-                        />
-                        <p className="font-semibold text-base">2</p>
-                      </div>
+                     
 
                       {(session?.user || user) && (
                         <button
