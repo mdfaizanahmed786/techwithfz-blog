@@ -170,7 +170,37 @@ const slug = (props: Response | any) => {
     }
     if (show) setShowReplies("");
   };
+const handleLikes=async(id:string)=>{
+  const like=await fetch("http://localhost:3000/api/likecomment",{
+    method:"POST",
+    headers:{
+      "Content-type":"application/json"
+    },
+    body:JSON.stringify({
+      id,
+      slug:slug,
+      email:!user ? session?.user?.email : user,
+    })
+  })
+  const response=await like.json()
+  if(response.success){
+   
+    toast.success("Liked!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    setLike(id)
+  }
 
+  
+  setLikeState(true)
+}
   return (
     <div className="bg-[#2E2E2E]">
       <Head>
@@ -307,7 +337,7 @@ const slug = (props: Response | any) => {
                   <div className="flex gap-4 items-center">
                       <div className="space-x-1 flex items-center">
                         <div className="cursor-pointer">
-                          {(like===_id && likeState) && (session?.user?.email || user)   ? (
+                          {(like===_id) && (session?.user?.email || user)   ? (
                             <AiFillHeart
                               size={20}
                               className="cursor-pointer textStyle"
@@ -319,7 +349,7 @@ const slug = (props: Response | any) => {
                               size={20}
                               className="cursor-pointer"
                               title="Like"
-                              onClick={() =>{ setLike(_id); setLikeState(true)}}
+                              onClick={()=>handleLikes(_id)}
                             />
                           )}
                         </div>
