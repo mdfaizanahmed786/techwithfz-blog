@@ -7,7 +7,7 @@ export default async function getposts(req:NextApiRequest, res:NextApiResponse) 
   try {
     await connectDb();
     let allBlogs = await Blog.find();
-
+d
     res.status(200).json({ allBlogs });
   } catch (er) {
     res.status(500).json({ error: "Internal Server Error" });

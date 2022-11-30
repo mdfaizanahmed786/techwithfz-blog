@@ -35,6 +35,7 @@ interface Comment {
   slug: string;
   createdAt: string;
   replies: Reply[];
+  likes:string[]
   _v: number;
 }
 
@@ -54,6 +55,7 @@ const slug = (props: Response | any) => {
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState("");
+  const [likeState, setLikeState] = useState(false);
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
@@ -260,7 +262,7 @@ const slug = (props: Response | any) => {
               </div>
             )}
             {comments.map(
-              ({ comment, email, _id, createdAt, replies }: Comment) => (
+              ({ comment, email, _id, createdAt, replies, likes }: Comment) => (
                 <div
                   key={_id}
                   className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
@@ -305,23 +307,23 @@ const slug = (props: Response | any) => {
                   <div className="flex gap-4 items-center">
                       <div className="space-x-1 flex items-center">
                         <div className="cursor-pointer">
-                          {like && (session?.user?.email || user)   ? (
+                          {(like===_id && likeState) && (session?.user?.email || user)   ? (
                             <AiFillHeart
                               size={20}
                               className="cursor-pointer textStyle"
                               title="Like"
-                              onClick={() => setLike("")}
+                              onClick={() => {setLike(""); setLikeState(false)}}
                             />
                           ) : (
                             <AiOutlineHeart
                               size={20}
                               className="cursor-pointer"
                               title="Like"
-                              onClick={() => setLike(comment)}
+                              onClick={() =>{ setLike(_id); setLikeState(true)}}
                             />
                           )}
                         </div>
-                        <p className="font-semibold text-base">1</p>
+                        <p className="font-semibold text-base">{likes.length}</p>
                       </div>
                      
 
@@ -389,7 +391,7 @@ export async function getServerSideProps(context: any) {
   if (specificPost[0]?.userComments) {
     comments = specificPost[0]?.userComments;
   }
-
+  
   return {
     props: { specificPost, comments },
   };

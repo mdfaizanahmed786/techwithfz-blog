@@ -15,7 +15,7 @@ const CommentSchema=new mongoose.Schema<Comment>({
     createdAt: { type: Date, default: () => Date.now(), immutable: true },
     slug:{type:String, required:true},
     replies:[{type:Object, date:Date.now(), email:String}],
-    likes:[{type:Number, default:0}],
+    likes:[{type:Object}],
     email:{type:String, required:true},
   })
 
