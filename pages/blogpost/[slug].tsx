@@ -1,6 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { MdOutlineArrowBackIosNew, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import {
+  MdOutlineArrowBackIosNew,
+  MdArrowDropDown,
+  MdArrowDropUp,
+} from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
@@ -8,10 +12,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 
 import { toast } from "react-toastify";
-import {
-  AiOutlineHeart,
-  AiFillHeart,
-} from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Oval } from "react-loading-icons";
 
 interface Response {
@@ -35,6 +36,7 @@ interface Comment {
   slug: string;
   createdAt: string;
   replies: Reply[];
+  likes: string[];
   _v: number;
 }
 
@@ -54,6 +56,7 @@ const slug = (props: Response | any) => {
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState("");
+  const [likeState, setLikeState] = useState(false);
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
@@ -71,17 +74,20 @@ const slug = (props: Response | any) => {
     setLoader(true);
     e.preventDefault();
 
-    const comment = await fetch("https://techwithfz.vercel.app/api/addcomment", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        comment: feedback,
-        slug,
-        email: !user ? session?.user?.email : user,
-      }),
-    });
+    const comment = await fetch(
+      "https://techwithfz.vercel.app/api/addcomment",
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: feedback,
+          slug,
+          email: !user ? session?.user?.email : user,
+        }),
+      }
+    );
 
     const response = await comment.json();
     setLoader(true);
@@ -119,8 +125,8 @@ const slug = (props: Response | any) => {
       setShowReply(comment);
     }
   };
- 
-  const addNewReply = async (e:FormEvent, comment: string) => {
+
+  const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
     const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
       method: "POST",
@@ -260,7 +266,7 @@ const slug = (props: Response | any) => {
               </div>
             )}
             {comments.map(
-              ({ comment, email, _id, createdAt, replies }: Comment) => (
+              ({ comment, email, _id, createdAt, replies, likes }: Comment) => (
                 <div
                   key={_id}
                   className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
@@ -280,8 +286,32 @@ const slug = (props: Response | any) => {
                       onClick={() => toggleShowReplies(comment)}
                       className="text-white font-semibold cursor-pointer flex gap-1 items-center"
                     >
-                      {show && showReplies === comment ? <div> <p className="flex items-center "> <MdArrowDropUp className="text-white" size={27} /> <span className="font-bold text-white">Hide</span></p></div> : <div> <p className="flex items-center "> <MdArrowDropDown className="text-white" size={27} /> <span className="font-bold text-white">View</span></p></div>} <div> all
-                      replies ({replies.length})</div>
+                      {show && showReplies === comment ? (
+                        <div>
+                          {" "}
+                          <p className="flex items-center ">
+                            {" "}
+                            <MdArrowDropUp
+                              className="text-white"
+                              size={27}
+                            />{" "}
+                            <span className="font-bold text-white">Hide</span>
+                          </p>
+                        </div>
+                      ) : (
+                        <div>
+                          {" "}
+                          <p className="flex items-center ">
+                            {" "}
+                            <MdArrowDropDown
+                              className="text-white"
+                              size={27}
+                            />{" "}
+                            <span className="font-bold text-white">View</span>
+                          </p>
+                        </div>
+                      )}{" "}
+                      <div> all replies ({replies.length})</div>
                     </div>
                   )}
                   {replies.length !== 0 &&
@@ -302,28 +332,37 @@ const slug = (props: Response | any) => {
                     ))}
 
                   <div>
-                  <div className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center">
                       <div className="space-x-1 flex items-center">
                         <div className="cursor-pointer">
-                          {like === comment ? (
+                          {like === _id &&
+                          likeState &&
+                          (session?.user?.email || user) ? (
                             <AiFillHeart
                               size={20}
                               className="cursor-pointer textStyle"
                               title="Like"
-                              onClick={() => setLike("")}
+                              onClick={() => {
+                                setLike("");
+                                setLikeState(false);
+                              }}
                             />
                           ) : (
                             <AiOutlineHeart
                               size={20}
                               className="cursor-pointer"
                               title="Like"
-                              onClick={() => setLike(comment)}
+                              onClick={() => {
+                                setLike(_id);
+                                setLikeState(true);
+                              }}
                             />
                           )}
                         </div>
-                        <p className="font-semibold text-base">1</p>
+                        <p className="font-semibold text-base">
+                          {likes.length}
+                        </p>
                       </div>
-                     
 
                       {(session?.user || user) && (
                         <button
@@ -335,7 +374,7 @@ const slug = (props: Response | any) => {
                       )}
                     </div>
                     {showReply === comment && (
-                      <form onSubmit={(e)=>addNewReply(e, comment)}>
+                      <form onSubmit={(e) => addNewReply(e, comment)}>
                         <div className="flex flex-col gap-5 mt-5 ">
                           <textarea
                             name="comment"
@@ -349,10 +388,7 @@ const slug = (props: Response | any) => {
                             required
                           ></textarea>
                           <div className="flex gap-4">
-                            <button
-                              className="text-white font-semibold commonButton  px-3 py-2 w-36"
-                            
-                            >
+                            <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                               Add Reply
                             </button>
 
@@ -376,7 +412,6 @@ const slug = (props: Response | any) => {
     </div>
   );
 };
-
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
