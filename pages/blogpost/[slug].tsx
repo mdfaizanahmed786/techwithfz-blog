@@ -171,7 +171,7 @@ const slug = (props: Response | any) => {
     if (show) setShowReplies("");
   };
 const handleLikes=async(id:string)=>{
-  const like=await fetch("http://localhost:3000/api/likecomment",{
+  const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
     method:"POST",
     headers:{
       "Content-type":"application/json"
