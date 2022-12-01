@@ -175,6 +175,7 @@ const slug = (props: Response | any) => {
 
 
 const handleLikes=async(id:string)=>{
+  if(user || session?.user?.email){
   const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
     method:"POST",
     headers:{
@@ -201,7 +202,19 @@ const handleLikes=async(id:string)=>{
     });
     setLike(id)
   }
-
+  }
+  else{
+    toast.error("Login to like!", {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
   
 
 }
