@@ -175,7 +175,7 @@ const slug = (props: Response | any) => {
 
 
 const handleLikes=async(id:string)=>{
-  if(user && session?.user?.email){
+  if(user || session?.user?.email){
   const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
     method:"POST",
     headers:{
