@@ -6,7 +6,7 @@ import parse from "html-react-parser";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-
+ 
 import { toast } from "react-toastify";
 import {
   AiOutlineHeart,
@@ -39,10 +39,10 @@ interface Comment {
   _v: number;
 }
 
-type Props = {};
+
 
 const slug = (props: Response | any) => {
-  const { specificPost, comments, authState } = props;
+  const { specificPost, comments} = props;
   const router = useRouter();
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
@@ -55,7 +55,9 @@ const slug = (props: Response | any) => {
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState("");
-  const [likeState, setLikeState] = useState(false);
+  const [likeState, setLikeState]=useState(false)
+
+
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.success && auth?.authToken) {
@@ -170,8 +172,10 @@ const slug = (props: Response | any) => {
     }
     if (show) setShowReplies("");
   };
+
+
 const handleLikes=async(id:string)=>{
-  const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
+  const like=await fetch("http://localhost:3000/api/likecomment",{
     method:"POST",
     headers:{
       "Content-type":"application/json"
@@ -184,7 +188,7 @@ const handleLikes=async(id:string)=>{
   })
   const response=await like.json()
   if(response.success){
-   
+    router.reload()
     toast.success("Liked!", {
       position: "top-right",
       autoClose: 2500,
@@ -199,7 +203,7 @@ const handleLikes=async(id:string)=>{
   }
 
   
-  setLikeState(true)
+
 }
   return (
     <div className="bg-[#2E2E2E]">
@@ -326,7 +330,7 @@ const handleLikes=async(id:string)=>{
                         <div className="flex items-center gap-3">
                           <FaUserCircle className="text-green-500" size={27} />
                           <p className="font-bold">
-                            {email.replace("@gmail.com", "")}
+                            {email.replace("@gmail.com", "_gm")}
                           </p>
                         </div>
                         <p>{reply}</p>
@@ -337,12 +341,15 @@ const handleLikes=async(id:string)=>{
                   <div className="flex gap-4 items-center">
                       <div className="space-x-1 flex items-center">
                         <div className="cursor-pointer">
-                          {(like===_id) && (session?.user?.email || user)   ? (
+                          {/* @ts-ignore */}
+                          {likes.includes(session?.user?.email || user) && (session?.user?.email || user)   ? (
+                          
+                        
                             <AiFillHeart
                               size={20}
                               className="cursor-pointer textStyle"
                               title="Like"
-                              onClick={() => {setLike(""); setLikeState(false)}}
+                            
                             />
                           ) : (
                             <AiOutlineHeart
