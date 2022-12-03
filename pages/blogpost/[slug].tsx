@@ -1,17 +1,18 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { MdOutlineArrowBackIosNew, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import {
+  MdOutlineArrowBackIosNew,
+  MdArrowDropDown,
+  MdArrowDropUp,
+} from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
- 
+
 import { toast } from "react-toastify";
-import {
-  AiOutlineHeart,
-  AiFillHeart,
-} from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Oval } from "react-loading-icons";
 
 interface Response {
@@ -35,14 +36,12 @@ interface Comment {
   slug: string;
   createdAt: string;
   replies: Reply[];
-  likes:string[]
+  likes: string[];
   _v: number;
 }
 
-
-
 const slug = (props: Response | any) => {
-  const { specificPost, comments} = props;
+  const { specificPost, comments } = props;
   const router = useRouter();
   const { slug } = router.query;
   const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
@@ -55,8 +54,6 @@ const slug = (props: Response | any) => {
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState("");
-  const [likeState, setLikeState]=useState(false)
-
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
@@ -75,17 +72,20 @@ const slug = (props: Response | any) => {
     setLoader(true);
     e.preventDefault();
 
-    const comment = await fetch("https://techwithfz.vercel.app/api/addcomment", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        comment: feedback,
-        slug,
-        email: !user ? session?.user?.email : user,
-      }),
-    });
+    const comment = await fetch(
+      "https://techwithfz.vercel.app/api/addcomment",
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: feedback,
+          slug,
+          email: !user ? session?.user?.email : user,
+        }),
+      }
+    );
 
     const response = await comment.json();
     setLoader(true);
@@ -123,8 +123,8 @@ const slug = (props: Response | any) => {
       setShowReply(comment);
     }
   };
- 
-  const addNewReply = async (e:FormEvent, comment: string) => {
+
+  const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
     const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
       method: "POST",
@@ -173,51 +173,50 @@ const slug = (props: Response | any) => {
     if (show) setShowReplies("");
   };
 
-
-const handleLikes=async(id:string)=>{
-  if(user || session?.user?.email){
-  const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
-    method:"POST",
-    headers:{
-      "Content-type":"application/json"
-    },
-    body:JSON.stringify({
-      id,
-      slug:slug,
-      email:!user ? session?.user?.email : user,
-    })
-  })
-  const response=await like.json()
-  if(response.success){
-    router.reload()
-    toast.success("Liked!", {
-      position: "top-right",
-      autoClose: 2500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-    setLike(id)
-  }
-  }
-  else{
-    toast.error("Login to like!", {
-      position: "top-right",
-      autoClose: 2500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }
-  
-
-}
+  const handleLikes = async (id: string) => {
+    if (user || session?.user?.email) {
+      const like = await fetch(
+        "https://techwithfz.vercel.app/api/likecomment",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+            slug: slug,
+            email: !user ? session?.user?.email : user,
+          }),
+        }
+      );
+      const response = await like.json();
+      if (response.success) {
+        router.reload();
+        toast.success("Liked!", {
+          position: "top-right",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setLike(id);
+      }
+    } else {
+      toast.error("Login to like!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
   return (
     <div className="bg-[#2E2E2E]">
       <Head>
@@ -329,8 +328,32 @@ const handleLikes=async(id:string)=>{
                       onClick={() => toggleShowReplies(comment)}
                       className="text-white font-semibold cursor-pointer flex gap-1 items-center"
                     >
-                      {show && showReplies === comment ? <div> <p className="flex items-center "> <MdArrowDropUp className="text-white" size={27} /> <span className="font-bold text-white">Hide</span></p></div> : <div> <p className="flex items-center "> <MdArrowDropDown className="text-white" size={27} /> <span className="font-bold text-white">View</span></p></div>} <div> all
-                      replies ({replies.length})</div>
+                      {show && showReplies === comment ? (
+                        <div>
+                          {" "}
+                          <p className="flex items-center ">
+                            {" "}
+                            <MdArrowDropUp
+                              className="text-white"
+                              size={27}
+                            />{" "}
+                            <span className="font-bold text-white">Hide</span>
+                          </p>
+                        </div>
+                      ) : (
+                        <div>
+                          {" "}
+                          <p className="flex items-center ">
+                            {" "}
+                            <MdArrowDropDown
+                              className="text-white"
+                              size={27}
+                            />{" "}
+                            <span className="font-bold text-white">View</span>
+                          </p>
+                        </div>
+                      )}{" "}
+                      <div> all replies ({replies.length})</div>
                     </div>
                   )}
                   {replies.length !== 0 &&
@@ -351,31 +374,30 @@ const handleLikes=async(id:string)=>{
                     ))}
 
                   <div>
-                  <div className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center">
                       <div className="space-x-1 flex items-center">
                         <div className="cursor-pointer">
                           {/* @ts-ignore */}
-                          {likes.includes(session?.user?.email || user) && (session?.user?.email || user)   ? (
-                          
-                        
+                          {likes.includes(session?.user?.email || user) &&
+                          (session?.user?.email || user) ? (
                             <AiFillHeart
                               size={20}
                               className="cursor-pointer textStyle"
                               title="Like"
-                            
                             />
                           ) : (
                             <AiOutlineHeart
                               size={20}
                               className="cursor-pointer"
                               title="Like"
-                              onClick={()=>handleLikes(_id)}
+                              onClick={() => handleLikes(_id)}
                             />
                           )}
                         </div>
-                        <p className="font-semibold text-base">{likes.length}</p>
+                        <p className="font-semibold text-base">
+                          {likes.length}
+                        </p>
                       </div>
-                     
 
                       {(session?.user || user) && (
                         <button
@@ -387,7 +409,7 @@ const handleLikes=async(id:string)=>{
                       )}
                     </div>
                     {showReply === comment && (
-                      <form onSubmit={(e)=>addNewReply(e, comment)}>
+                      <form onSubmit={(e) => addNewReply(e, comment)}>
                         <div className="flex flex-col gap-5 mt-5 ">
                           <textarea
                             name="comment"
@@ -401,10 +423,7 @@ const handleLikes=async(id:string)=>{
                             required
                           ></textarea>
                           <div className="flex gap-4">
-                            <button
-                              className="text-white font-semibold commonButton  px-3 py-2 w-36"
-                            
-                            >
+                            <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                               Add Reply
                             </button>
 
@@ -429,7 +448,6 @@ const handleLikes=async(id:string)=>{
   );
 };
 
-
 export async function getServerSideProps(context: any) {
   const { params } = context;
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
@@ -441,7 +459,7 @@ export async function getServerSideProps(context: any) {
   if (specificPost[0]?.userComments) {
     comments = specificPost[0]?.userComments;
   }
-  
+
   return {
     props: { specificPost, comments },
   };
