@@ -204,7 +204,7 @@ const Forgot = (props: Props) => {
   }
 
   return (
-    <div className="loginPage min-h-screen md:items-center md:flex">
+    <div className="bg-[#2E2E2E] min-h-screen md:items-center md:flex">
       <Head>
         <title>Reset your password</title>
       </Head>
