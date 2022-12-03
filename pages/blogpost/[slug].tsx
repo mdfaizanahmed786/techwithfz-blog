@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBackIosNew, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
  
@@ -55,7 +55,6 @@ const slug = (props: Response | any) => {
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState("");
-  const [likeState, setLikeState]=useState(false)
 
 
   useEffect(() => {
@@ -64,12 +63,13 @@ const slug = (props: Response | any) => {
       setUser(auth?.email);
     }
   }, [router.query]);
-  const matchResults = (comment: string) => {
+  
+  const matchResults = useMemo(()=>(comment: string) => {
     let allComments = comments.filter(
       (item: Comment) => item.comment === comment
     );
     return allComments;
-  };
+  }, [comments])
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoader(true);
