@@ -68,7 +68,7 @@ const Blog = (props: Props) => {
         {newPosts.map((blog: Response) => (
           <div
             key={blog._id}
-            className="flex flex-col md:gap-5 gap-4 md:px-9 md:py-7 px-6 py-5 rounded-lg shadow-md hover:bg-[#2E2E2E] bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-xl"
+            className="flex flex-col md:gap-5 gap-4 md:px-9 md:py-7 px-6 py-5 rounded-lg shadow-md  bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-xl"
           >
             <p className="text-xs textStyle font-semibold">
               Date: {blog.createdAt.slice(0, 10)}
