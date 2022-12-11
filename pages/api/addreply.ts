@@ -2,10 +2,7 @@ import connectDb from "../../backend/connect";
 import { Comment } from "../../backend/models/Comment";
 import { Blog } from "../../backend/models/Blog";
 import { NextApiRequest, NextApiResponse } from "next";
-type Reply = {
-  email: string;
-  reply: string;
-};
+
 interface UserComment {
   _id: string;
   comment: string;

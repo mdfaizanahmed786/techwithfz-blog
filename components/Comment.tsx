@@ -6,21 +6,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { toast } from "react-toastify";
 import Replies from "./Replies";
-type Reply = {
-  email: string;
-  reply: string;
-};
-interface Comment {
-  _id: string;
-  comment: string;
-  email: string;
-  slug: string;
-  createdAt: string;
-  replies: Reply[];
-  likes: string[];
-  matchResults: (comment: string) => Comment[];
-  _v: number;
-}
+
 
 function Comment({
   comment,

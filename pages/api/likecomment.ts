@@ -1,10 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Blog } from "../../backend/models/Blog";
 import connectDb from "../../backend/connect";
-type Reply = {
-  email: string;
-  reply: string;
-};
+
 interface UserComment {
   id: string;
   comment: string;

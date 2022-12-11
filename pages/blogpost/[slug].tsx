@@ -8,23 +8,10 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
  
 import { toast } from "react-toastify";
-import {
-  AiOutlineHeart,
-  AiFillHeart,
-} from "react-icons/ai";
+
 import { Oval } from "react-loading-icons";
 import Comment from "../../components/Comment";
 
-interface Response {
-  _id: string;
-  title: string;
-  author: string;
-  desc: string;
-  slug: string;
-  imgs: string[];
-  createdAt: string;
-  __v: number;
-}
 
 
 
@@ -37,11 +24,7 @@ const slug = (props: Response | any) => {
   const [feedback, setFeedBack] = useState("");
   const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
-  const [showReply, setShowReply] = useState("");
-  const replyToComment = useRef<HTMLTextAreaElement>(null);
-  const [showReplies, setShowReplies] = useState("");
-  const [show, setShow] = useState(false);
-  const [like, setLike] = useState("");
+
 
 
   useEffect(() => {
