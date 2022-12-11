@@ -5,6 +5,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { toast } from "react-toastify";
+import Replies from "./Replies";
 type Reply = {
   email: string;
   reply: string;
@@ -21,7 +22,15 @@ interface Comment {
   _v: number;
 }
 
-function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }: Comment) {
+function Comment({
+  comment,
+  email,
+  _id,
+  createdAt,
+  replies,
+  likes,
+  matchResults,
+}: Comment) {
   const [user, setUser] = useState<string | null | undefined>("");
 
   const { data: session } = useSession();
@@ -30,7 +39,7 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState("");
-  const {slug}=useRouter().query
+  const { slug } = useRouter().query;
   const router = useRouter();
 
   useEffect(() => {
@@ -40,8 +49,7 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
     }
   }, [router.query]);
 
-
-  const addNewReply = async (e:FormEvent, comment: string) => {
+  const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
     const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
       method: "POST",
@@ -90,174 +98,164 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
     if (show) setShowReplies("");
   };
 
-  
   const toggleReply = (comment: string) => {
     let allComments = matchResults(comment);
     if (allComments) {
       setShowReply(comment);
     }
   };
- 
- 
 
-
-const handleLikes=async(id:string)=>{
-  if(user || session?.user?.email){
-  const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
-    method:"POST",
-    headers:{
-      "Content-type":"application/json"
-    },
-    body:JSON.stringify({
-      id,
-      slug:slug,
-      email:!user ? session?.user?.email : user,
-    })
-  })
-  const response=await like.json()
-  if(response.success){
-    router.reload()
-    toast.success("Liked!", {
-      position: "top-right",
-      autoClose: 2500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-    setLike(id)
-  }
-  }
-  else{
-    toast.error("Login to like!", {
-      position: "top-right",
-      autoClose: 2500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }
-  
-
-}
-  return(
+  const handleLikes = async (id: string) => {
+    if (user || session?.user?.email) {
+      const like = await fetch(
+        "https://techwithfz.vercel.app/api/likecomment",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+            slug: slug,
+            email: !user ? session?.user?.email : user,
+          }),
+        }
+      );
+      const response = await like.json();
+      if (response.success) {
+        router.reload();
+        toast.success("Liked!", {
+          position: "top-right",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setLike(id);
+      }
+    } else {
+      toast.error("Login to like!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+  return (
     <div
-    key={_id}
-    className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
-  >
-    <div className="flex items-center gap-3">
-      <FaUserCircle className="text-green-500" size={27} />
-      <p className="font-bold">
-        {email.replace("@gmail.com", "")}
-      </p>
-      <p className="text-xs text-gray-300">
-        {createdAt.slice(0, 10)}
-      </p>
-    </div>
-    <p>{comment}</p>
-    {replies.length !== 0 && (
-      <div
-        onClick={() => toggleShowReplies(comment)}
-        className="text-white font-semibold cursor-pointer flex gap-1 items-center"
-      >
-        {show && showReplies === comment ? <div> <p className="flex items-center "> <MdArrowDropUp className="text-white" size={27} /> <span className="font-bold text-white">Hide</span></p></div> : <div> <p className="flex items-center "> <MdArrowDropDown className="text-white" size={27} /> <span className="font-bold text-white">View</span></p></div>} <div> all
-        replies ({replies.length})</div>
+      key={_id}
+      className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+    >
+      <div className="flex items-center gap-3">
+        <FaUserCircle className="text-green-500" size={27} />
+        <p className="font-bold">{email.replace("@gmail.com", "")}</p>
+        <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
       </div>
-    )}
-    {replies.length !== 0 &&
-      showReplies === comment &&
-      replies.map(({ reply, email }: Reply, i) => (
+      <p>{comment}</p>
+      {replies.length !== 0 && (
         <div
-          key={i}
-          className="bg-[#1e1e1e] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
+          onClick={() => toggleShowReplies(comment)}
+          className="text-white font-semibold cursor-pointer flex gap-1 items-center"
         >
-          <div className="flex items-center gap-3">
-            <FaUserCircle className="text-green-500" size={27} />
-            <p className="font-bold">
-              {email.replace("@gmail.com", "_gm")}
-            </p>
-          </div>
-          <p>{reply}</p>
+          {show && showReplies === comment ? (
+            <div>
+              {" "}
+              <p className="flex items-center ">
+                {" "}
+                <MdArrowDropUp className="text-white" size={27} />{" "}
+                <span className="font-bold text-white">Hide</span>
+              </p>
+            </div>
+          ) : (
+            <div>
+              {" "}
+              <p className="flex items-center ">
+                {" "}
+                <MdArrowDropDown className="text-white" size={27} />{" "}
+                <span className="font-bold text-white">View</span>
+              </p>
+            </div>
+          )}{" "}
+          <div> all replies ({replies.length})</div>
         </div>
-      ))}
+      )}
+      {replies.length !== 0 &&
+        showReplies === comment &&
+        replies.map((reply: Reply, i) => <Replies {...reply} key={i} />)}
 
-    <div>
-    <div className="flex gap-4 items-center">
-        <div className="space-x-1 flex items-center">
-          <div className="cursor-pointer">
-            {/* @ts-ignore */}
-            {likes.includes(session?.user?.email || user) && (session?.user?.email || user)   ? (
-            
-          
-              <AiFillHeart
-                size={20}
-                className="cursor-pointer textStyle"
-                title="Like"
-              
-              />
-            ) : (
-              <AiOutlineHeart
-                size={20}
-                className="cursor-pointer"
-                title="Like"
-                onClick={()=>handleLikes(_id)}
-              />
-            )}
+      <div>
+        <div className="flex gap-4 items-center">
+          <div className="space-x-1 flex items-center">
+            <div className="cursor-pointer">
+              {/* @ts-ignore */}
+              {likes.includes(session?.user?.email || user) &&
+              (session?.user?.email || user) ? (
+                <AiFillHeart
+                  size={20}
+                  className="cursor-pointer textStyle"
+                  title="Like"
+                />
+              ) : (
+                <AiOutlineHeart
+                  size={20}
+                  className="cursor-pointer"
+                  title="Like"
+                  onClick={() => handleLikes(_id)}
+                />
+              )}
+            </div>
+            <p className="font-semibold text-base">{likes.length}</p>
           </div>
-          <p className="font-semibold text-base">{likes.length}</p>
-        </div>
-       
 
-        {(session?.user || user) && (
-          <button
-            className="text-white font-semibold commonButton  px-2 py-1 "
-            onClick={() => toggleReply(comment)}
-          >
-            Reply
-          </button>
+          {(session?.user || user) && (
+            <button
+              className="text-white font-semibold commonButton  px-2 py-1 "
+              onClick={() => toggleReply(comment)}
+            >
+              Reply
+            </button>
+          )}
+        </div>
+        {showReply === comment && (
+          <form onSubmit={(e) => addNewReply(e, comment)}>
+            <div className="flex flex-col gap-5 mt-5 ">
+              <textarea
+                name="comment"
+                ref={replyToComment}
+                id="comment"
+                className="bg-[#1e1e1e] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
+                placeholder="Add a reply"
+                rows={2}
+                cols={10}
+                style={{ resize: "none" }}
+                required
+              ></textarea>
+              <div className="flex gap-4">
+                <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
+                  Add Reply
+                </button>
+
+                <button
+                  className="text-white font-semibold commonButton  px-3 py-2 w-36"
+                  onClick={() => setShowReply("")}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
         )}
       </div>
-      {showReply === comment && (
-        <form onSubmit={(e)=>addNewReply(e, comment)}>
-          <div className="flex flex-col gap-5 mt-5 ">
-            <textarea
-              name="comment"
-              ref={replyToComment}
-              id="comment"
-              className="bg-[#1e1e1e] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
-              placeholder="Add a reply"
-              rows={2}
-              cols={10}
-              style={{ resize: "none" }}
-              required
-            ></textarea>
-            <div className="flex gap-4">
-              <button
-                className="text-white font-semibold commonButton  px-3 py-2 w-36"
-              
-              >
-                Add Reply
-              </button>
-
-              <button
-                className="text-white font-semibold commonButton  px-3 py-2 w-36"
-                onClick={() => setShowReply("")}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
     </div>
-  </div>
-
-  ) 
+  );
 }
 
 export default Comment;
