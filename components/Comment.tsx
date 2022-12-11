@@ -43,7 +43,7 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
 
   const addNewReply = async (e:FormEvent, comment: string) => {
     e.preventDefault();
-    const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
+    const reply = await fetch("http://localhost:3000/api/addreply", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -103,7 +103,7 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
 
 const handleLikes=async(id:string)=>{
   if(user || session?.user?.email){
-  const like=await fetch("https://techwithfz.vercel.app/api/likecomment",{
+  const like=await fetch("http://localhost:3000/api/likecomment",{
     method:"POST",
     headers:{
       "Content-type":"application/json"
