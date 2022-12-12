@@ -1,6 +1,7 @@
 type Reply = {
     email: string;
     reply: string;
+    createdAt:number;
   };
   interface Comment {
     _id: string;
