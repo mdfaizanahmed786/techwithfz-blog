@@ -6,6 +6,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { toast } from "react-toastify";
 import Replies from "./Replies";
+import TimeAgo from "react-timeago"
 
 
 function Comment({
@@ -143,7 +144,7 @@ function Comment({
       <div className="flex items-center gap-3">
         <FaUserCircle className="text-green-500" size={27} />
         <p className="font-bold">{email.replace("@gmail.com", "")}</p>
-        <p className="text-xs text-gray-300">{createdAt.slice(0, 10)}</p>
+        <TimeAgo date={createdAt} className="text-xs text-gray-300" />
       </div>
       <p>{comment}</p>
       {replies.length !== 0 && (
