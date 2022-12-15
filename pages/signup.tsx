@@ -19,7 +19,6 @@ interface GoogleAuth{
   google:Auth
 }
 type Props = {
-  authState:boolean
   providers:GoogleAuth
 }
 
@@ -209,7 +208,7 @@ const Signup = (props: Props) => {
     onChange={onChange}
   />
   </div>
-            <button type="submit" className={`${session?.user || props.authState ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user || props.authState}>Signup</button>
+            <button type="submit" className={`${session?.user ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user }>Signup</button>
           </form>
           <p className="text-white text-sm">
             Already have an account?{" "}

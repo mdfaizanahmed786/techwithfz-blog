@@ -10,8 +10,8 @@ type Props = {
   authState: boolean | undefined;
 };
 
-const Navbar = ({ authState }: Props) => {
-  const { isAuthenticated } = useContext(userContext);
+const Navbar = () => {
+  const { isAuthenticated, cookieAuth } = useContext(userContext);
   const [admin, setAdmin] = useState<boolean>(false);
   const { data: session } = useSession()
   const router = useRouter();
@@ -63,7 +63,7 @@ const Navbar = ({ authState }: Props) => {
             </p>
           </Link>
         </div>
-        {authState || session ? (
+        {cookieAuth || session ? (
           <div className="flex items-center space-x-5">
             <p  className="font-bold textStyle cursor-pointer">Welcome</p>
             <p

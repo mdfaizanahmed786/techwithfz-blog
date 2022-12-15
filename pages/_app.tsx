@@ -1,4 +1,4 @@
-import { SessionProvider } from "next-auth/react"
+import { getSession, SessionProvider } from "next-auth/react"
 import { Session } from "next-auth";
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,22 +11,14 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useRouter } from "next/router";
 
+
 function MyApp({ Component,   pageProps}:  AppProps<{
   session: Session;
 }>) {
-  const [authState, setAuthState] = useState<boolean>();
+  
   const router=useRouter();
-
-  useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth?.success && auth?.authToken) {
-      setAuthState(true);
-    }
-    else{
-      setAuthState(false)
-    }
-  }, [router.query]);
-
+  
+ 
   return (
     <>
       <SessionProvider session={pageProps.session}>
@@ -38,8 +30,8 @@ function MyApp({ Component,   pageProps}:  AppProps<{
           height={3}
           showOnShallow={true}
         />
-        <Navbar  authState={authState} />
-        <Component {...pageProps} authState={authState} />
+        <Navbar  />
+        <Component {...pageProps}  />
         <Footer />
         <ToastContainer />
       </AppProvider>

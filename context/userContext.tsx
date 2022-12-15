@@ -4,8 +4,10 @@ import { createContext, useEffect, useState } from "react";
 const userContext = createContext({} as any);
 const { Provider } = userContext;
 
+
 const AppProvider = ({ children }:any) => {
   const [isAuth, setIsAuth] = useState();
+  const [cookieAuth, setCookieAuth]=useState("")
 
   const isAuthenticated = ():any => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
@@ -19,7 +21,7 @@ const AppProvider = ({ children }:any) => {
     }
   };
  
-  return <Provider value={{ isAuthenticated, isAuth }}>{children}</Provider>;
+  return <Provider value={{ isAuthenticated, isAuth, cookieAuth, setCookieAuth }}>{children}</Provider>;
 };
 
 export { userContext, AppProvider };

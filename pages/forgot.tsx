@@ -19,7 +19,6 @@ interface GoogleAuth {
   google: Auth;
 }
 type Props = {
-  authState: boolean;
   providers: GoogleAuth;
 };
 
@@ -284,11 +283,11 @@ const Forgot = (props: Props) => {
               <button
                 type="submit"
                 className={`${
-                  session?.user || props.authState
+                  session?.user 
                     ? "bg-gray-500 text-white py-2 font-semibold rounded-md"
                     : "commonButton py-2 font-semibold text-white"
                 } `}
-                disabled={session?.user || props.authState}
+                disabled={session?.user}
               >
                 Continue
               </button>
@@ -331,11 +330,11 @@ const Forgot = (props: Props) => {
               <button
                 type="submit"
                 className={`${
-                  session?.user || props.authState
+                  session?.user
                     ? "bg-gray-500 text-white py-2 font-semibold rounded-md"
                     : "commonButton py-2 font-semibold text-white"
                 } `}
-                disabled={session?.user || props.authState}
+                disabled={session?.user}
               >
                 Continue
               </button>

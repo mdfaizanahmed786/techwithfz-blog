@@ -8,6 +8,9 @@ import { getProviders, signIn } from "next-auth/react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import ReCAPTCHA from "react-google-recaptcha";
 import Image from "next/image";
+import Cookies from "cookies";
+
+import { NextRequest, NextResponse } from "next/server";
 
 interface Auth {
   callbackUrl: string;
@@ -20,7 +23,6 @@ interface GoogleAuth {
   google: Auth;
 }
 type Props = {
-  authState: boolean;
   providers: GoogleAuth;
 };
 
@@ -125,7 +127,13 @@ const Login = (props: Props) => {
       </Head>
       <div className="flex md:max-w-[1450px] md:mx-auto mx-5 ">
         <div className="imageContainer md:flex-[0.45] hidden md:inline-flex">
-        <Image src="/login.png" className='object-cover h-full rounded-tl-md rounded-bl-md' alt="login_image" width={500} height={900} />
+          <Image
+            src="/login.png"
+            className="object-cover h-full rounded-tl-md rounded-bl-md"
+            alt="login_image"
+            width={500}
+            height={900}
+          />
         </div>
         <div className="bg-[#1E1E1E] md:px-7 px-5 rounded-md md:rounded-none md:rounded-tr-md md:rounded-br-md flex flex-col gap-8  items-center md:flex-[0.55] justify-center shadow-lg  w-full py-7 mt-16 md:mt-0 md:py-0 mb-12 md:mb-0">
           <form onSubmit={handleSubmit} className="flex flex-col gap-7 w-full">
@@ -168,7 +176,7 @@ const Login = (props: Props) => {
               <div className="bg-[#2E2E2E] py-2 px-2 items-center rounded-md outline-none  text-white border-[#10935F] border-2 flex ">
                 <input
                   ref={passwordRef}
-                  type={`${show ? "text": "password"}`}
+                  type={`${show ? "text" : "password"}`}
                   name="password"
                   id="password"
                   autoComplete="false"
@@ -179,9 +187,19 @@ const Login = (props: Props) => {
                 />
                 <div>
                   {show ? (
-                    <BsEyeSlash onClick={() => setShow(false)} className="cursor-pointer" size={27} title="Hide password"/>
+                    <BsEyeSlash
+                      onClick={() => setShow(false)}
+                      className="cursor-pointer"
+                      size={27}
+                      title="Hide password"
+                    />
                   ) : (
-                    <BsEye onClick={() => setShow(true)} className="cursor-pointer" size={27} title="Show password"/>
+                    <BsEye
+                      onClick={() => setShow(true)}
+                      className="cursor-pointer"
+                      size={27}
+                      title="Show password"
+                    />
                   )}
                 </div>
               </div>
@@ -205,11 +223,11 @@ const Login = (props: Props) => {
             <button
               type="submit"
               className={`${
-                session?.user || props.authState
+                session?.user
                   ? "bg-gray-500 text-white py-2 font-semibold rounded-md"
                   : "commonButton py-2 font-semibold text-white"
               } `}
-              disabled={session?.user || props.authState}
+              disabled={session?.user}
             >
               Login
             </button>
@@ -225,8 +243,10 @@ const Login = (props: Props) => {
     </div>
   );
 };
-export async function getServerSideProps(context: object) {
+
+export async function getServerSideProps(context: any) {
   const providers = await getProviders();
+
   return {
     props: { providers },
   };

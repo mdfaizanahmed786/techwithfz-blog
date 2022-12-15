@@ -1,9 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import SinglePost from "../components/SinglePost";
+import { userContext } from "../context/userContext";
+
 interface Response {
   _id: string;
   title: string;
@@ -18,7 +20,14 @@ interface Response {
 type Props = Response[] | any;
 
 const Home: NextPage = (props: Props) => {
-  const { allBlogs } = props;
+  const { allBlogs, authCookie } = props;
+  const authContext = useContext(userContext);
+  useEffect(()=>{
+    if(authCookie){
+      authContext.setCookieAuth(authCookie)
+
+    }
+  },[])
   return (
     <div>
       <Head>
@@ -57,9 +66,16 @@ const Home: NextPage = (props: Props) => {
 export async function getServerSideProps(context: any) {
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
+  let authCookie=""
+  if(context?.req?.cookies['auth']){
+    authCookie = context?.req?.cookies['auth']
 
+  }
+ 
+
+  
   return {
-    props: { allBlogs },
+    props: { allBlogs, authCookie },
   };
 }
 
