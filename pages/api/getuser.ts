@@ -4,7 +4,7 @@ import connectDb from "../../backend/connect";
 import jsonwebtoken from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Secret } from "next-auth/jwt/types.js";
-
+import cookie from "cookie";
 export default async function getuser(
   req: NextApiRequest,
   res: NextApiResponse
@@ -24,11 +24,26 @@ export default async function getuser(
           .status(404)
           .json({ error: "Please enter valid credentials" });
       }
-      const { isAdmin, _id } = user;
+      const { isAdmin, _id, password } = user;
       const authToken = jsonwebtoken.sign(
-        { email, _id },
+        { email, _id, password },
         process.env.JWT_SECRET as Secret
       );
+
+
+      user.token = authToken;
+      res.setHeader("Set-Cookie", cookie.serialize('auth', authToken,{
+        httpOnly:true,
+        secure:process.env.NODE_ENV !== 'development',
+        sameSite:'strict',
+        maxAge: 3600,
+        path:'/'   
+      })); 
+      
+      
+
+
+
       res.json({ isAdmin, success: true, authToken, email });
     } catch (er: any) {
       res.status(500).json({ error: er.message });
@@ -37,3 +52,6 @@ export default async function getuser(
     res.send("You are not allowed to do so!");
   }
 }
+
+
+// first we've installed cookie package and then types of it.jj

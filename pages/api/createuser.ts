@@ -20,12 +20,14 @@ export default async function createuser(
         password: hashedPass,
       });
       await user.save();
-      const { isAdmin, id, email } = user;
+      const { isAdmin, id, email, password } = user;
       const authToken = jsonwebtoken.sign(
-        { email, id },
+        { email, id, password },
         process.env.JWT_SECRET as Secret
       );
+      user.token = authToken;
       res.json({ isAdmin, success: true, authToken, email });
+
     } catch (er: any) {
       res.status(500).json({ error: er.message });
     }
