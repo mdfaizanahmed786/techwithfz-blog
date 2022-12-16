@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Navbar = () => {
-  const { isAuthenticated, cookieAuth } = useContext(userContext);
+  const { isAuthenticated, cookieAuth, setCookieAuth } = useContext(userContext);
   const [admin, setAdmin] = useState<boolean>(false);
   const { data: session } = useSession()
   const router = useRouter();
@@ -23,9 +23,15 @@ const Navbar = () => {
     }
   }, [router.query]);
 
-  const logOut = () => {
+  const logOut = async () => {
     router.push("/")
     localStorage.removeItem("auth");
+    const removeUser=await fetch('http://localhost:3000/api/signout')
+    const response=await removeUser.json();
+    if(response.success){
+      setCookieAuth("")
+    }
+
     toast.success('Logout Success!', {
       position: "top-right",
       autoClose: 1800,
