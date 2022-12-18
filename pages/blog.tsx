@@ -1,22 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import parse from "html-react-parser";
-import React, { useContext, useEffect, useState } from "react";
+
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
+import Post from "../components/Post";
 
-interface Response {
-  _id: string;
-  title: string;
-  author: string;
-  desc: string;
-  slug: string;
-  imgs: string[];
-  createdAt: string;
-  __v: number;
-  authState: boolean;
-}
+
 type Props = Response[] | any;
 
 const Blog = (props: Props) => {
@@ -32,7 +23,7 @@ const Blog = (props: Props) => {
       setAdmin(false);
     }
   }, [router.query]);
-  async function deletePost(id: string) {
+  const deletePost=useCallback(()=>async(id: string)=>{
     let user = JSON.parse(localStorage.getItem("auth")!);
     if (user?.isAdmin) {
       let afterDelete = allBlogs.filter((post: Response) => post._id !== id);
@@ -52,7 +43,7 @@ const Blog = (props: Props) => {
         });
 
     }
-  }
+  },[allBlogs])
 
   return (
 
@@ -66,38 +57,7 @@ const Blog = (props: Props) => {
       <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-4">
      
         {newPosts.map((blog: Response) => (
-          <div
-            key={blog._id}
-            className="flex flex-col md:gap-5 gap-4 md:px-9 md:py-7 px-6 py-5 rounded-lg shadow-md  bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:shadow-xl"
-          >
-            <p className="text-xs textStyle font-semibold">
-              Date: {blog.createdAt.slice(0, 10)}
-            </p>
-            <h2 className="font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 ">
-              <Link href={`blogpost/${blog.slug}`}>{blog.title}</Link>
-            </h2>
-            <div className="">
-            <p className="info text-white line-clamp-2">{parse(blog.desc)}</p>
-          </div>
-            <div className="flex justify-between">
-              <div className="flex gap-5">
-                <Link href={`blogpost/${blog.slug}`}>
-                  <button className="commonButton py-2 w-32 font-semibold text-white">
-                    Read More
-                  </button>
-                </Link>
-                {admin && (
-                  <button className="commonButton py-2 hidden md:block w-32 font-semibold text-white" onClick={()=>deletePost(blog._id)}>
-                    Delete Post
-                  </button>
-                )}
-              </div>
-              <div className="flex gap-2 items-center">
-                <AiOutlineClockCircle className="text-[#0BEF59]" />
-                <p className="textStyle text-xs font-semibold">10 min read</p>
-              </div>
-            </div>
-          </div>
+         <Post {...blog} deletePost={deletePost} admin={admin}/>
         ))}
       </div>
     </div>

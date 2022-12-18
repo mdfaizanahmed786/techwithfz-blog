@@ -134,6 +134,7 @@ function Comment({
         progress: undefined,
         theme: "dark",
       });
+      router.push("/login")
     }
   };
   return (
