@@ -25,7 +25,6 @@ const Navbar = () => {
 
   const logOut = async () => {
     router.push("/")
-    localStorage.removeItem("auth");
     const removeUser=await fetch('http://localhost:3000/api/signout')
     const response=await removeUser.json();
     if(response.success){

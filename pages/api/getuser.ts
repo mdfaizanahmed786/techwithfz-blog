@@ -26,7 +26,7 @@ export default async function getuser(
       }
       const { isAdmin, _id, password } = user;
       const authToken = jsonwebtoken.sign(
-        { email, _id, password },
+        { email, _id, password,  },
         process.env.JWT_SECRET as Secret
       );
 
