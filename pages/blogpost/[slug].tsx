@@ -188,9 +188,25 @@ const slug = (props: Response | any) => {
     </div>
   );
 };
+export async function getStaticPaths() {
+  const res = await fetch('https://techwithfz.vercel.app/api/getposts')
+  const {allBlogs:posts} = await res.json()
+
+  // Get the paths we want to pre-render based on posts
+  const paths = posts.map((post:Response) => ({
+    params: { slug: post.slug },
+  }))
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths, fallback: 'blocking' }
+}
 
 
-export async function getServerSideProps(context: any) {
+
+
+export async function getStaticProps(context: any) {
   const { params } = context;
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
