@@ -15,7 +15,11 @@ function Post({_id, createdAt, slug, desc,title, deletePost, admin}: Props) {
     className="flex flex-col md:gap-5 gap-4 md:px-9 md:py-7 px-6 py-5 rounded-lg drop-shadow-lg  bg-[#1E1E1E] cursor-pointer transition-all duration-200 hover:drop-shadow-xl"
   >
     <p className="text-xs textStyle font-semibold">
-      Date: {createdAt.slice(0, 10)}
+    {new Date(createdAt).toLocaleDateString("en-US",{
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+          })}
     </p>
     <h2 className="font-bold text-white text-2xl cursor-pointer hover:text-gray-400 transition-all duration-200 ">
       <Link href={`blogpost/${slug}`}>{title}</Link>
