@@ -5,6 +5,9 @@ import parse from "html-react-parser";
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
+import jwt,{ JwtPayload, Secret } from "jsonwebtoken";
+import { userContext } from "../context/userContext";
+
 
 interface Response {
   _id: string;
@@ -20,10 +23,11 @@ interface Response {
 type Props = Response[] | any;
 
 const Blog = (props: Props) => {
-  const { allBlogs } = props;
+  const { allBlogs, authCookie } = props;
   const router = useRouter();
   const [admin, setAdmin] = useState<boolean>(false);
   const [newPosts, setNewPosts]=useState(allBlogs)
+  const authContext = useContext(userContext);
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth")!);
     if (auth?.isAdmin) {
@@ -32,6 +36,12 @@ const Blog = (props: Props) => {
       setAdmin(false);
     }
   }, [router.query]);
+
+  useEffect(() => {
+    if (authCookie) {
+      authContext.setCookieAuth(authCookie);
+    }
+  }, []);
   async function deletePost(id: string) {
     let user = JSON.parse(localStorage.getItem("auth")!);
     if (user?.isAdmin) {
@@ -107,9 +117,14 @@ const Blog = (props: Props) => {
 export async function getServerSideProps(context: any) {
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
+  let authCookie: string | JwtPayload = "";
+  if (context?.req?.cookies["authToken"]) {
+    let result = context?.req?.cookies["authToken"];
+    authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+  }
 
   return {
-    props: { allBlogs },
+    props: { allBlogs, authCookie },
   };
 }
 

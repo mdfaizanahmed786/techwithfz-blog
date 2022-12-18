@@ -5,6 +5,7 @@ import React, { useContext, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import SinglePost from "../components/SinglePost";
 import { userContext } from "../context/userContext";
+import jsonwebtoken, { JwtPayload, Secret } from "jsonwebtoken";
 
 interface Response {
   _id: string;
@@ -66,9 +67,10 @@ const Home: NextPage = (props: Props) => {
 export async function getServerSideProps(context: any) {
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
-  let authCookie=""
-  if(context?.req?.cookies['auth']){
-    authCookie = context?.req?.cookies['auth']
+  let authCookie:string | JwtPayload=""
+  if(context?.req?.cookies['authToken']){
+    let result = context?.req?.cookies['authToken']
+    authCookie = jsonwebtoken.verify(result, process.env.JWT_SECRET as Secret)
 
   }
  

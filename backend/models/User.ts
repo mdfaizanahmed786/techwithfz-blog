@@ -7,7 +7,7 @@ interface User {
   password: string;
   isAdmin: boolean;
   createdAt?: string;
-  token:string;
+  authToken:string;
   blog: typeof BlogSchema;
 }
 
@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema<User>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minLength: 5 },
   isAdmin: { type: Boolean, default: false },
-  token:{type:String, required:true},
+  authToken:{type:String, required:true},
   createdAt: { type: Date, default: () => Date.now() },
 
   blog: BlogSchema,

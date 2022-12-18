@@ -51,7 +51,7 @@ const Signup = (props: Props) => {
         return;
       }
 
-      const addUser = await fetch("https://techwithfz.vercel.app/api/createuser", {
+      const addUser = await fetch("http://localhost:3000/api/createuser", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

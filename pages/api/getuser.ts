@@ -24,27 +24,17 @@ export default async function getuser(
           .status(404)
           .json({ error: "Please enter valid credentials" });
       }
-      const { isAdmin, _id, password } = user;
-      const authToken = jsonwebtoken.sign(
-        { email, _id, password,  },
-        process.env.JWT_SECRET as Secret
-      );
-
-
-      user.token = authToken;
-      res.setHeader("Set-Cookie", cookie.serialize('auth', authToken,{
-        httpOnly:true,
-        secure:process.env.NODE_ENV !== 'development',
-        sameSite:'strict',
-        maxAge: 3600,
-        path:'/'   
-      })); 
-      
-      
-
-
-
-      res.json({ isAdmin, success: true, authToken, email });
+      const { authToken} = user;
+    
+      const serialized = cookie.serialize("authToken", authToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: "/",
+      });
+      res.setHeader("Set-Cookie", serialized);
+res.json({  success: true, authToken});
     } catch (er: any) {
       res.status(500).json({ error: er.message });
     }

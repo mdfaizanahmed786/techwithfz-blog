@@ -19,12 +19,12 @@ interface Comment {
   createdAt: string;
   replies: Reply[];
   likes: string[];
+  cookieAuth:any;
   matchResults: (comment: string) => Comment[];
   _v: number;
 }
 
-function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }: Comment) {
-  const [user, setUser] = useState<string | null | undefined>("");
+function Comment({ comment, email, _id, createdAt, replies, likes,matchResults, cookieAuth }: Comment) {
 
   const { data: session } = useSession();
   const [showReply, setShowReply] = useState("");
@@ -34,13 +34,9 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
   const [like, setLike] = useState("");
   const {slug}=useRouter().query
   const router = useRouter();
+  
 
-  useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth?.success && auth?.authToken) {
-      setUser(auth?.email);
-    }
-  }, [router.query]);
+ 
 
 
   const addNewReply = async (e:FormEvent, comment: string) => {
@@ -54,7 +50,7 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
         comment,
         slug,
         reply: replyToComment.current!.value,
-        email: !user ? session?.user?.email : user,
+        email: !cookieAuth.email ? session?.user?.email : cookieAuth?.email,
       }),
     });
     const response = await reply.json();
@@ -104,7 +100,7 @@ function Comment({ comment, email, _id, createdAt, replies, likes,matchResults }
 
 
 const handleLikes=async(id:string)=>{
-  if(user || session?.user?.email){
+  if(cookieAuth?.email || session?.user?.email){
   const like=await fetch("http://localhost:3000/api/likecomment",{
     method:"POST",
     headers:{
@@ -113,7 +109,7 @@ const handleLikes=async(id:string)=>{
     body:JSON.stringify({
       id,
       slug:slug,
-      email:!user ? session?.user?.email : user,
+      email:!cookieAuth?.email ? session?.user?.email : cookieAuth?.email,
     })
   })
   const response=await like.json()
@@ -182,7 +178,7 @@ const handleLikes=async(id:string)=>{
         <div className="space-x-1 flex items-center">
           <div className="cursor-pointer">
             {/* @ts-ignore */}
-            {likes.includes(session?.user?.email || user) && (session?.user?.email || user)   ? (
+            {likes.includes(session?.user?.email ||  cookieAuth?.email) && (session?.user?.email ||  cookieAuth?.email)   ? (
             
           
               <AiFillHeart
@@ -204,7 +200,7 @@ const handleLikes=async(id:string)=>{
         </div>
        
 
-        {(session?.user || user) && (
+        {(session?.user ||  cookieAuth?.email) && (
           <button
             className="text-white font-semibold commonButton  px-2 py-1 "
             onClick={() => toggleReply(comment)}

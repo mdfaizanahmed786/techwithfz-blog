@@ -68,7 +68,7 @@ const Navbar = () => {
             </p>
           </Link>
         </div>
-        {cookieAuth || session ? (
+        {cookieAuth.email || session ? (
           <div className="flex items-center space-x-5">
             <p  className="font-bold textStyle cursor-pointer">Welcome</p>
             <p

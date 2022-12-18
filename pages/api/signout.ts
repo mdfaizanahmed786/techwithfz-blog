@@ -5,7 +5,7 @@ export default async function signout(req:NextApiRequest, res:NextApiResponse){
 
     res.setHeader('Set-Cookie', 
         cookie.serialize(
-            'auth', '', {
+            'authToken', '', {
                 expires: new Date(0),
                 path: '/'
             }
