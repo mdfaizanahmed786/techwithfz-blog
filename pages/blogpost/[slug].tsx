@@ -220,6 +220,7 @@ export async function getStaticProps(context: any) {
   
   return {
     props: { specificPost, comments },
+    revalidate:30
   };
 }
 export default slug;
