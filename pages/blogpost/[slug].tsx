@@ -104,8 +104,12 @@ const slug = (props: Response | any) => {
         {specificPost.map((blog: Response) => (
           <div key={blog._id} className="space-y-4">
             <p className="text-xs textStyle font-semibold">
-              Date: {blog.createdAt.slice(0, 10)}
-            </p>
+             {new Date(blog.createdAt).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+             })}
+            </p> 
             <h1 className="font-bold text-white text-4xl cursor-pointer ">
               {blog.title}
             </h1>

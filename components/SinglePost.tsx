@@ -26,7 +26,11 @@ const SinglePost = ({ title, slug, desc, createdAt, imgs }: Props) => {
               {title}
             </h3>
           </Link>
-          <p className="textStyle text-xs font-semibold ">Date: {createdAt}</p>
+          <p className="textStyle text-xs font-semibold ">{new Date(createdAt).toLocaleDateString("en-US",{
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+          })}</p>
           <div className="">
             <p className="info text-white line-clamp-4">{parse(desc)}</p>
           </div>
