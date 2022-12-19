@@ -70,7 +70,16 @@ export async function getServerSideProps(context: any) {
   let authCookie:string | JwtPayload=""
   if(context?.req?.cookies['authToken']){
     let result = context?.req?.cookies['authToken']
-    authCookie = jsonwebtoken.verify(result, process.env.JWT_SECRET as Secret)
+    if(result===process.env.NEXT_PUBLIC_ADMIN_TOKEN){
+      authCookie = {
+        email:'admin',
+        isAdmin: true,
+      };
+    }
+    else{
+
+      authCookie = jsonwebtoken.verify(result, process.env.JWT_SECRET as Secret);
+    }
 
   }
  

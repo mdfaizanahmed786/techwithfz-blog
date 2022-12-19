@@ -25,6 +25,8 @@ export default async function createuser(
         process.env.JWT_SECRET as Secret
       );
 
+      
+
       const user = await User.create({
         name,
         email,

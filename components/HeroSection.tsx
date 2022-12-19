@@ -4,9 +4,9 @@ import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
 import { toast } from "react-toastify";
 
-type Props = {};
 
-const HeroSection = (props: Props) => {
+
+const HeroSection = () => {
   const displayMessage=()=>{
     toast.success('Coming soon!', {
       position: "top-right",

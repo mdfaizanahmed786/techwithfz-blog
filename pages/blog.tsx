@@ -25,17 +25,9 @@ type Props = Response[] | any;
 const Blog = (props: Props) => {
   const { allBlogs, authCookie } = props;
   const router = useRouter();
-  const [admin, setAdmin] = useState<boolean>(false);
   const [newPosts, setNewPosts]=useState(allBlogs)
   const authContext = useContext(userContext);
-  useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth?.isAdmin) {
-      setAdmin(true);
-    } else {
-      setAdmin(false);
-    }
-  }, [router.query]);
+  const {isAdmin}=authCookie
 
   useEffect(() => {
     if (authCookie) {
@@ -96,7 +88,7 @@ const Blog = (props: Props) => {
                     Read More
                   </button>
                 </Link>
-                {admin && (
+                {isAdmin && (
                   <button className="commonButton py-2 hidden md:block w-32 font-semibold text-white" onClick={()=>deletePost(blog._id)}>
                     Delete Post
                   </button>
@@ -120,7 +112,16 @@ export async function getServerSideProps(context: any) {
   let authCookie: string | JwtPayload = "";
   if (context?.req?.cookies["authToken"]) {
     let result = context?.req?.cookies["authToken"];
-    authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+    if(result===process.env.NEXT_PUBLIC_ADMIN_TOKEN){
+      authCookie = {
+        email:'admin',
+        isAdmin: true,
+      };
+    }
+    else{
+
+      authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+    }
   }
 
   return {

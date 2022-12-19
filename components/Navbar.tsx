@@ -11,17 +11,11 @@ type Props = {
 };
 
 const Navbar = () => {
-  const { isAuthenticated, cookieAuth, setCookieAuth } = useContext(userContext);
-  const [admin, setAdmin] = useState<boolean>(false);
+  const { cookieAuth, setCookieAuth } = useContext(userContext);
+  const {isAdmin}=cookieAuth
   const { data: session } = useSession()
   const router = useRouter();
-  useEffect(() => {
-    if (isAuthenticated()) {
-      setAdmin(true);
-    } else {
-      setAdmin(false);
-    }
-  }, [router.query]);
+ 
 
   const logOut = async () => {
     router.push("/")
@@ -77,7 +71,7 @@ const Navbar = () => {
             >
               Logout
             </p>
-            {admin && (
+            {isAdmin && (
               <Link href={"/admin"} ><p className="commonButton hidden md:inline-flex font-semibold cursor-pointer text-white px-3 py-1">
                 Welcome Faizan
               </p>

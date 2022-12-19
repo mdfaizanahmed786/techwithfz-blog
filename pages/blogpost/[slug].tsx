@@ -40,9 +40,10 @@ interface Response {
 
 const slug = (props: Response | any) => {
   const { specificPost, comments, authCookie } = props;
+  
   const router = useRouter();
   const { slug } = router.query;
-  const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
+  const getTitle = useMemo(()=>specificPost.filter((blog: Response) => blog.slug === slug),[specificPost])
   const [feedback, setFeedBack] = useState("");
   const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
@@ -227,7 +228,16 @@ export async function getServerSideProps(context: any) {
   let authCookie: string | JwtPayload = "";
   if (context?.req?.cookies["authToken"]) {
     let result = context?.req?.cookies["authToken"];
-    authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+    if(result===process.env.NEXT_PUBLIC_ADMIN_TOKEN){
+      authCookie = {
+        email:'admin',
+        isAdmin: true,
+      };
+    }
+    else{
+
+      authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+    }
   }
 
   return {

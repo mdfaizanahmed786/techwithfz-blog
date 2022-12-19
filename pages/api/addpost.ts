@@ -23,7 +23,7 @@ export default async function addpost(
       );
       if (
         comparePassword &&
-        user.isAdmin &&
+        user.authToken===process.env.NEXT_PUBLIC_ADMIN_TOKEN &&
         email === "ahmedriyan528@gmail.com"
       ) {
         const response = await Blog.create({
