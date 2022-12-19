@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest, res: NextResponse) {
   let cookie = request.cookies.get("authToken");
+  console.log(cookie)
 
   if (
     cookie &&
@@ -14,7 +15,7 @@ export async function middleware(request: NextRequest, res: NextResponse) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-if(request.nextUrl.pathname.startsWith("/admin") && cookie?.valueOf!==process.env.NEXT_PUBLIC_ADMIN_TOKEN){
+if(request.nextUrl.pathname.startsWith("/admin") && cookie!==process.env.NEXT_PUBLIC_ADMIN_TOKEN){
   return NextResponse.redirect(new URL("/", request.url));
 }
 else{

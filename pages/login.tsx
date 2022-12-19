@@ -37,9 +37,8 @@ const Login = (props: Props) => {
   const authSignin = () => {
     loginWithGoogle(props.providers.google.id);
     if (session)
-    router.push("/")
-      toast.success("Login Success!", {
-        position: "top-right",
+    toast.success("Login Success!", {
+      position: "top-right",
         autoClose: 1800,
         hideProgressBar: false,
         closeOnClick: true,
@@ -48,6 +47,7 @@ const Login = (props: Props) => {
         progress: undefined,
         theme: "dark",
       });
+      router.push("/")
   };
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ const Login = (props: Props) => {
         });
         return;
       }
-      const getUser = await fetch("https://techwithfz.vercel.app/api/getuser", {
+      const getUser = await fetch("http://localhost:3000/api/getuser", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
