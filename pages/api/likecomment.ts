@@ -12,7 +12,6 @@ interface UserComment {
   _v: number;
 }
 
-
 export default async function likecomment(
   req: NextApiRequest,
   res: NextApiResponse
@@ -22,18 +21,18 @@ export default async function likecomment(
       await connectDb();
       const { id, slug, email } = req.body;
       let postSlug = await Blog.findOne({ slug });
-      let comments=postSlug.userComments.filter((com:UserComment)=>com.id===id);
+      let comments = postSlug.userComments.filter(
+        (com: UserComment) => com.id === id
+      );
 
       if (!postSlug) return res.status(404).json({ err: "Post not found" });
 
-    
-      if (comments.length===0) return res.status(404).json({ err: "Comment not found" });
+      if (comments.length === 0)
+        return res.status(404).json({ err: "Comment not found" });
 
-
-    
       comments[0].likes.push(email);
 
-      postSlug.userComments.filter((com:UserComment)=>com.id===id);
+      postSlug.userComments.filter((com: UserComment) => com.id === id);
 
       await Blog.findOneAndUpdate(
         { slug: slug },
