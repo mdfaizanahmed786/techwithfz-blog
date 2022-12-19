@@ -39,7 +39,8 @@ const Login = (props: Props) => {
 
   const authSignin = () => {
     loginWithGoogle(props.providers.google.id);
-    if (session)
+    if (session){
+    router.push("/")
       toast.success("Login Success!", {
         position: "top-right",
         autoClose: 1800,
@@ -50,6 +51,7 @@ const Login = (props: Props) => {
         progress: undefined,
         theme: "dark",
       });
+    }
   };
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
