@@ -17,7 +17,7 @@ const Navbar = () => {
   const logOut = async () => {
     router.push("/")
     if(cookieAuth.email){
-    const removeUser=await fetch('https://techwitfz.vercel.app/api/signout')
+    const removeUser=await fetch('https://techwithfz.vercel.app/api/signout')
     const response=await removeUser.json();
     if(response.success){
       setCookieAuth("")
