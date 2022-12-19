@@ -17,8 +17,8 @@ function Comment({
   replies,
   likes,
   matchResults,
+  cookieAuth
 }: Comment) {
-  const [user, setUser] = useState<string | null | undefined>("");
 
   const { data: session } = useSession();
   const [showReply, setShowReply] = useState("");
@@ -29,12 +29,7 @@ function Comment({
   const { slug } = useRouter().query;
   const router = useRouter();
 
-  useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth?.success && auth?.authToken) {
-      setUser(auth?.email);
-    }
-  }, [router.query]);
+  
 
   const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
@@ -47,7 +42,7 @@ function Comment({
         comment,
         slug,
         reply: replyToComment.current!.value,
-        email: !user ? session?.user?.email : user,
+        email:!cookieAuth.email ? session?.user?.email : cookieAuth?.email,
       }),
     });
     const response = await reply.json();
@@ -93,7 +88,7 @@ function Comment({
   };
 
   const handleLikes = async (id: string) => {
-    if (user || session?.user?.email) {
+    if (cookieAuth?.email || session?.user?.email) {
       const like = await fetch(
         "https://techwithfz.vercel.app/api/likecomment",
         {
@@ -104,7 +99,7 @@ function Comment({
           body: JSON.stringify({
             id,
             slug: slug,
-            email: !user ? session?.user?.email : user,
+            email: !cookieAuth.email ? session?.user?.email : cookieAuth?.email,
           }),
         }
       );
@@ -184,8 +179,8 @@ function Comment({
           <div className="space-x-1 flex items-center">
             <div className="cursor-pointer">
               {/* @ts-ignore */}
-              {likes.includes(session?.user?.email || user) &&
-              (session?.user?.email || user) ? (
+              {likes.includes(session?.user?.email || cookieAuth?.email) &&
+              (session?.user?.email || cookieAuth?.email) ? (
                 <AiFillHeart
                   size={20}
                   className="cursor-pointer textStyle"
@@ -203,7 +198,7 @@ function Comment({
             <p className="font-semibold text-base">{likes.length}</p>
           </div>
 
-          {(session?.user || user) && (
+          {(session?.user ||cookieAuth?.email) && (
             <button
               className="text-white font-semibold commonButton  px-2 py-1 "
               onClick={() => toggleReply(comment)}

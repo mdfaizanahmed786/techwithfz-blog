@@ -1,7 +1,6 @@
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { formatted_date } from "../lib/dateFormatter";
-// @ts-ignore
+
 import TimeAgo from "react-timeago"
 
 

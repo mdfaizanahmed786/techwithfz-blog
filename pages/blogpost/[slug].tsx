@@ -1,61 +1,80 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { MdOutlineArrowBackIosNew, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import {
+  MdOutlineArrowBackIosNew,
+  MdArrowDropDown,
+  MdArrowDropUp,
+} from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
- 
+
 import { toast } from "react-toastify";
+import jwt from "jsonwebtoken";
 
 import { Oval } from "react-loading-icons";
 import Comment from "../../components/Comment";
-
-
-
+import { userContext } from "../../context/userContext";
+import { JwtPayload } from "jsonwebtoken";
+import { Secret } from "jsonwebtoken";
 
 const slug = (props: Response | any) => {
-  const { specificPost, comments} = props;
+  const { specificPost, comments, authCookie } = props;
   const router = useRouter();
   const { slug } = router.query;
-  const getTitle = specificPost.filter((blog: Response) => blog.slug === slug);
+  const getTitle = useMemo(
+    () => specificPost.filter((blog: Response) => blog.slug === slug),
+    [specificPost, slug]
+  );
   const [user, setUser] = useState<string | null | undefined>("");
   const [feedback, setFeedBack] = useState("");
   const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
-
-
+  const authContext = useContext(userContext);
 
   useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth?.success && auth?.authToken) {
-      setUser(auth?.email);
+    if (authCookie) {
+      authContext.setCookieAuth(authCookie);
     }
-  }, [router.query]);
-  
-  const matchResults = useMemo(()=>(comment: string) => {
-    let allComments = comments.filter(
-      (item: Comment) => item.comment === comment
-    );
-    return allComments;
-  }, [comments])
+  }, []);
+
+  const matchResults = useMemo(
+    () => (comment: string) => {
+      let allComments = comments.filter(
+        (item: Comment) => item.comment === comment
+      );
+      return allComments;
+    },
+    [comments]
+  );
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoader(true);
     e.preventDefault();
 
-    const comment = await fetch("https://techwithfz.vercel.app/api/addcomment", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        comment: feedback,
-        slug,
-        email: !user ? session?.user?.email : user,
-      }),
-    });
+    const comment = await fetch(
+      "https://techwithfz.vercel.app/api/addcomment",
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: feedback,
+          slug,
+          email: !authCookie?.email ? session?.user?.email : authCookie?.email,
+        }),
+      }
+    );
 
     const response = await comment.json();
     setLoader(true);
@@ -104,12 +123,12 @@ const slug = (props: Response | any) => {
         {specificPost.map((blog: Response) => (
           <div key={blog._id} className="space-y-4">
             <p className="text-xs textStyle font-semibold">
-             {new Date(blog.createdAt).toLocaleDateString("en-US", {
+              {new Date(blog.createdAt).toLocaleDateString("en-US", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
-             })}
-            </p> 
+              })}
+            </p>
             <h1 className="font-bold text-white text-4xl cursor-pointer ">
               {blog.title}
             </h1>
@@ -132,7 +151,7 @@ const slug = (props: Response | any) => {
           </div>
         ))}
         <div className="mt-5 py-6">
-          {user || session?.user?.email ? (
+          {authCookie.email || session?.user?.email ? (
             <div className=" mt-5 md:w-96">
               <form
                 className="flex flex-col bg-[#1e1e1e]  shadow-md p-4 rounded-md justify-center"
@@ -181,21 +200,19 @@ const slug = (props: Response | any) => {
                 <Oval stroke="#10b45b" strokeWidth={3} />
               </div>
             )}
-            {comments.map(
-              (comment: Comment) => (
-              <Comment {...comment} matchResults={matchResults}/>
-              )
-            )}
+            {comments.map((comment: Comment) => (
+              <Comment
+                {...comment}
+                matchResults={matchResults}
+                cookieAuth={authCookie}
+              />
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-
-
-
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
@@ -208,9 +225,20 @@ export async function getServerSideProps(context: any) {
   if (specificPost[0]?.userComments) {
     comments = specificPost[0]?.userComments;
   }
-  
+  let authCookie: string | JwtPayload = "";
+  if (context?.req?.cookies["authToken"]) {
+    let result = context?.req?.cookies["authToken"];
+    if (result === process.env.NEXT_PUBLIC_ADMIN_TOKEN) {
+      authCookie = {
+        email: "admin",
+        isAdmin: true,
+      };
+    } else {
+      authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+    }
+  }
   return {
-    props: { specificPost, comments },
+    props: { specificPost, comments, authCookie },
   };
 }
 export default slug;

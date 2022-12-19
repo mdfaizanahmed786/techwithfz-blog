@@ -12,6 +12,7 @@ type Reply = {
     replies: Reply[];
     likes: string[];
     matchResults: (comment: string) => Comment[];
+    cookieAuth:any
     _v: number;
   }
 

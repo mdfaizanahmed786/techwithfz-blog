@@ -5,21 +5,14 @@ const userContext = createContext({} as any);
 const { Provider } = userContext;
 
 const AppProvider = ({ children }:{children:React.ReactNode}) => {
-  const [isAuth, setIsAuth] = useState();
 
-  const isAuthenticated = ():any => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth) {
-      setIsAuth(auth);
-    }
+  const [cookieAuth, setCookieAuth]=useState("")
 
-    if (auth?.isAdmin && auth?.authToken) return true;
-    else {
-      return false;
-    }
-  };
+
  
-  return <Provider value={{ isAuthenticated, isAuth }}>{children}</Provider>;
+  return <Provider value={{ cookieAuth, setCookieAuth }}>{children}</Provider>;
 };
 
 export { userContext, AppProvider };
+
+

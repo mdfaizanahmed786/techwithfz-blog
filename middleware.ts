@@ -3,7 +3,7 @@ export { default } from "next-auth/middleware"
 
 
 export async function middleware(request: NextRequest, res: NextResponse) {
-  let cookie = request.cookies.get("authToken");
+  let cookie = request.cookies.get("authToken") as any;
 
   if (
     cookie?.name === "authToken" &&

@@ -1,31 +1,29 @@
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { AiOutlineClockCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
 import Post from "../components/Post";
+import jwt,{ JwtPayload, Secret } from "jsonwebtoken";
+import { userContext } from "../context/userContext";
 
 
 type Props = Response[] | any;
 
 const Blog = (props: Props) => {
-  const { allBlogs } = props;
-  const router = useRouter();
-  const [admin, setAdmin] = useState<boolean>(false);
+  const { allBlogs, authCookie } = props;
   const [newPosts, setNewPosts]=useState(allBlogs)
+  const authContext = useContext(userContext);
+  const {isAdmin}=authCookie
+
   useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem("auth")!);
-    if (auth?.isAdmin) {
-      setAdmin(true);
-    } else {
-      setAdmin(false);
+    if (authCookie) {
+      authContext.setCookieAuth(authCookie);
     }
-  }, [router.query]);
+  }, []);
   const deletePost=useCallback(()=>async(id: string)=>{
-    let user = JSON.parse(localStorage.getItem("auth")!);
-    if (user?.isAdmin) {
+ 
+    if (isAdmin) {
       let afterDelete = allBlogs.filter((post: Response) => post._id !== id);
       setNewPosts(afterDelete);
       await fetch(`https://techwithfz.vercel.app/api/deletepost/${id}`, {
@@ -57,7 +55,7 @@ const Blog = (props: Props) => {
       <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-4">
      
         {newPosts.map((blog: Response) => (
-         <Post {...blog} deletePost={deletePost} admin={admin}/>
+         <Post {...blog} deletePost={deletePost} admin={isAdmin}/>
         ))}
       </div>
     </div>
@@ -67,9 +65,23 @@ const Blog = (props: Props) => {
 export async function getServerSideProps(context: any) {
   const response = await fetch("https://techwithfz.vercel.app/api/getposts");
   const { allBlogs } = await response.json();
+  let authCookie: string | JwtPayload = "";
+  if (context?.req?.cookies["authToken"]) {
+    let result = context?.req?.cookies["authToken"];
+    if(result===process.env.NEXT_PUBLIC_ADMIN_TOKEN){
+      authCookie = {
+        email:'admin',
+        isAdmin: true,
+      };
+    }
+    else{
+
+      authCookie = jwt.verify(result, process.env.JWT_SECRET as Secret);
+    }
+  }
 
   return {
-    props: { allBlogs },
+    props: { allBlogs, authCookie },
   };
 }
 

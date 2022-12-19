@@ -1,16 +1,14 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { userContext } from "../context/userContext";
 import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
-type Props = {};
 
-const Admin = (props: Props) => {
-  const authContext = useContext(userContext);
+
+const Admin = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -20,9 +18,7 @@ const Admin = (props: Props) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    authContext.isAuthenticated() ? router.push("/admin") : router.push("/");
-  }, []);
+  
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();

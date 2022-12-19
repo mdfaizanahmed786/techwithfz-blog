@@ -76,7 +76,7 @@ const Signup = (props: Props) => {
           theme: "dark",
           });
           router.push("/")
-          localStorage.setItem("auth", JSON.stringify(response));
+        
       }
       else {
         toast.error('Try again with another email or password!', {
@@ -109,6 +109,7 @@ const Signup = (props: Props) => {
 
     loginWithGoogle(props.providers.google.id)
   if(session)
+  router.push("/")
   toast.success('Singup Success!', {
     position: "top-right",
     autoClose: 1800,
@@ -216,7 +217,7 @@ const Signup = (props: Props) => {
     onChange={onChange}
   />
   </div>
-            <button type="submit" className={`${session?.user || props.authState ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user || props.authState}>Signup</button>
+            <button type="submit" className={`${session?.user  ?  "bg-gray-500 text-white py-2 font-semibold rounded-md" : "commonButton py-2 font-semibold text-white"} `} disabled={session?.user}>Signup</button>
           </form>
           <p className="text-white text-sm">
             Already have an account?{" "}

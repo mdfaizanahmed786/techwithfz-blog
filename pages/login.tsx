@@ -20,7 +20,6 @@ interface GoogleAuth {
   google: Auth;
 }
 type Props = {
-  authState: boolean;
   providers: GoogleAuth;
 };
 
@@ -38,6 +37,7 @@ const Login = (props: Props) => {
   const authSignin = () => {
     loginWithGoogle(props.providers.google.id);
     if (session)
+    router.push("/")
       toast.success("Login Success!", {
         position: "top-right",
         autoClose: 1800,
@@ -88,7 +88,7 @@ const Login = (props: Props) => {
           theme: "dark",
         });
         router.push("/");
-        localStorage.setItem("auth", JSON.stringify(response));
+  
       } else {
         toast.error("Check your credentials!", {
           position: "top-right",
@@ -210,11 +210,11 @@ const Login = (props: Props) => {
             <button
               type="submit"
               className={`${
-                session?.user || props.authState
+                session?.user 
                   ? "bg-gray-500 text-white py-2 font-semibold rounded-md"
                   : "commonButton py-2 font-semibold text-white"
               } `}
-              disabled={session?.user || props.authState}
+              disabled={session?.user }
             >
               Login
             </button>

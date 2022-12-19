@@ -5,27 +5,22 @@ import { userContext } from "../context/userContext";
 import { useSession, signIn, signOut } from "next-auth/react"
 import { toast } from "react-toastify";
 
-type Props = {
-  key?: number;
-  authState: boolean | undefined;
-};
 
-const Navbar = ({ authState }: Props) => {
-  const { isAuthenticated } = useContext(userContext);
-  const [admin, setAdmin] = useState<boolean>(false);
+
+const Navbar = () => {
+  const { cookieAuth, setCookieAuth} = useContext(userContext);
+ const {isAdmin} =cookieAuth
   const { data: session } = useSession()
   const router = useRouter();
-  useEffect(() => {
-    if (isAuthenticated()) {
-      setAdmin(true);
-    } else {
-      setAdmin(false);
-    }
-  }, [router.query]);
+ 
 
-  const logOut = () => {
+  const logOut = async () => {
     router.push("/")
-    localStorage.removeItem("auth");
+    const removeUser=await fetch('https://techwitfz.vercel.app/api/signout')
+    const response=await removeUser.json();
+    if(response.success){
+      setCookieAuth("")
+    }
     toast.success('Logout Success!', {
       position: "top-right",
       autoClose: 1800,
@@ -63,7 +58,7 @@ const Navbar = ({ authState }: Props) => {
             </p>
           </Link>
         </div>
-        {authState || session ? (
+        {cookieAuth.email || session ? (
           <div className="flex items-center space-x-5">
             <p  className="font-bold textStyle cursor-pointer">Welcome</p>
             <p
@@ -72,7 +67,7 @@ const Navbar = ({ authState }: Props) => {
             >
               Logout
             </p>
-            {admin && (
+            {isAdmin && (
               <Link href={"/admin"} ><p className="commonButton hidden md:inline-flex font-semibold cursor-pointer text-white px-3 py-1">
                 Welcome Faizan
               </p>
