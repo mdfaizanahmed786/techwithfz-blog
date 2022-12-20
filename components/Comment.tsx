@@ -140,7 +140,7 @@ function Comment({
       setLiked(true)
      
     }
-  },[])
+  },[like])
   return (
     <div
       key={_id}
