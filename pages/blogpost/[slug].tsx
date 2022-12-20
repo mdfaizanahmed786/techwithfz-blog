@@ -203,6 +203,7 @@ const slug = (props: Response | any) => {
             {comments.map((comment: Comment) => (
               <Comment
                 {...comment}
+                key={comment._id}
                 matchResults={matchResults}
                 cookieAuth={authCookie}
               />

@@ -39,7 +39,8 @@ function Comment({
   const replyToComment = useRef<HTMLTextAreaElement>(null);
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
-  const [like, setLike] = useState("");
+  const [like, setLike] = useState(likes.length);
+  const [liked, setLiked] = useState(false);
   const { slug } = useRouter().query;
   const router = useRouter();
 
@@ -114,7 +115,6 @@ function Comment({
       });
       const response = await like.json();
       if (response.success) {
-        router.reload();
         toast.success("Liked!", {
           position: "top-right",
           autoClose: 2500,
@@ -125,7 +125,8 @@ function Comment({
           progress: undefined,
           theme: "dark",
         });
-        setLike(id);
+        setLike(prev=>prev+1);
+        setLiked(prev=>!prev)
       }
     } else {
       toast.error("Login to like!", {
@@ -140,9 +141,16 @@ function Comment({
       });
     }
   };
+  useEffect(()=>{
+    if(likes.includes(session?.user?.email || cookieAuth?.email) &&
+    (session?.user?.email || cookieAuth?.email)){
+      setLiked(true)
+     
+    }
+  },[])
+
   return (
     <div
-      key={_id}
       className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
     >
       <div className="flex items-center gap-3">
@@ -187,8 +195,7 @@ function Comment({
           <div className="space-x-1 flex items-center">
             <div className="cursor-pointer">
               {/* @ts-ignore */}
-              {likes.includes(session?.user?.email || cookieAuth?.email) &&
-              (session?.user?.email || cookieAuth?.email) ? (
+             {liked ? (
                 <AiFillHeart
                   size={20}
                   className="cursor-pointer textStyle"
@@ -203,7 +210,7 @@ function Comment({
                 />
               )}
             </div>
-            <p className="font-semibold text-base">{likes.length}</p>
+            <p className="font-semibold text-base">{like}</p>
           </div>
 
           {(session?.user || cookieAuth?.email) && (

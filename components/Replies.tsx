@@ -1,6 +1,5 @@
 import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { formatted_date } from '../lib/dateformat';
 
 type Reply = {
     email: string;
@@ -18,7 +17,7 @@ function Replies({reply, email, createdAt}:Reply) {
       <p className="font-bold">
         {email.replace("@gmail.com", "_gm")}
       </p>
-      <p className='text-xs text-gray-300'>{formatted_date(createdAt)}</p>
+      <p className='text-xs text-gray-300'>{(createdAt)}</p>
     </div>
     <p>{reply}</p>
   </div>
