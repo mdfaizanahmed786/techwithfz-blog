@@ -75,7 +75,7 @@ const Signup = (props: Props) => {
           progress: undefined,
           theme: "dark",
           });
-          router.push("/")
+        
         
       }
       else {
@@ -109,7 +109,7 @@ const Signup = (props: Props) => {
 
     loginWithGoogle(props.providers.google.id)
   if(session)
-  router.push("/")
+ 
   toast.success('Singup Success!', {
     position: "top-right",
     autoClose: 1800,

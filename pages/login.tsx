@@ -47,7 +47,7 @@ const Login = (props: Props) => {
         progress: undefined,
         theme: "dark",
       });
-      router.push("/")
+     
   };
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -87,7 +87,7 @@ const Login = (props: Props) => {
           progress: undefined,
           theme: "dark",
         });
-        router.push("/");
+    
   
       } else {
         toast.error("Check your credentials!", {
