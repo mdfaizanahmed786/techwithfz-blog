@@ -203,7 +203,7 @@ function Comment({
                 />
               )}
             </div>
-            <p className="font-semibold text-base">{likes.length}</p>
+            <p className="font-semibold text-base">{like}</p>
           </div>
 
           {(session?.user ||cookieAuth?.email) && (
