@@ -25,7 +25,8 @@ function Comment({
   const replyToComment = useRef<HTMLTextAreaElement>(null);
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
-  const [like, setLike] = useState("");
+  const [like, setLike] = useState(likes.length);
+  const [liked, setLiked]=useState(false)
   const { slug } = useRouter().query;
   const router = useRouter();
 
@@ -105,7 +106,6 @@ function Comment({
       );
       const response = await like.json();
       if (response.success) {
-        router.reload();
         toast.success("Liked!", {
           position: "top-right",
           autoClose: 2500,
@@ -116,7 +116,8 @@ function Comment({
           progress: undefined,
           theme: "dark",
         });
-        setLike(id);
+        setLike(prevCount=>prevCount+1);
+        setLiked(prevLike=>!prevLike)
       }
     } else {
       toast.error("Login to like!", {
@@ -132,6 +133,14 @@ function Comment({
       router.push("/login")
     }
   };
+
+  useEffect(()=>{
+    if(likes.includes(session?.user?.email || cookieAuth?.email) &&
+    (session?.user?.email || cookieAuth?.email)){
+      setLiked(true)
+     
+    }
+  },[])
   return (
     <div
       key={_id}
@@ -179,8 +188,7 @@ function Comment({
           <div className="space-x-1 flex items-center">
             <div className="cursor-pointer">
               {/* @ts-ignore */}
-              {likes.includes(session?.user?.email || cookieAuth?.email) &&
-              (session?.user?.email || cookieAuth?.email) ? (
+              {liked ? (
                 <AiFillHeart
                   size={20}
                   className="cursor-pointer textStyle"
