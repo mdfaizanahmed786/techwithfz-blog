@@ -87,7 +87,7 @@ const Login = (props: Props) => {
           progress: undefined,
           theme: "dark",
         });
-    
+    router.push("/")
   
       } else {
         toast.error("Check your credentials!", {
