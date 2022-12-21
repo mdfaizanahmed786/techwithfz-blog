@@ -23,7 +23,7 @@ export default async function likecomment(
   if (req.method === "POST") {
     try {
       await connectDb();
-      const {  id,slug, email, comment } = req.body;
+      const { slug, email, comment } = req.body;
       let postSlug = await Blog.findOne({ slug });
       let comments=postSlug.userComments.filter((com:UserComment)=>(com.comment===comment && com.email===email));
 
