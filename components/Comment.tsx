@@ -30,7 +30,14 @@ function Comment({
   const { slug } = useRouter().query;
   const router = useRouter();
 
-  
+  useEffect(()=>{
+   
+    if(likes.includes(session?.user?.email || cookieAuth?.email) &&
+    (session?.user?.email || cookieAuth?.email)){
+      setLiked(true)
+     
+    }
+  },[like])
 
   const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
@@ -134,14 +141,7 @@ function Comment({
     }
   };
 
-  useEffect(()=>{
-   
-    if(likes.includes(session?.user?.email || cookieAuth?.email) &&
-    (session?.user?.email || cookieAuth?.email)){
-      setLiked(true)
-     
-    }
-  },[like])
+ 
   return (
     <div
     
