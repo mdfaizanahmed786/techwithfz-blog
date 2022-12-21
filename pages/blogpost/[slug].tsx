@@ -51,7 +51,6 @@ interface Comments {
   createdAt: string;
   replies: Reply[];
   likes: string[];
-  cookieAuth: any;
   matchResults: (comment: string) => Comments[];
   _v?: number;
 }
@@ -89,7 +88,6 @@ const slug = (props: Response | any) => {
     createdAt: "",
     replies:[],
     likes:[],
-    cookieAuth:"",
     matchResults
   })
   useEffect(() => {
@@ -134,7 +132,7 @@ const slug = (props: Response | any) => {
         theme: "dark",
       });
       
-     setUserComments([...userComments,{  comment: commentRef?.current?.value!, email: !authCookie?.email ? session?.user?.email : authCookie?.email, createdAt:new Date().toISOString(), slug: slug as string, cookieAuth: authCookie, matchResults, replies:[], likes:[] }])
+     setUserComments([...userComments,{  comment: commentRef?.current?.value!, email: !authCookie?.email ? session?.user?.email : authCookie?.email, createdAt:new Date().toISOString(), slug: slug as string, matchResults, replies:[], likes:[] }])
     }
     setLoader(false);
 
@@ -247,6 +245,8 @@ const slug = (props: Response | any) => {
                 {...comment}
                 key={comment._id}
                 matchResults={matchResults}
+                cookieAuth={authCookie}
+                session={session?.user?.email}
                
               />
             ))}

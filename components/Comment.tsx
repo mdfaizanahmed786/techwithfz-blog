@@ -20,6 +20,7 @@ interface Comment {
   replies: Reply[];
   likes: string[];
   cookieAuth: any;
+  session:string | null | undefined;
   matchResults: (comment: string) => Comment[];
   _v: number;
 }
@@ -31,9 +32,10 @@ function Comment({
   replies,
   likes,
   matchResults,
+  session,
   cookieAuth,
 }: Comment) {
-  const { data: session } = useSession();
+ 
   const [showReply, setShowReply] = useState("");
   const replyToComment = useRef<HTMLTextAreaElement>(null);
   const [showReplies, setShowReplies] = useState("");
@@ -43,6 +45,16 @@ function Comment({
   const { slug } = useRouter().query;
   const router = useRouter();
 
+  useEffect(()=>{
+    console.log(cookieAuth?.email, session)
+    if(likes.includes(session || cookieAuth?.email) &&
+    (session || cookieAuth?.email)){
+      setLiked(true)
+     
+    }
+  },[like])
+
+  
   const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
     const reply = await fetch("http://localhost:3000/api/addreply", {
@@ -54,7 +66,7 @@ function Comment({
         comment,
         slug,
         reply: replyToComment.current!.value,
-        email: !cookieAuth.email ? session?.user?.email : cookieAuth?.email,
+        email: !cookieAuth.email ? session : cookieAuth?.email,
       }),
     });
     const response = await reply.json();
@@ -100,7 +112,7 @@ function Comment({
   };
 
   const handleLikes = async () => {
-    if (cookieAuth?.email || session?.user?.email) {
+    if (cookieAuth?.email || session) {
       const like = await fetch("http://localhost:3000/api/likecomment", {
         method: "POST",
         headers: {
@@ -110,7 +122,7 @@ function Comment({
     
           comment,
           slug: slug,
-          email: !cookieAuth?.email ? session?.user?.email : cookieAuth?.email,
+          email: !cookieAuth?.email ? session : cookieAuth?.email,
         }),
       });
       const response = await like.json();
@@ -143,13 +155,6 @@ function Comment({
       });
     }
   };
-  useEffect(()=>{
-    if(likes.includes(session?.user?.email || cookieAuth?.email) &&
-    (session?.user?.email || cookieAuth?.email)){
-      setLiked(true)
-     
-    }
-  },[])
 
   return (
     <div
@@ -215,7 +220,7 @@ function Comment({
             <p className="font-semibold text-base">{like}</p>
           </div>
 
-          {(session?.user || cookieAuth?.email) && (
+          {(session|| cookieAuth?.email) && (
             <button
               className="text-white font-semibold commonButton  px-2 py-1 "
               onClick={() => toggleReply(comment)}
