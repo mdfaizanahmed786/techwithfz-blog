@@ -220,6 +220,7 @@ const slug = (props: Response | any) => {
               <Comment
                 {...comment}
                 matchResults={matchResults}
+                key={comment.createdAt}
                
               />
             ))}

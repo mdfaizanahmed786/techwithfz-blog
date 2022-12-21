@@ -100,7 +100,7 @@ function Comment({
           body: JSON.stringify({
             comment,
             slug: slug,
-            email: !cookieAuth.email ? session?.user?.email : cookieAuth?.email,
+            email: !cookieAuth?.email ? session?.user?.email : cookieAuth?.email,
           }),
         }
       );
@@ -135,6 +135,7 @@ function Comment({
   };
 
   useEffect(()=>{
+   
     if(likes.includes(session?.user?.email || cookieAuth?.email) &&
     (session?.user?.email || cookieAuth?.email)){
       setLiked(true)
@@ -143,7 +144,7 @@ function Comment({
   },[like])
   return (
     <div
-      key={_id}
+    
       className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
     >
       <div className="flex items-center gap-3">
