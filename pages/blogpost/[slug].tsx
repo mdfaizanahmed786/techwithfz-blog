@@ -216,7 +216,7 @@ const slug = (props: Response | any) => {
                 <Oval stroke="#10b45b" strokeWidth={3} />
               </div>
             )}
-            {comments.map((comment: Comment) => (
+            {userComments.map((comment: Comment) => (
               <Comment
                 {...comment}
                 matchResults={matchResults}
