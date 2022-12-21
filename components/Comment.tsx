@@ -107,7 +107,7 @@ function Comment({
           body: JSON.stringify({
             comment,
             slug: slug,
-            email: !cookieAuth?.email ? session?.user?.email : cookieAuth?.email,
+            email: cookieAuth?.email===undefined ? session?.user?.email : cookieAuth?.email,
           }),
         }
       );

@@ -22,7 +22,7 @@ export default async function likecomment(
       const {  slug, email, comment } = req.body;
       let postSlug = await Blog.findOne({ slug });
       let comments = postSlug.userComments.filter(
-        (com: UserComment) => (com.comment===comment && com.email===email)
+        (com: UserComment) => (com.comment===comment)
       );
 
       if (!postSlug) return res.status(404).json({ err: "Post not found" });
@@ -32,7 +32,7 @@ export default async function likecomment(
 
       comments[0].likes.push(email);
 
-      postSlug.userComments.filter((com: UserComment) =>(com.comment===comment && com.email===email));
+      postSlug.userComments.filter((com: UserComment) =>(com.comment===comment));
 
       await Blog.findOneAndUpdate(
         { slug: slug },
