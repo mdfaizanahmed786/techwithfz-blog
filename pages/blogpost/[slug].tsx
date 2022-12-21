@@ -106,7 +106,7 @@ const slug = (props: Response | any) => {
         progress: undefined,
         theme: "dark",
       });
-      setUserComments([...userComments,{  comment: commentRef?.current?.value!, email: !authCookie?.email ? session?.user?.email : authCookie?.email, createdAt:new Date().toISOString(), slug: slug as string, cookieAuth: authCookie, matchResults, replies:[], likes:[] }])
+      setUserComments([...userComments,{  comment: commentRef?.current?.value!, email: !authCookie?.email ? session?.user?.email : authCookie?.email, createdAt:new Date().toISOString(), slug: slug as string, matchResults, replies:[], likes:[] }])
     }
     setLoader(false);
     if (response.err) {
@@ -221,6 +221,7 @@ const slug = (props: Response | any) => {
                 {...comment}
                 matchResults={matchResults}
                 key={comment.createdAt}
+                cookieAuth={authCookie}
                
               />
             ))}
