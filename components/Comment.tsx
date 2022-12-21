@@ -88,7 +88,7 @@ function Comment({
     }
   };
 
-  const handleLikes = async (id: string) => {
+  const handleLikes = async () => {
     if (cookieAuth?.email || session?.user?.email) {
       const like = await fetch(
         "https://techwithfz.vercel.app/api/likecomment",
@@ -98,7 +98,7 @@ function Comment({
             "Content-type": "application/json",
           },
           body: JSON.stringify({
-            id,
+            comment,
             slug: slug,
             email: !cookieAuth.email ? session?.user?.email : cookieAuth?.email,
           }),
@@ -199,7 +199,7 @@ function Comment({
                   size={20}
                   className="cursor-pointer"
                   title="Like"
-                  onClick={() => handleLikes(_id)}
+                  onClick={() => handleLikes()}
                 />
               )}
             </div>

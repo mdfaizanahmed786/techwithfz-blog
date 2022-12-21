@@ -8,7 +8,6 @@ import {
 import { FaUserCircle } from "react-icons/fa";
 import parse from "html-react-parser";
 import React, {
-  FormEvent,
   useContext,
   useEffect,
   useMemo,
@@ -27,6 +26,19 @@ import { userContext } from "../../context/userContext";
 import { JwtPayload } from "jsonwebtoken";
 import { Secret } from "jsonwebtoken";
 
+interface Comments {
+  _id?: string;
+  comment: string;
+  email: string;
+  slug: string;
+  createdAt: string;
+  replies: Reply[];
+  likes: string[];
+  cookieAuth: any;
+  matchResults: (comment: string) => Comments[];
+  _v?: number;
+}
+
 const slug = (props: Response | any) => {
   const { specificPost, comments, authCookie } = props;
   const router = useRouter();
@@ -35,17 +47,12 @@ const slug = (props: Response | any) => {
     () => specificPost.filter((blog: Response) => blog.slug === slug),
     [specificPost, slug]
   );
-  const [user, setUser] = useState<string | null | undefined>("");
-  const [feedback, setFeedBack] = useState("");
+
+  const commentRef=useRef<HTMLTextAreaElement>(null)!
   const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
   const authContext = useContext(userContext);
-
-  useEffect(() => {
-    if (authCookie) {
-      authContext.setCookieAuth(authCookie);
-    }
-  }, []);
+  const [userComments, setUserComments]=useState(comments)
 
   const matchResults = useMemo(
     () => (comment: string) => {
@@ -56,7 +63,16 @@ const slug = (props: Response | any) => {
     },
     [comments]
   );
+ 
 
+
+  useEffect(() => {
+    if (authCookie) {
+      authContext.setCookieAuth(authCookie);
+    }
+  }, [userComments.length]);
+
+  
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoader(true);
     e.preventDefault();
@@ -69,7 +85,7 @@ const slug = (props: Response | any) => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          comment: feedback,
+          comment:  commentRef.current?.value!,
           slug,
           email: !authCookie?.email ? session?.user?.email : authCookie?.email,
         }),
@@ -79,7 +95,7 @@ const slug = (props: Response | any) => {
     const response = await comment.json();
     setLoader(true);
     if (response.success) {
-      router.reload();
+    
       toast.success("Comment Added!", {
         position: "top-right",
         autoClose: 2500,
@@ -90,6 +106,7 @@ const slug = (props: Response | any) => {
         progress: undefined,
         theme: "dark",
       });
+      setUserComments([...userComments,{  comment: commentRef?.current?.value!, email: !authCookie?.email ? session?.user?.email : authCookie?.email, createdAt:new Date().toISOString(), slug: slug as string, cookieAuth: authCookie, matchResults, replies:[], likes:[] }])
     }
     setLoader(false);
     if (response.err) {
@@ -170,8 +187,7 @@ const slug = (props: Response | any) => {
                     cols={10}
                     style={{ resize: "none" }}
                     required
-                    value={feedback}
-                    onChange={(e) => setFeedBack(e.target.value)}
+                    ref={commentRef}
                   ></textarea>
                   <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                     Add Comment
@@ -204,7 +220,7 @@ const slug = (props: Response | any) => {
               <Comment
                 {...comment}
                 matchResults={matchResults}
-                cookieAuth={authCookie}
+               
               />
             ))}
           </div>
