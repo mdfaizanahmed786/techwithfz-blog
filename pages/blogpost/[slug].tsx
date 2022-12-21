@@ -56,7 +56,7 @@ const slug = (props: Response | any) => {
 
   const matchResults = useMemo(
     () => (comment: string) => {
-      let allComments = comments.filter(
+      let allComments = userComments.filter(
         (item: Comment) => item.comment === comment
       );
       return allComments;
