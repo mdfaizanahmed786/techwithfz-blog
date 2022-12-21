@@ -38,6 +38,29 @@ interface Response {
   __v: number;
 }
 
+type Reply = {
+  email: string;
+  reply: string;
+  createdAt: number;
+};
+interface Comments {
+  _id?: string;
+  comment: string;
+  email: string;
+  slug: string;
+  createdAt: string;
+  replies: Reply[];
+  likes: string[];
+  cookieAuth: any;
+  matchResults: (comment: string) => Comments[];
+  _v?: number;
+}
+interface AddComment{
+  comment: string;
+  email: string;
+  slug: string|undefined,
+  createdAt: string;
+}
 const slug = (props: Response | any) => {
   const { specificPost, comments, authCookie } = props;
   
@@ -48,12 +71,8 @@ const slug = (props: Response | any) => {
   const [loader, setLoader] = useState(false);
   const { data: session } = useSession();
   const authContext = useContext(userContext);
-  useEffect(() => {
-    if (authCookie) {
-      authContext.setCookieAuth(authCookie);
-    }
-  }, []);
-
+  const [userComments, setUserComments]=useState(comments)
+  const commentRef=useRef<HTMLTextAreaElement>(null)!
   const matchResults = useMemo(
     () => (comment: string) => {
       let allComments = comments.filter(
@@ -63,6 +82,23 @@ const slug = (props: Response | any) => {
     },
     [comments]
   );
+  const [newComment, addNewComment]=useState<Comments>({
+    comment: "",
+    email: "",
+    slug: "",
+    createdAt: "",
+    replies:[],
+    likes:[],
+    cookieAuth:"",
+    matchResults
+  })
+  useEffect(() => {
+    if (authCookie) {
+      authContext.setCookieAuth(authCookie);
+    }
+
+  }, [authCookie, userComments.length]);
+
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoader(true);
@@ -74,16 +110,19 @@ const slug = (props: Response | any) => {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        comment: feedback,
+        comment: commentRef.current?.value!,
         slug,
         email: !authCookie?.email ? session?.user?.email : authCookie?.email,
       }),
     });
 
+   
+
+
     const response = await comment.json();
     setLoader(true);
     if (response.success) {
-      router.reload();
+
       toast.success("Comment Added!", {
         position: "top-right",
         autoClose: 2500,
@@ -94,8 +133,11 @@ const slug = (props: Response | any) => {
         progress: undefined,
         theme: "dark",
       });
+      
+     setUserComments([...userComments,{  comment: commentRef?.current?.value!, email: !authCookie?.email ? session?.user?.email : authCookie?.email, createdAt:new Date().toISOString(), slug: slug as string, cookieAuth: authCookie, matchResults, replies:[], likes:[] }])
     }
     setLoader(false);
+
     if (response.err) {
       toast.error(`${response.err}`, {
         position: "top-right",
@@ -170,8 +212,7 @@ const slug = (props: Response | any) => {
                     cols={10}
                     style={{ resize: "none" }}
                     required
-                    value={feedback}
-                    onChange={(e) => setFeedBack(e.target.value)}
+                    ref={commentRef}
                   ></textarea>
                   <button className="text-white font-semibold commonButton  px-3 py-2 w-36">
                     Add Comment
@@ -189,7 +230,7 @@ const slug = (props: Response | any) => {
         <div className="flex flex-col gap-7">
           <div className="space-y-3">
             <h2 className="font-semibold md:text-3xl text-xl text-white">
-              Comments ({comments.length})
+              Comments ({userComments.length})
             </h2>
             <div className="border border-gray-500" />
           </div>
@@ -200,12 +241,13 @@ const slug = (props: Response | any) => {
                 <Oval stroke="#10b45b" strokeWidth={3} />
               </div>
             )}
-            {comments.map((comment: Comment) => (
+            {userComments.map((comment: Comment) => (
+              
               <Comment
                 {...comment}
                 key={comment._id}
                 matchResults={matchResults}
-                cookieAuth={authCookie}
+               
               />
             ))}
           </div>

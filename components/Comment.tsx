@@ -27,7 +27,6 @@ interface Comment {
 function Comment({
   comment,
   email,
-  _id,
   createdAt,
   replies,
   likes,
@@ -100,7 +99,7 @@ function Comment({
     }
   };
 
-  const handleLikes = async (id: string) => {
+  const handleLikes = async () => {
     if (cookieAuth?.email || session?.user?.email) {
       const like = await fetch("http://localhost:3000/api/likecomment", {
         method: "POST",
@@ -108,12 +107,14 @@ function Comment({
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          id,
+    
+          comment,
           slug: slug,
           email: !cookieAuth?.email ? session?.user?.email : cookieAuth?.email,
         }),
       });
       const response = await like.json();
+      console.log(response.err)
       if (response.success) {
         toast.success("Liked!", {
           position: "top-right",
@@ -129,6 +130,7 @@ function Comment({
         setLiked(prev=>!prev)
       }
     } else {
+    
       toast.error("Login to like!", {
         position: "top-right",
         autoClose: 2500,
@@ -206,7 +208,7 @@ function Comment({
                   size={20}
                   className="cursor-pointer"
                   title="Like"
-                  onClick={() => handleLikes(_id)}
+                  onClick={() => handleLikes()}
                 />
               )}
             </div>

@@ -8,7 +8,7 @@ import { getProviders, signIn } from "next-auth/react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import ReCAPTCHA from "react-google-recaptcha";
 import Image from "next/image";
-import Cookies from "cookies";
+
 
 import { NextRequest, NextResponse } from "next/server";
 
