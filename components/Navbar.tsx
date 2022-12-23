@@ -22,7 +22,7 @@ const Navbar = () => {
     if(response.success){
       setCookieAuth("")
     }
-  }
+  
     toast.success('Logout Success!', {
       position: "top-right",
       autoClose: 1800,
@@ -33,6 +33,8 @@ const Navbar = () => {
       progress: undefined,
       theme: "dark",
       });
+    }
+   
     signOut()
   };
   return (
