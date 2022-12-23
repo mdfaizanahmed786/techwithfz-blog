@@ -205,7 +205,7 @@ const slug = (props: Response | any) => {
         <div className="flex flex-col gap-7">
           <div className="space-y-3">
             <h2 className="font-semibold md:text-3xl text-xl text-white">
-              Comments ({comments.length})
+              Comments ({userComments.length})
             </h2>
             <div className="border border-gray-500" />
           </div>
