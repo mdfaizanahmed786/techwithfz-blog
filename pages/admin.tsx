@@ -16,6 +16,7 @@ const Admin = (props: Props) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
   const slugRef = useRef<HTMLInputElement>(null);
+  const categoryRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
 
   const router = useRouter();
