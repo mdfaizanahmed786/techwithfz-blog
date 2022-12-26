@@ -7,6 +7,8 @@ import Post from "../components/Post";
 import jwt,{ JwtPayload, Secret } from "jsonwebtoken";
 import { userContext } from "../context/userContext";
 import {GoSearch} from 'react-icons/go'
+import Categories from "../components/Categories";
+import { categories } from "../lib/categories";
 
 
 
@@ -66,19 +68,27 @@ const Blog = (props: Props) => {
         All Blogs({newPosts.length})
       </h1>
 
-      <div className="searchContainer py-2 md:max-w-[1030px] md:mx-auto mx-4 space-y-2 md:space-y-3">
-          <p className="font-bold textStyle">Search</p>
-          <div className="bg-[#1E1E1E] flex  text-white ring-[#10935F] ring-2 rounded-md">
-            <input
-              type="text"
-              className="searchInput flex-1 bg-transparent  focus:outline-none py-2 px-5"
-              onChange={(e) =>filterItems(e)
-              }
-              placeholder="Search for a post..."
-            />
-            <div className="bg-[#10B45B] px-5 md:py-4 py-3 rounded-br-md rounded-tr-md ">
-              <GoSearch size={20} />
+      <div className="md:max-w-[1030px] md:mx-auto mx-4">
+          <div className="searchContainer py-2  space-y-3">
+            <p className="font-bold textStyle">Search</p>
+            <div className="bg-[#1E1E1E] flex  text-white ring-[#10935F] ring-2 rounded-md">
+              <input
+                type="text"
+                className="searchInput flex-1 bg-transparent  focus:outline-none py-2 px-5"
+                onChange={(e) => filterItems(e)}
+                placeholder="Search for a post..."
+              />
+              <div className="bg-[#10B45B] px-5 py-4 rounded-br-md rounded-tr-md ">
+                <GoSearch size={20} />
+              </div>
             </div>
+          </div>
+
+          <div className="categories flex flex-wrap gap-4 py-4">
+            {categories.map(({id, category, isActive}:Category) => (
+              <Categories key={id} category={category} isActive={isActive}/>
+            ))}
+
           </div>
         </div>
 
