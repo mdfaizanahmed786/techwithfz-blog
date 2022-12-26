@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest, res: NextResponse) {
   let cookie = request.cookies.get("authToken");
-  console.log(cookie)
+  
 
   if (
     cookie &&
