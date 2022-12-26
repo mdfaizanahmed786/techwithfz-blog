@@ -8,7 +8,7 @@ type Props = {
 const Categories = ({ category, isActive }: Props) => {
   return (
     <div
-      className={`category bg-[#1E1E1E] px-4 py-2 rounded-md text-white cursor-pointer ${
+      className={`category bg-[#1E1E1E] px-4 py-2 rounded-md text-white cursor-pointer text-sm ${
         isActive && "ring-[#10935F] ring-2"
       }`}
     >

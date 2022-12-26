@@ -78,13 +78,13 @@ const Blog = (props: Props) => {
                 onChange={(e) => filterItems(e)}
                 placeholder="Search for a post..."
               />
-              <div className="bg-[#10B45B] px-5 py-4 rounded-br-md rounded-tr-md ">
+              <div className="bg-[#10B45B] px-5 py-3 rounded-br-md rounded-tr-md ">
                 <GoSearch size={20} />
               </div>
             </div>
           </div>
 
-          <div className="categories flex flex-wrap gap-4 py-4">
+          <div className="categories flex flex-wrap md:gap-4 gap-3 py-4">
             {categories.map(({id, category, isActive}:Category) => (
               <Categories key={id} category={category} isActive={isActive}/>
             ))}
