@@ -75,7 +75,7 @@ const Blog = (props: Props) => {
         All Blogs({newPosts.length})
       </h1>
 
-      <div>
+    
         <div className="searchContainer py-6 md:max-w-[1030px] md:mx-auto mx-4 space-y-3">
           <p className="font-bold textStyle">Search</p>
           <div className="bg-[#1E1E1E] flex  text-white ring-[#10935F] ring-2 rounded-md">
@@ -91,7 +91,7 @@ const Blog = (props: Props) => {
             </div>
           </div>
         </div>
-      </div>
+     
       <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-4">
         {newPosts.map((blog: Response) => (
           <div
