@@ -71,12 +71,12 @@ const Blog = (props: Props) => {
       <Head>
         <title>TechWithFZ - Blog</title>
       </Head>
-      <h1 className="text-3xl text-white font-bold text-center py-5 ">
+      <h1 className="text-3xl text-white font-bold text-center pt-6 ">
         All Blogs({newPosts.length})
       </h1>
 
     
-        <div className="searchContainer py-6 md:max-w-[1030px] md:mx-auto mx-4 space-y-3">
+        <div className="searchContainer py-2 md:max-w-[1030px] md:mx-auto mx-4 space-y-3">
           <p className="font-bold textStyle">Search</p>
           <div className="bg-[#1E1E1E] flex  text-white ring-[#10935F] ring-2 rounded-md">
             <input
