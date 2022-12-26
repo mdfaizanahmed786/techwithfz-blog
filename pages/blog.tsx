@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import Post from "../components/Post";
 import jwt,{ JwtPayload, Secret } from "jsonwebtoken";
 import { userContext } from "../context/userContext";
+import {GoSearch} from 'react-icons/go'
+
 
 
 type Props = Response[] | any;
@@ -43,15 +45,43 @@ const Blog = (props: Props) => {
     }
   },[allBlogs])
 
+  const filterItems=(e: React.ChangeEvent<HTMLInputElement>)=>{
+    setNewPosts(
+      allBlogs.filter((post: Response) =>
+        post.title
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase())
+      )
+    )
+
+  }
+
   return (
 
     <div className="bg-[#2E2E2E] w-full">
       <Head>
         <title>TechWithFZ - Blog</title>
       </Head>
-      <h1 className="text-3xl text-white font-bold text-center py-5 ">
+      <h1 className="text-3xl text-white font-bold text-center pt-6 ">
         All Blogs({newPosts.length})
       </h1>
+
+      <div className="searchContainer py-2 md:max-w-[1030px] md:mx-auto mx-4 space-y-3">
+          <p className="font-bold textStyle">Search</p>
+          <div className="bg-[#1E1E1E] flex  text-white ring-[#10935F] ring-2 rounded-md">
+            <input
+              type="text"
+              className="searchInput flex-1 bg-transparent  focus:outline-none py-2 px-5"
+              onChange={(e) =>filterItems(e)
+              }
+              placeholder="Search for a post..."
+            />
+            <div className="bg-[#10B45B] px-5 py-4 rounded-br-md rounded-tr-md ">
+              <GoSearch size={20} />
+            </div>
+          </div>
+        </div>
+
       <div className="flex flex-col gap-7 py-6 md:max-w-[1030px] md:mx-auto mx-4">
      
         {newPosts.map((blog: Response) => (
