@@ -12,8 +12,6 @@ import { categories } from "../lib/categories";
 
 type Props = Response[] | any;
 
-
-
 const Blog = (props: Props) => {
   const { allBlogs, authCookie } = props;
   const [newPosts, setNewPosts] = useState(allBlogs);
@@ -57,6 +55,19 @@ const Blog = (props: Props) => {
     );
   };
 
+  const handleCategory = useCallback(
+    (category: string) => {
+      if (category === "All") {
+        setNewPosts(allBlogs);
+      } else {
+        setNewPosts(
+          allBlogs.filter((post: Response) => post.category === category)
+        );
+      }
+    },
+    [allBlogs]
+  );
+
   return (
     <div className="bg-[#2E2E2E] w-full">
       <Head>
@@ -88,6 +99,7 @@ const Blog = (props: Props) => {
               {...category}
               active={activeCategory}
               handleActive={setActiveCategory}
+              handleCategory={handleCategory}
             />
           ))}
         </div>

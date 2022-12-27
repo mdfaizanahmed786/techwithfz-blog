@@ -25,7 +25,7 @@ export const categories = [
   },
   {
     id: 7,
-    category: "HTML",
+    category: "Next.js",
   },
 
   {

@@ -24,6 +24,7 @@ type Reply = {
     slug: string;
     imgs: string[];
     createdAt: string;
+    category:string
     __v: number;
   }
   interface Category {
