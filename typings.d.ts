@@ -26,5 +26,8 @@ type Reply = {
     createdAt: string;
     __v: number;
   }
-  
+  interface Category {
+    id: number;
+    category: string;
+  } 
   
