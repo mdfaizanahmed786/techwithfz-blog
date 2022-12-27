@@ -41,7 +41,7 @@ function Comment({
 
   const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
-    const reply = await fetch("https://techwithfz.vercel.app/api/addreply", {
+    const reply = await fetch("http://localhost:3000/api/addreply", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -98,7 +98,7 @@ function Comment({
   const handleLikes = async () => {
     if (cookieAuth?.email || session?.user?.email) {
       const like = await fetch(
-        "https://techwithfz.vercel.app/api/likecomment",
+        "http://localhost:3000/api/likecomment",
         {
           method: "POST",
           headers: {

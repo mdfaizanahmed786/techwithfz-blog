@@ -75,7 +75,7 @@ const Forgot = (props: Props) => {
           return;
         }
         let updateData = await fetch(
-          "https://techwithfz.vercel.app/api/update",
+          "http://localhost:3000/api/update",
           {
             method: "PUT",
             headers: {
@@ -144,7 +144,7 @@ const Forgot = (props: Props) => {
           return;
         }
         const forgotPassword = await fetch(
-          "https://techwithfz.vercel.app/api/forgot",
+          "http://localhost:3000/api/forgot",
           {
             method: "POST",
             headers: {

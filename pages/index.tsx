@@ -67,7 +67,7 @@ const Home: NextPage = (props: Props) => {
 };
 
 export async function getServerSideProps(context: any) {
-  const response = await fetch("https://techwithfz.vercel.app/api/getposts");
+  const response = await fetch("http://localhost:3000/api/getposts");
   const { allBlogs } = await response.json();
   let authCookie: string | JwtPayload = "";
   if (context?.req?.cookies["authToken"]) {
