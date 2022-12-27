@@ -27,8 +27,4 @@ type Reply = {
     __v: number;
   }
   
-  interface Category{
-    category:string,
-    id:number,
-    isActive:boolean
-  }
+  

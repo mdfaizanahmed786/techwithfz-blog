@@ -14,10 +14,18 @@ import { categories } from "../lib/categories";
 
 type Props = Response[] | any;
 
+interface Category{
+  id:number
+category:string
+active:string
+ handleActive: (category: string) => void;
+}
+
 const Blog = (props: Props) => {
   const { allBlogs, authCookie } = props;
   const [newPosts, setNewPosts]=useState(allBlogs)
   const authContext = useContext(userContext);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
   const {isAdmin}=authCookie
 
   useEffect(() => {
@@ -58,6 +66,8 @@ const Blog = (props: Props) => {
 
   }
 
+
+
   return (
 
     <div className="bg-[#2E2E2E] w-full">
@@ -85,8 +95,9 @@ const Blog = (props: Props) => {
           </div>
 
           <div className="categories flex flex-wrap md:gap-4 gap-3 py-4">
-            {categories.map(({id, category, isActive}:Category) => (
-              <Categories key={id} category={category} isActive={isActive}/>
+            {/* @ts-ignore */}
+           {categories.map((category: Category) => (
+              <Categories {...category} active={activeCategory} handleActive={setActiveCategory} />
             ))}
 
           </div>
