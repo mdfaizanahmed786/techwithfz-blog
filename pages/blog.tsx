@@ -104,6 +104,10 @@ const Blog = (props: Props) => {
           ))}
         </div>
       </div>
+      {newPosts.length === 0 && <div className="h-screen flex items-center md:justify-center py-28 md:py-0 lg:py-0 flex-col gap-5 md:gap-0">
+        <h1 className="text-2xl text-white font-bold">No Posts Found!</h1>
+        <img src="/new_file.png" className="md:h-auto md:w-auto object-cover h-96 w-96"/>
+        </div>}
 
       <div className="flex flex-col gap-7 py-7 md:py-6 md:max-w-[1030px] md:mx-auto mx-4">
         {newPosts.map((blog: Response) => (
