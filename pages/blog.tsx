@@ -26,23 +26,26 @@ const Blog = (props: Props) => {
     }
   }, []);
   const deletePost = useCallback(
-    () => async (id: string) => {
+    async (id: string) => {
       if (isAdmin) {
         let afterDelete = allBlogs.filter((post: Response) => post._id !== id);
         setNewPosts(afterDelete);
-        await fetch(`http://localhost:3000/api/deletepost/${id}`, {
+      await fetch(`http://localhost:3000/api/deletepost/${id}`, {
           method: "DELETE",
         });
-        toast.success("Deleted your Post!", {
-          position: "top-right",
-          autoClose: 1800,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+
+     
+          toast.success("Deleted your Post!", {
+            position: "top-right",
+            autoClose: 1800,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+
       }
     },
     [allBlogs]

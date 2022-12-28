@@ -29,7 +29,7 @@ const [values, setValues]=useState({
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const { email, password, title, author, slug } = values;
+      const { email, password, title, author, slug, category } = values;
       const addPost = await fetch("http://localhost:3000/api/addpost", {
         method: "POST",
         headers: {
@@ -42,7 +42,8 @@ const [values, setValues]=useState({
             title,
             author,
             desc: value,
-            slug
+            slug,
+            category
           },
         }),
       });

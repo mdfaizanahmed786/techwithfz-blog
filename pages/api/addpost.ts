@@ -13,7 +13,7 @@ export default async function addpost(
     try {
       const {
         email,
-        blog: { title, author, desc, slug },
+        blog: { title, author, desc, slug, category },
       } = req.body;
       const user = await User.findOne({ email });
       if (!user) return res.status(401).json({ error: "You are unauthorized" });
@@ -31,6 +31,7 @@ export default async function addpost(
           desc,
           author,
           slug,
+          category,
         });
         return res.json(response);
       } else {

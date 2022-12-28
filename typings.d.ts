@@ -25,6 +25,7 @@ type Reply = {
     imgs: string[];
     createdAt: string;
     category:string
+    success?: boolean 
     __v: number;
   }
   interface Category {
