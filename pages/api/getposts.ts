@@ -9,7 +9,7 @@ export default async function getposts(
 ) {
   try {
     await connectDb();
-    let allBlogs = await Blog.find();
+    let allBlogs = await Blog.find().sort({ createdAt: -1 });
 
     res.status(200).json({ allBlogs });
   } catch (er) {
