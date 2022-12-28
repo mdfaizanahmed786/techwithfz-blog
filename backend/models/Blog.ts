@@ -9,6 +9,7 @@ interface Blog{
   slug:string;
   userComments:typeof CommentSchema[];
   imgs:string[];
+  category:string
 
 
 }
@@ -19,6 +20,7 @@ const BlogSchema = new mongoose.Schema<Blog>({
   createdAt: { type: Date, default: () => Date.now(), immutable: true },
   slug: { type: String, required: true },
   userComments:[ { type: CommentSchema}],
+  category:{type:String, required:true},
   imgs:[String]
  
 });

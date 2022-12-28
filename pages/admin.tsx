@@ -6,36 +6,41 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
-
-
 const Admin = () => {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const authorRef = useRef<HTMLInputElement>(null);
-  const slugRef = useRef<HTMLInputElement>(null);
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+    title: "",
+    author: "",
+    slug: "",
+    category: "",
+  });
   const [value, setValue] = useState("");
 
   const router = useRouter();
-
-  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
+      const { email, password, title, author, slug, category } = values;
       const addPost = await fetch("https://techwithfz.vercel.app/api/addpost", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          email: emailRef.current?.value,
-          password: passwordRef.current?.value,
+          email,
+          password,
           blog: {
-            title: titleRef.current?.value,
-            author: authorRef.current?.value,
+            title,
+            author,
             desc: value,
-            slug: slugRef.current?.value,
+            slug,
+            category,
           },
         }),
       });
@@ -90,7 +95,7 @@ const Admin = () => {
             <div className="flex flex-col gap-1">
               <label htmlFor="email">Email</label>
               <input
-                ref={emailRef}
+                value={values.email}
                 type="email"
                 name="email"
                 id="email"
@@ -100,12 +105,13 @@ const Admin = () => {
                 required
                 placeholder="Enter you admin email"
                 pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="password">Password</label>
               <input
-                ref={passwordRef}
+                value={values.password}
                 type="password"
                 name="password"
                 id="password"
@@ -114,13 +120,14 @@ const Admin = () => {
                 className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
                 required
                 placeholder="Enter your password"
+                onChange={handleChange}
               />
             </div>
 
             <div className="flex flex-col gap-1">
               <label htmlFor="title">Title</label>
               <input
-                ref={titleRef}
+                value={values.title}
                 type="text"
                 name="title"
                 id="title"
@@ -129,12 +136,13 @@ const Admin = () => {
                 className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
                 required
                 placeholder="Enter blog title"
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="author">Author</label>
               <input
-                ref={authorRef}
+                value={values.author}
                 type="text"
                 name="author"
                 id="author"
@@ -143,12 +151,13 @@ const Admin = () => {
                 className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
                 required
                 placeholder="Author Name"
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="slug">Slug</label>
               <input
-                ref={slugRef}
+                value={values.slug}
                 type="text"
                 name="slug"
                 id="slug"
@@ -157,6 +166,23 @@ const Admin = () => {
                 className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
                 required
                 placeholder="how-to-add-slug"
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label htmlFor="category">Category</label>
+              <input
+                value={values.category}
+                type="text"
+                name="category"
+                id="category"
+                autoComplete="false"
+                minLength={5}
+                className="bg-[#2E2E2E] px-5 py-3 rounded-md outline-none text-white border-[#10935F] border-2"
+                required
+                placeholder="Database..."
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -166,7 +192,6 @@ const Admin = () => {
                   value={value}
                   onChange={setValue}
                   className="!text-white"
-                  
                 />
               </div>
             </div>
