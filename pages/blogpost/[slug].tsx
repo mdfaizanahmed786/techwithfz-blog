@@ -93,7 +93,7 @@ const slug = (props: Response | any) => {
     );
 
     const response = await comment.json();
-    setLoader(true);
+    setLoader(true); 
     if (response.success) {
     
       toast.success("Comment Added!", {
