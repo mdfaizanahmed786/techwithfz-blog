@@ -37,7 +37,7 @@ function Comment({
       setLiked(true)
      
     }
-  },[like])
+  },[like,liked])
 
   const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
