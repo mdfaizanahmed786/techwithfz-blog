@@ -141,6 +141,40 @@ function Comment({
     }
   };
 
+  const handleDislikes=async ()=>{
+    if(cookieAuth?.email || session?.user?.email){
+       const dislike=await fetch("https://techwithfz.vercel.app/api/dislike",{
+         method:"POST",
+         headers:{
+           "Content-type":"application/json"
+         },
+         body:JSON.stringify({
+           comment,
+           slug:slug,
+           email:cookieAuth?.email===undefined ? session?.user?.email : cookieAuth?.email
+         })
+       })
+       const response=await dislike.json()
+       if(response.success){
+         toast.success("Disliked!", {
+           position: "top-right",
+           autoClose: 2500,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "dark",
+         });
+         setLiked(prevLike=>!prevLike)
+         setLike(prevCount=>prevCount-1);
+       }
+    }
+
+
+
+ }
+
  
   return (
     <div
@@ -194,6 +228,7 @@ function Comment({
                   size={20}
                   className="cursor-pointer textStyle"
                   title="Like"
+                  onClick={() => handleDislikes()}
                 />
               ) : (
                 <AiOutlineHeart

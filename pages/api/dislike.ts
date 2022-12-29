@@ -31,13 +31,12 @@ export default async function dislike(
     
     let addDislike = comments[0].likes.filter((like: any) => like !== email);
     comments[0].likes = addDislike;
-    post.userComments.filter((com:any) => com.comment === comment);
     await Blog.findOneAndUpdate(
       { slug },
       { $set: { userComments: [...post.userComments] } },
       { new: true }
     );
-    res.json({ success: true, comments });
+    res.json({ success: true });
   } catch (er: any) {
     return res.status(500).json({ error: er.message });
   }
