@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import {
   AiFillGithub,
@@ -16,10 +17,10 @@ const Footer = (props: Props) => {
           Copyright &copy; 2022 techwithfz.com
         </div>
         <div className="icons-group flex gap-8 items-center">
-          <AiOutlineTwitter className="text-[#10935F]" size={27} />
-          <AiFillGithub className="text-[#10935F]" size={27} />
-          <AiFillLinkedin className="text-[#10935F]"  size={27}/>
-          <AiFillInstagram className="text-[#10935F]"  size={27}/>
+          <Link href="https://twitter.com/FaizanA52900440"><AiOutlineTwitter className="text-[#10935F]" size={27} /></Link>
+          <Link href="https://github.com/mdfaizanahmed786"><AiFillGithub className="text-[#10935F]" size={27} /></Link>
+          <Link href="https://www.linkedin.com/in/faizan-ahmed-371a061bb/"><AiFillLinkedin className="text-[#10935F]"  size={27}/></Link>
+          <Link href="https://www.instagram.com/ahmed_faizan_7860/"><AiFillInstagram className="text-[#10935F]"  size={27}/></Link>
         </div>
       </div>
     </footer>
