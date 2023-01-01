@@ -75,7 +75,7 @@ const Signup = (props: Props) => {
           progress: undefined,
           theme: "dark",
           });
-        
+          router.push("/")
         
       }
       else {
