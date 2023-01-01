@@ -65,7 +65,7 @@ const Signup = (props: Props) => {
       });
       const response = await addUser.json();
       if(response.success && captcha){
-        toast.success('Signup Success!', {
+        toast.success('SingUp Success!', {
           position: "top-right",
           autoClose: 1800,
           hideProgressBar: false,

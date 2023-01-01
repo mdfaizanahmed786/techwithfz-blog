@@ -6,8 +6,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { toast } from "react-toastify";
 import Replies from "./Replies";
-import TimeAgo from "react-timeago"
-
+import TimeAgo from "react-timeago";
 
 function Comment({
   comment,
@@ -17,27 +16,26 @@ function Comment({
   replies,
   likes,
   matchResults,
-  cookieAuth
+  cookieAuth,
 }: Comment) {
-
   const { data: session } = useSession();
   const [showReply, setShowReply] = useState("");
   const replyToComment = useRef<HTMLTextAreaElement>(null);
   const [showReplies, setShowReplies] = useState("");
   const [show, setShow] = useState(false);
   const [like, setLike] = useState(likes.length);
-  const [liked, setLiked]=useState(false)
+  const [liked, setLiked] = useState(false);
   const { slug } = useRouter().query;
   const router = useRouter();
 
-  useEffect(()=>{
-   
-    if(likes.includes(session?.user?.email || cookieAuth?.email) &&
-    (session?.user?.email || cookieAuth?.email)){
-      setLiked(true)
-     
+  useEffect(() => {
+    if (
+      likes.includes(session?.user?.email || cookieAuth?.email) &&
+      (session?.user?.email || cookieAuth?.email)
+    ) {
+      setLiked(true);
     }
-  },[like,liked])
+  }, [like, liked]);
 
   const addNewReply = async (e: FormEvent, comment: string) => {
     e.preventDefault();
@@ -50,7 +48,7 @@ function Comment({
         comment,
         slug,
         reply: replyToComment.current!.value,
-        email:!cookieAuth.email ? session?.user?.email : cookieAuth?.email,
+        email: !cookieAuth.email ? session?.user?.email : cookieAuth?.email,
       }),
     });
     const response = await reply.json();
@@ -107,24 +105,17 @@ function Comment({
           body: JSON.stringify({
             comment,
             slug: slug,
-            email: cookieAuth?.email===undefined ? session?.user?.email : cookieAuth?.email,
+            email:
+              cookieAuth?.email === undefined
+                ? session?.user?.email
+                : cookieAuth?.email,
           }),
         }
       );
       const response = await like.json();
       if (response.success) {
-        toast.success("Liked!", {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        setLike(prevCount=>prevCount+1);
-        setLiked(prevLike=>!prevLike)
+        setLike((prevCount) => prevCount + 1);
+        setLiked((prevLike) => !prevLike);
       }
     } else {
       toast.error("Login to like!", {
@@ -137,50 +128,36 @@ function Comment({
         progress: undefined,
         theme: "dark",
       });
-      router.push("/login")
+      router.push("/login");
     }
   };
 
-  const handleDislikes=async ()=>{
-    if(cookieAuth?.email || session?.user?.email){
-       const dislike=await fetch("https://techwithfz.vercel.app/api/dislike",{
-         method:"POST",
-         headers:{
-           "Content-type":"application/json"
-         },
-         body:JSON.stringify({
-           comment,
-           slug:slug,
-           email:cookieAuth?.email===undefined ? session?.user?.email : cookieAuth?.email
-         })
-       })
-       const response=await dislike.json()
-       if(response.success){
-         toast.success("Disliked!", {
-           position: "top-right",
-           autoClose: 2500,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-           theme: "dark",
-         });
-         setLiked(prevLike=>!prevLike)
-         setLike(prevCount=>prevCount-1);
-       }
+  const handleDislikes = async () => {
+    if (cookieAuth?.email || session?.user?.email) {
+      const dislike = await fetch("https://techwithfz.vercel.app/api/dislike", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          comment,
+          slug: slug,
+          email:
+            cookieAuth?.email === undefined
+              ? session?.user?.email
+              : cookieAuth?.email,
+        }),
+      });
+      const response = await dislike.json();
+      if (response.success) {
+        setLiked((prevLike) => !prevLike);
+        setLike((prevCount) => prevCount - 1);
+      }
     }
+  };
 
-
-
- }
-
- 
   return (
-    <div
-    
-      className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 "
-    >
+    <div className="bg-[#2E2E2E] px-5 py-5 rounded-md outline-none text-white border-[#10935F] border-2 flex flex-col gap-4 flex-1 ">
       <div className="flex items-center gap-3">
         <FaUserCircle className="text-green-500" size={27} />
         <p className="font-bold">{email.replace("@gmail.com", "")}</p>
@@ -242,7 +219,7 @@ function Comment({
             <p className="font-semibold text-base">{like}</p>
           </div>
 
-          {(session?.user ||cookieAuth?.email) && (
+          {(session?.user || cookieAuth?.email) && (
             <button
               className="text-white font-semibold commonButton  px-2 py-1 "
               onClick={() => toggleReply(comment)}

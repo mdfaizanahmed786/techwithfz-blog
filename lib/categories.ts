@@ -32,4 +32,5 @@ export const categories = [
     id: 9,
     category: "Others",
   }
-];
+] as const
+

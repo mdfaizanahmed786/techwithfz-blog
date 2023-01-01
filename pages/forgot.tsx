@@ -163,7 +163,7 @@ const Forgot = (props: Props) => {
             "Instructions have been sent to your email to reset your password!",
             {
               position: "top-right",
-              autoClose: 1800,
+              autoClose: 2100,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -173,7 +173,7 @@ const Forgot = (props: Props) => {
             }
           );
         } else {
-          toast.error("User with this email do not exist!", {
+          toast.error("No user with this email!", {
             position: "top-right",
             autoClose: 1800,
             hideProgressBar: false,
