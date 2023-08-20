@@ -14,7 +14,7 @@ const Footer = (props: Props) => {
     <footer className="bg-[#1E1E1E] md:p-6 p-4 ">
       <div className="flex md:flex-row flex-col md:justify-between max-w-[1430px] mx-auto items-center gap-5 md:gap-0">
         <div className="font-semibold text-white">
-          Copyright &copy; 2022 techwithfz.com
+          Copyright &copy; 2023 techwithfz.com
         </div>
         <div className="icons-group flex gap-8 items-center">
           <Link href="https://twitter.com/FaizanA52900440"><AiOutlineTwitter className="text-[#10935F] cursor-pointer" size={27} /></Link>
