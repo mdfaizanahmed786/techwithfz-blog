@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 type ConnectionState={
-  connectionReady: number
+  connectionReady?: number
 }
-const connection:ConnectionState={}
+const connection:ConnectionState={
+}
 const connectDb = async () : Promise<void> => {
     if(connection.connectionReady){
       console.log("Already connected database");
